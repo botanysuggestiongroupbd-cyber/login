@@ -130,6 +130,21 @@
             background: #e68900;
         }
         
+        .resend-verification {
+            background: #9c27b0;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .resend-verification:hover {
+            background: #7b1fa2;
+        }
+        
         .message {
             padding: 12px;
             border-radius: 8px;
@@ -150,6 +165,12 @@
             border: 1px solid #c8e6c9;
         }
         
+        .info {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #bbdefb;
+        }
+        
         .loading {
             display: inline-block;
             width: 20px;
@@ -163,6 +184,16 @@
         
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+        
+        .verification-note {
+            background: #fff3e0;
+            border: 1px solid #ffcc80;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #e65100;
         }
         
         .footer {
@@ -184,6 +215,11 @@
         <div class="login-form">
             <div id="errorMessage" class="message error"></div>
             <div id="successMessage" class="message success"></div>
+            <div id="infoMessage" class="message info"></div>
+            
+            <div class="verification-note">
+                <strong>Email Verification Required:</strong> After registration, you will receive a verification email. Please verify your email to activate your account. The email may also go to your spam folder, so please check there as well.
+            </div>
             
             <div class="form-group">
                 <label for="email">Email Address</label>
@@ -211,7 +247,13 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            sendPasswordResetEmail,
+            sendEmailVerification,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -236,8 +278,23 @@
         const passwordInput = document.getElementById('password');
         const errorMessage = document.getElementById('errorMessage');
         const successMessage = document.getElementById('successMessage');
+        const infoMessage = document.getElementById('infoMessage');
 
-        // Login function
+        // Check authentication state
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+                if (user.emailVerified) {
+                    // Email is verified, redirect to main page
+                    window.location.href = 'https://botanysuggestiongroupbd-cyber.github.io/Botany-eBooks/#';
+                } else {
+                    // Email is not verified, sign out the user
+                    auth.signOut();
+                }
+            }
+        });
+
+        // Login function with email verification check
         loginBtn.addEventListener('click', async () => {
             const email = emailInput.value;
             const password = passwordInput.value;
@@ -245,6 +302,7 @@
             // Hide previous messages
             errorMessage.style.display = 'none';
             successMessage.style.display = 'none';
+            infoMessage.style.display = 'none';
             
             // Validate inputs
             if (!email || !password) {
@@ -261,13 +319,40 @@
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
-                // Show success message and redirect
-                showSuccess('Login successful! Redirecting...');
-                
-                // Redirect to the specified URL after a short delay
-                setTimeout(() => {
-                    window.location.href = 'https://botanysuggestiongroupbd-cyber.github.io/Botany-eBooks/#';
-                }, 1500);
+                // Check if email is verified
+                if (user.emailVerified) {
+                    // Email is verified - proceed with login
+                    showSuccess('Login successful! Redirecting...');
+                    
+                    // Redirect to the specified URL after a short delay
+                    setTimeout(() => {
+                        window.location.href = 'https://botanysuggestiongroupbd-cyber.github.io/Botany-eBooks/#';
+                    }, 1500);
+                } else {
+                    // Email is not verified - prevent login
+                    showError('Please verify your email address before logging in. Check your email for the verification link.');
+                    
+                    // Show resend verification option
+                    showInfo('If you did not receive the verification email, you can resend it.');
+                    
+                    // Create resend verification button
+                    const resendBtn = document.createElement('button');
+                    resendBtn.className = 'resend-verification';
+                    resendBtn.textContent = 'Resend Verification Email';
+                    resendBtn.onclick = () => resendVerificationEmail(user);
+                    
+                    // Remove existing resend button if any
+                    const existingResendBtn = document.querySelector('.resend-verification');
+                    if (existingResendBtn) {
+                        existingResendBtn.remove();
+                    }
+                    
+                    // Add the resend button after the login form
+                    document.querySelector('.action-buttons').parentNode.insertBefore(resendBtn, document.querySelector('.action-buttons'));
+                    
+                    // Sign out the user since email is not verified
+                    await auth.signOut();
+                }
                 
             } catch (error) {
                 // Handle specific error cases
@@ -286,6 +371,9 @@
                     case 'auth/wrong-password':
                         errorMsg += 'Incorrect password.';
                         break;
+                    case 'auth/too-many-requests':
+                        errorMsg += 'Too many failed login attempts. Please try again later.';
+                        break;
                     default:
                         errorMsg += error.message;
                 }
@@ -297,6 +385,16 @@
                 loginBtn.disabled = false;
             }
         });
+
+        // Function to resend verification email
+        async function resendVerificationEmail(user) {
+            try {
+                await sendEmailVerification(user);
+                showSuccess('Verification email sent! Please check your inbox.');
+            } catch (error) {
+                showError('Error sending verification email: ' + error.message);
+            }
+        }
 
         // Password reset function
         resetBtn.addEventListener('click', async () => {
@@ -315,10 +413,10 @@
             }
         });
 
-        // Registration button - you can add your link later
+        // Registration button
         registerBtn.addEventListener('click', () => {
-            // Placeholder - add your registration page URL here later
-            showError('Registration page link not yet configured.');
+            showInfo('Please contact administrator for registration or use the registration portal.');
+            // You can add your registration page URL here when ready
             // window.location.href = 'your-registration-page.html';
         });
 
@@ -331,6 +429,11 @@
         function showSuccess(message) {
             successMessage.textContent = message;
             successMessage.style.display = 'block';
+        }
+        
+        function showInfo(message) {
+            infoMessage.textContent = message;
+            infoMessage.style.display = 'block';
         }
         
         // Allow form submission with Enter key
