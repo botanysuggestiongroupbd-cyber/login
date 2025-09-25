@@ -5,203 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Login</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        /* ... আপনার existing CSS styles ... */
         
-        body {
-            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .login-container {
-            background: white;
-            width: 100%;
-            max-width: 450px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: #4caf50;
-            color: white;
-            padding: 25px 30px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-        
-        .header p {
-            opacity: 0.9;
-            font-size: 16px;
-        }
-        
-        .login-form {
-            padding: 30px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border 0.3s;
-        }
-        
-        .form-group input:focus {
-            border-color: #4caf50;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-        }
-        
-        .login-btn {
-            background: #4caf50;
-            color: white;
-            border: none;
+        .strict-check {
+            background: #fff8e1;
+            border: 1px solid #ffd54f;
+            border-radius: 6px;
             padding: 15px;
-            width: 100%;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 10px;
-        }
-        
-        .login-btn:hover {
-            background: #45a049;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 25px;
-        }
-        
-        .action-buttons button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .register-btn {
-            background: #2196F3;
-            color: white;
-        }
-        
-        .register-btn:hover {
-            background: #0b7dda;
-        }
-        
-        .reset-btn {
-            background: #ff9800;
-            color: white;
-        }
-        
-        .reset-btn:hover {
-            background: #e68900;
-        }
-        
-        .resend-verification {
-            background: #9c27b0;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-        
-        .resend-verification:hover {
-            background: #7b1fa2;
-        }
-        
-        .message {
-            padding: 12px;
-            border-radius: 8px;
             margin-bottom: 20px;
             text-align: center;
-            display: none;
-        }
-        
-        .error {
-            background: #ffebee;
-            color: #c62828;
-            border: 1px solid #ffcdd2;
-        }
-        
-        .success {
-            background: #e8f5e9;
-            color: #2e7d32;
-            border: 1px solid #c8e6c9;
-        }
-        
-        .info {
-            background: #e3f2fd;
-            color: #1565c0;
-            border: 1px solid #bbdefb;
-        }
-        
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .verification-note {
-            background: #fff3e0;
-            border: 1px solid #ffcc80;
-            border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 20px;
-            font-size: 14px;
+            font-weight: bold;
             color: #e65100;
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-            font-size: 14px;
-            border-top: 1px solid #eee;
         }
     </style>
 </head>
@@ -213,13 +27,13 @@
         </div>
         
         <div class="login-form">
+            <div class="strict-check">
+                ⚠️ Email Verification MANDATORY - Unverified accounts cannot login
+            </div>
+            
             <div id="errorMessage" class="message error"></div>
             <div id="successMessage" class="message success"></div>
             <div id="infoMessage" class="message info"></div>
-            
-            <div class="verification-note">
-                <strong>Email Verification Required:</strong> After registration, you will receive a verification email. Please verify your email to activate your account. The email may also go to your spam folder, so please check there as well.
-            </div>
             
             <div class="form-group">
                 <label for="email">Email Address</label>
@@ -244,7 +58,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
         import { 
@@ -252,10 +65,11 @@
             signInWithEmailAndPassword, 
             sendPasswordResetEmail,
             sendEmailVerification,
-            onAuthStateChanged
+            onAuthStateChanged,
+            setPersistence,
+            browserSessionPersistence
         } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyChDeqEPatoWTUPoZpcYOSXcnAuoVJsV-c",
             authDomain: "apps-login-page.firebaseapp.com",
@@ -266,11 +80,12 @@
             measurementId: "G-RPPBB0C7BQ"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // Get DOM elements
+        // Set persistence to session only
+        setPersistence(auth, browserSessionPersistence);
+
         const loginBtn = document.getElementById('loginBtn');
         const registerBtn = document.getElementById('registerBtn');
         const resetBtn = document.getElementById('resetBtn');
@@ -280,163 +95,146 @@
         const successMessage = document.getElementById('successMessage');
         const infoMessage = document.getElementById('infoMessage');
 
-        // Check authentication state
-        onAuthStateChanged(auth, (user) => {
+        // Strict authentication state check
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // User is signed in
+                // Force token refresh to get latest email verification status
+                await user.getIdToken(true);
+                
                 if (user.emailVerified) {
-                    // Email is verified, redirect to main page
-                    window.location.href = 'https://botanysuggestiongroupbd-cyber.github.io/Botany-eBooks/#';
+                    showSuccess('Email verified! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = 'https://botanysuggestiongroupbd-cyber.github.io/Botany-eBooks/#';
+                    }, 1000);
                 } else {
-                    // Email is not verified, sign out the user
-                    auth.signOut();
+                    // Immediate sign out for unverified users
+                    await auth.signOut();
+                    showError('Email not verified. Please verify your email first.');
                 }
             }
         });
 
-        // Login function with email verification check
+        // Strict login function
         loginBtn.addEventListener('click', async () => {
             const email = emailInput.value;
             const password = passwordInput.value;
             
-            // Hide previous messages
             errorMessage.style.display = 'none';
             successMessage.style.display = 'none';
             infoMessage.style.display = 'none';
             
-            // Validate inputs
             if (!email || !password) {
                 showError('Please enter both email and password.');
                 return;
             }
             
-            // Show loading state
-            loginBtn.innerHTML = '<span class="loading"></span> Logging in...';
+            loginBtn.innerHTML = '<span class="loading"></span> Verifying...';
             loginBtn.disabled = true;
             
             try {
-                // Sign in with Firebase
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
-                // Check if email is verified
-                if (user.emailVerified) {
-                    // Email is verified - proceed with login
+                // Force refresh to get latest verification status
+                await user.reload();
+                const updatedUser = auth.currentUser;
+                
+                if (updatedUser.emailVerified) {
                     showSuccess('Login successful! Redirecting...');
-                    
-                    // Redirect to the specified URL after a short delay
                     setTimeout(() => {
                         window.location.href = 'https://botanysuggestiongroupbd-cyber.github.io/Botany-eBooks/#';
                     }, 1500);
                 } else {
-                    // Email is not verified - prevent login
-                    showError('Please verify your email address before logging in. Check your email for the verification link.');
-                    
-                    // Show resend verification option
-                    showInfo('If you did not receive the verification email, you can resend it.');
+                    showError('❌ EMAIL VERIFICATION REQUIRED: Please verify your email before logging in.');
                     
                     // Create resend verification button
                     const resendBtn = document.createElement('button');
                     resendBtn.className = 'resend-verification';
-                    resendBtn.textContent = 'Resend Verification Email';
-                    resendBtn.onclick = () => resendVerificationEmail(user);
+                    resendBtn.innerHTML = '📧 Resend Verification Email';
+                    resendBtn.onclick = () => resendVerificationEmail(updatedUser);
                     
-                    // Remove existing resend button if any
                     const existingResendBtn = document.querySelector('.resend-verification');
-                    if (existingResendBtn) {
-                        existingResendBtn.remove();
-                    }
+                    if (existingResendBtn) existingResendBtn.remove();
                     
-                    // Add the resend button after the login form
                     document.querySelector('.action-buttons').parentNode.insertBefore(resendBtn, document.querySelector('.action-buttons'));
                     
-                    // Sign out the user since email is not verified
+                    // Immediate sign out
                     await auth.signOut();
                 }
                 
             } catch (error) {
-                // Handle specific error cases
                 let errorMsg = 'Login failed. ';
                 
                 switch(error.code) {
                     case 'auth/invalid-email':
-                        errorMsg += 'The email address is not valid.';
+                        errorMsg = 'Invalid email address.';
                         break;
                     case 'auth/user-disabled':
-                        errorMsg += 'This user account has been disabled.';
+                        errorMsg = 'This account has been disabled.';
                         break;
                     case 'auth/user-not-found':
-                        errorMsg += 'No user found with this email address.';
+                        errorMsg = 'No account found with this email.';
                         break;
                     case 'auth/wrong-password':
-                        errorMsg += 'Incorrect password.';
+                        errorMsg = 'Incorrect password.';
                         break;
                     case 'auth/too-many-requests':
-                        errorMsg += 'Too many failed login attempts. Please try again later.';
+                        errorMsg = 'Too many attempts. Try again later.';
                         break;
                     default:
-                        errorMsg += error.message;
+                        errorMsg = error.message;
                 }
                 
-                showError(errorMsg);
+                showError('❌ ' + errorMsg);
             } finally {
-                // Reset button state
                 loginBtn.innerHTML = 'Login';
                 loginBtn.disabled = false;
             }
         });
 
-        // Function to resend verification email
         async function resendVerificationEmail(user) {
             try {
                 await sendEmailVerification(user);
-                showSuccess('Verification email sent! Please check your inbox.');
+                showSuccess('✅ Verification email sent! Check your inbox and spam folder.');
             } catch (error) {
-                showError('Error sending verification email: ' + error.message);
+                showError('Failed to send verification email: ' + error.message);
             }
         }
 
-        // Password reset function
         resetBtn.addEventListener('click', async () => {
             const email = emailInput.value;
-            
             if (!email) {
-                showError('Please enter your email address to reset password.');
+                showError('Please enter your email address.');
                 return;
             }
             
             try {
                 await sendPasswordResetEmail(auth, email);
-                showSuccess(`Password reset email sent to ${email}. Check your inbox.`);
+                showSuccess(`Password reset email sent to ${email}`);
             } catch (error) {
-                showError('Error sending password reset email: ' + error.message);
+                showError('Error: ' + error.message);
             }
         });
 
-        // Registration button
         registerBtn.addEventListener('click', () => {
-            showInfo('Please contact administrator for registration or use the registration portal.');
-            // You can add your registration page URL here when ready
-            // window.location.href = 'your-registration-page.html';
+            showInfo('Registration: Please contact administrator or use the registration portal.');
         });
 
-        // Helper functions
         function showError(message) {
-            errorMessage.textContent = message;
+            errorMessage.innerHTML = message;
             errorMessage.style.display = 'block';
         }
         
         function showSuccess(message) {
-            successMessage.textContent = message;
+            successMessage.innerHTML = message;
             successMessage.style.display = 'block';
         }
         
         function showInfo(message) {
-            infoMessage.textContent = message;
+            infoMessage.innerHTML = message;
             infoMessage.style.display = 'block';
         }
         
-        // Allow form submission with Enter key
         document.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 loginBtn.click();
