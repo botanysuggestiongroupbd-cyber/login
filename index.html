@@ -119,6 +119,15 @@
     .action-buttons button.reset:hover {
       background: #e68900;
     }
+    
+    /* Autofill styling */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus, 
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px white inset !important;
+        -webkit-text-fill-color: #000 !important;
+    }
   </style>
 </head>
 <body>
@@ -129,8 +138,13 @@
   <div id="errorMessage" class="message error"></div>
   <div id="successMessage" class="message success"></div>
   
-  <input type="email" id="email" placeholder="Email" required />
-  <input type="password" id="password" placeholder="Password" required />
+  <input type="email" id="email" placeholder="Email" required 
+         autocomplete="off" readonly 
+         onfocus="this.removeAttribute('readonly')" />
+  
+  <input type="password" id="password" placeholder="Password" required 
+         autocomplete="new-password" readonly 
+         onfocus="this.removeAttribute('readonly')" />
   
   <button id="loginBtn">
     Login
@@ -144,6 +158,7 @@
 
 <!-- Firebase SDKs -->
 <script type="module">
+  // ... আপনার existing Firebase code একই থাকবে ...
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
   import { 
     getAuth, 
@@ -191,19 +206,16 @@
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Check if email is verified
       if (!user.emailVerified) {
         await sendEmailVerification(user);
         showError("Please verify your email first. A new verification email has been sent.");
         return;
       }
 
-      // Update last login time in Firestore
       await updateDoc(doc(db, "students", user.uid), {
         lastLogin: new Date()
       });
 
-      // Redirect to dashboard
       window.location.href = "dashboard.html";
 
     } catch (error) {
