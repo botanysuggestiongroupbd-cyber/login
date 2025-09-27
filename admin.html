@@ -470,6 +470,57 @@
             background: #616161;
         }
         
+        /* Search Bar Styles */
+        .search-container {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .search-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .search-btn:hover {
+            background: #0b7dda;
+        }
+        
+        .result-btn {
+            background: #9C27B0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .result-btn:hover {
+            background: #7B1FA2;
+        }
+        
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -533,6 +584,14 @@
             .modal-content {
                 padding: 20px;
             }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .search-input {
+                min-width: 100%;
+            }
         }
     </style>
 </head>
@@ -585,6 +644,17 @@
                 <h3 id="todayStudents">0</h3>
                 <p>Registered Today</p>
             </div>
+        </div>
+        
+        <!-- Search Bar -->
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by name, email, college, registration number, or department...">
+            <button class="search-btn" onclick="searchStudents()">
+                <i class="fas fa-search"></i> Search
+            </button>
+            <button class="result-btn" onclick="viewCollegewiseResult()">
+                <i class="fas fa-chart-bar"></i> Collegewise Result
+            </button>
         </div>
         
         <!-- Bulk Actions -->
@@ -703,6 +773,7 @@
 
         let allStudents = [];
         let currentEditingStudentId = null;
+        let filteredStudents = [];
 
         // Check if user is authenticated
         auth.onAuthStateChanged((user) => {
@@ -764,6 +835,7 @@
                     allStudents.push(studentData);
                 });
                 
+                filteredStudents = [...allStudents];
                 updateStatistics(allStudents);
                 displayStudentData(allStudents);
                 
@@ -834,11 +906,13 @@
                 let statusBadge, statusButton;
                 if (student.emailVerified) {
                     statusBadge = `<span class="status-badge approved">Approved</span>`;
+                    // Approved members only have Edit button (no Approve button)
                     statusButton = `<button class="action-btn edit-btn" onclick="openEditModal('${student.id}')">
                         <i class="fas fa-edit"></i> Edit
                     </button>`;
                 } else {
-                    statusBadge = `<span class="status-badge pending" onclick="approveStudent('${student.id}')">Pending Approval</span>`;
+                    statusBadge = `<span class="status-badge pending">Pending Approval</span>`;
+                    // Pending members have Approve and Delete buttons
                     statusButton = `
                         <button class="action-btn approve-btn" onclick="approveStudent('${student.id}')">
                             <i class="fas fa-check"></i> Approve
@@ -864,6 +938,33 @@
                 `;
             }).join('');
         }
+
+        // Search students function
+        window.searchStudents = function() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                filteredStudents = [...allStudents];
+            } else {
+                filteredStudents = allStudents.filter(student => {
+                    return (
+                        (student.name && student.name.toLowerCase().includes(searchTerm)) ||
+                        (student.email && student.email.toLowerCase().includes(searchTerm)) ||
+                        (student.college && student.college.toLowerCase().includes(searchTerm)) ||
+                        (student.regno && student.regno.toLowerCase().includes(searchTerm)) ||
+                        (student.dept && student.dept.toLowerCase().includes(searchTerm))
+                    );
+                });
+            }
+            
+            displayStudentData(filteredStudents);
+            updateStatistics(filteredStudents);
+        };
+
+        // View collegewise result
+        window.viewCollegewiseResult = function() {
+            window.location.href = 'result.html';
+        };
 
         // Open edit modal
         window.openEditModal = function(studentId) {
@@ -1043,4 +1144,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
