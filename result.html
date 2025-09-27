@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>National University College Wise Result</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-50%) scale(1.05);
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #fdbb2d;
+        }
+        
+        .main-content {
+            padding: 30px;
+        }
+        
+        .instructions {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #1a2a6c;
+        }
+        
+        .instructions h3 {
+            color: #1a2a6c;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .option-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-color: #1a2a6c;
+        }
+        
+        .option-icon {
+            font-size: 3rem;
+            color: #1a2a6c;
+            margin-bottom: 15px;
+        }
+        
+        .option-card h3 {
+            color: #1a2a6c;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .option-card p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        
+        .code-input-container {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+        }
+        
+        .code-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        
+        .code-input:focus {
+            border-color: #1a2a6c;
+            outline: none;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #b21f1f, #1a2a6c);
+            transform: translateY(-2px);
+        }
+        
+        .footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .footer a {
+            color: #1a2a6c;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .option-card {
+                padding: 20px 15px;
+            }
+            
+            .back-btn {
+                position: relative;
+                left: 0;
+                top: 0;
+                transform: none;
+                margin-bottom: 15px;
+                width: fit-content;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBackToAdmin()">
+                <i class="fas fa-arrow-left"></i> Back to Admin
+            </button>
+            <div class="logo">
+                <i class="fas fa-university"></i>
+            </div>
+            <h1>National University Result Portal</h1>
+            <p>College Wise Result Checker</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> How to Use</h3>
+                <p>Select your program and year from the options below. Then enter your college code to view the results.</p>
+                <ul>
+                    <li>Make sure you have the correct college code before proceeding</li>
+                    <li>Results will open in a new tab</li>
+                    <li>For any issues, contact your college administration</li>
+                </ul>
+            </div>
+            
+            <div class="options-grid">
+                <!-- Honours First Year -->
+                <div class="option-card" onclick="toggleInput('honours1')">
+                    <div class="option-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Honours First Year</h3>
+                    <p>Check results for Honours First Year students</p>
+                    <div id="honours1" class="code-input-container">
+                        <input type="text" class="code-input" id="honours1Code" placeholder="Enter College Code">
+                        <button class="submit-btn" onclick="redirectToResult('honours1')">View Results</button>
+                    </div>
+                </div>
+                
+                <!-- Honours Second Year -->
+                <div class="option-card" onclick="toggleInput('honours2')">
+                    <div class="option-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3>Honours Second Year</h3>
+                    <p>Check results for Honours Second Year students</p>
+                    <div id="honours2" class="code-input-container">
+                        <input type="text" class="code-input" id="honours2Code" placeholder="Enter College Code">
+                        <button class="submit-btn" onclick="redirectToResult('honours2')">View Results</button>
+                    </div>
+                </div>
+                
+                <!-- Honours Third Year -->
+                <div class="option-card" onclick="toggleInput('honours3')">
+                    <div class="option-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Honours Third Year</h3>
+                    <p>Check results for Honours Third Year students</p>
+                    <div id="honours3" class="code-input-container">
+                        <input type="text" class="code-input" id="honours3Code" placeholder="Enter College Code">
+                        <button class="submit-btn" onclick="redirectToResult('honours3')">View Results</button>
+                    </div>
+                </div>
+                
+                <!-- Honours Fourth Year -->
+                <div class="option-card" onclick="toggleInput('honours4')">
+                    <div class="option-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3>Honours Fourth Year</h3>
+                    <p>Check results for Honours Fourth Year students</p>
+                    <div id="honours4" class="code-input-container">
+                        <input type="text" class="code-input" id="honours4Code" placeholder="Enter College Code">
+                        <button class="submit-btn" onclick="redirectToResult('honours4')">View Results</button>
+                    </div>
+                </div>
+                
+                <!-- Consolidated Result -->
+                <div class="option-card" onclick="toggleInput('consolidated')">
+                    <div class="option-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Consolidated Result</h3>
+                    <p>Check consolidated results for all Honours years</p>
+                    <div id="consolidated" class="code-input-container">
+                        <input type="text" class="code-input" id="consolidatedCode" placeholder="Enter College Code">
+                        <button class="submit-btn" onclick="redirectToResult('consolidated')">View Results</button>
+                    </div>
+                </div>
+                
+                <!-- Masters Preliminary -->
+                <div class="option-card" onclick="toggleInput('mastersPreliminary')">
+                    <div class="option-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3>Masters Preliminary</h3>
+                    <p>Check results for Masters Preliminary students</p>
+                    <div id="mastersPreliminary" class="code-input-container">
+                        <input type="text" class="code-input" id="mastersPreliminaryCode" placeholder="Enter College Code">
+                        <button class="submit-btn" onclick="redirectToResult('mastersPreliminary')">View Results</button>
+                    </div>
+                </div>
+                
+                <!-- Masters Final Year -->
+                <div class="option-card" onclick="toggleInput('mastersFinal')">
+                    <div class="option-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3>Masters Final Year</h3>
+                    <p>Check results for Masters Final Year students</p>
+                    <div id="mastersFinal" class="code-input-container">
+                        <input type="text" class="code-input" id="mastersFinalCode" placeholder="Enter College Code">
+                        <button class="submit-btn" onclick="redirectToResult('mastersFinal')">View Results</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 National University Result Portal. All rights reserved.</p>
+            <p>For official results, visit: <a href="http://results.nu.ac.bd" target="_blank">results.nu.ac.bd</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Toggle input field visibility
+        function toggleInput(optionId) {
+            // Hide all input containers first
+            const allInputs = document.querySelectorAll('.code-input-container');
+            allInputs.forEach(input => {
+                input.style.display = 'none';
+            });
+            
+            // Show the selected input container
+            const selectedInput = document.getElementById(optionId);
+            selectedInput.style.display = 'block';
+            
+            // Scroll to the selected option for better UX
+            selectedInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        // Redirect to the appropriate result page
+        function redirectToResult(optionType) {
+            let url = '';
+            let codeInput;
+            
+            // Get the college code based on the option type
+            switch(optionType) {
+                case 'honours1':
+                    codeInput = document.getElementById('honours1Code');
+                    url = `http://results.nu.ac.bd/honours/getHon1stForm_colwise.php?col_code=${codeInput.value}`;
+                    break;
+                case 'honours2':
+                    codeInput = document.getElementById('honours2Code');
+                    url = `http://results.nu.ac.bd/honours/getHon2ndForm_colwise.php?col_code=${codeInput.value}`;
+                    break;
+                case 'honours3':
+                    codeInput = document.getElementById('honours3Code');
+                    url = `http://results.nu.ac.bd/honours/getHon3rdForm_colwise.php?col_code=${codeInput.value}`;
+                    break;
+                case 'honours4':
+                    codeInput = document.getElementById('honours4Code');
+                    url = `http://results.nu.ac.bd/honours/getHon4thForm_full.php?col_code=${codeInput.value}`;
+                    break;
+                case 'consolidated':
+                    codeInput = document.getElementById('consolidatedCode');
+                    url = `http://results.nu.ac.bd/honours/getHonConsolForm.php?col_code=${codeInput.value}`;
+                    break;
+                case 'mastersPreliminary':
+                    codeInput = document.getElementById('mastersPreliminaryCode');
+                    url = `http://results.nu.ac.bd/mp/getMpForm_full.php?col_code=${codeInput.value}`;
+                    break;
+                case 'mastersFinal':
+                    codeInput = document.getElementById('mastersFinalCode');
+                    url = `http://results.nu.ac.bd/masters/getMasterseForm_full.php?col_code=${codeInput.value}`;
+                    break;
+                default:
+                    alert('Invalid option selected');
+                    return;
+            }
+            
+            // Validate college code
+            if (!codeInput.value.trim()) {
+                alert('Please enter a college code');
+                codeInput.focus();
+                return;
+            }
+            
+            // Open the result page in a new tab
+            window.open(url, '_blank');
+        }
+        
+        // Go back to admin page
+        function goBackToAdmin() {
+            window.location.href = 'admin.html';
+        }
+        
+        // Allow Enter key to submit the form
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeInputs = document.querySelectorAll('.code-input');
+            codeInputs.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        // Find the parent option card and trigger the submit button
+                        const container = this.closest('.code-input-container');
+                        const submitBtn = container.querySelector('.submit-btn');
+                        if (submitBtn) {
+                            submitBtn.click();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
