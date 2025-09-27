@@ -264,6 +264,56 @@
       font-size: 0.9rem;
       opacity: 0.8;
     }
+
+    /* Modal for Google Drive Links */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+      color: #333;
+    }
+    
+    .modal-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    
+    .modal-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .modal-open {
+      background: #4CAF50;
+      color: white;
+    }
+    
+    .modal-cancel {
+      background: #f44336;
+      color: white;
+    }
     
     @media (max-width: 768px) {
       .button-container {
@@ -298,6 +348,15 @@
         padding: 15px;
         min-height: 60px;
       }
+
+      .modal-content {
+        padding: 20px;
+        margin: 20px;
+      }
+      
+      .modal-buttons {
+        flex-direction: column;
+      }
     }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -331,7 +390,7 @@
   </header>
 
   <div class="button-container">
-    <a href="https://drive.google.com/file/d/1xsC_v2oDtNO-w_WKQeCfBWDwRwLl0g5b/view" class="btn">Taxonomy of Angiosperms</a>
+    <a href="https://drive.google.com/file/d/1xsC_v2oDtNO-w_WKQeCfBWDwRwLl0g5b/view" class="btn" target="_blank">Taxonomy of Angiosperms</a>
     <a href="#" class="btn">Advanced Plant Physiology</a>
     <a href="#" class="btn">Plant Ecology and Environment</a>
     <a href="#" class="btn">Molecular Genetics</a>
@@ -347,6 +406,18 @@
   <a href="all.html" class="back-button">
     <i class="fas fa-arrow-left"></i> Back to Main Page
   </a>
+
+  <!-- Google Drive Link Modal -->
+  <div class="modal" id="driveModal">
+    <div class="modal-content">
+      <h3 style="color: #333; margin-bottom: 15px;"><i class="fas fa-external-link-alt"></i> Opening Google Drive Link</h3>
+      <p style="color: #666; margin-bottom: 20px;">This will open a Google Drive link in a new tab. Make sure pop-ups are allowed for this site.</p>
+      <div class="modal-buttons">
+        <button class="modal-btn modal-open" id="confirmOpen">Open Link</button>
+        <button class="modal-btn modal-cancel" id="cancelOpen">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <div class="ad-container">
     <div class="ad-box">
@@ -415,6 +486,11 @@
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
     const logoutBtn = document.getElementById('logoutBtn');
+    const driveModal = document.getElementById('driveModal');
+    const confirmOpen = document.getElementById('confirmOpen');
+    const cancelOpen = document.getElementById('cancelOpen');
+
+    let currentDriveLink = '';
 
     // Toggle dropdown menu
     userInfo.addEventListener('click', (e) => {
@@ -473,14 +549,45 @@
       e.stopPropagation();
     });
 
-    // Add click handlers for subject buttons (for future Google Drive links)
+    // Google Drive link handling
     document.querySelectorAll('.btn').forEach(button => {
       button.addEventListener('click', function(e) {
-        // You can add Google Drive link functionality here later
-        console.log('Button clicked:', this.textContent);
-        // For now, just prevent the default action
-        e.preventDefault();
+        const href = this.getAttribute('href');
+        
+        // Check if it's a Google Drive link
+        if (href && href.includes('drive.google.com')) {
+          e.preventDefault();
+          currentDriveLink = href;
+          driveModal.style.display = 'flex';
+        } else if (href === '#') {
+          e.preventDefault();
+          // Button without link - you can add functionality here later
+          console.log('Button clicked without link:', this.textContent);
+        }
+        // If it's a regular link (not # and not drive.google.com), it will open normally
       });
+    });
+
+    // Modal buttons
+    confirmOpen.addEventListener('click', function() {
+      if (currentDriveLink) {
+        window.open(currentDriveLink, '_blank');
+        driveModal.style.display = 'none';
+        currentDriveLink = '';
+      }
+    });
+
+    cancelOpen.addEventListener('click', function() {
+      driveModal.style.display = 'none';
+      currentDriveLink = '';
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function(e) {
+      if (e.target === driveModal) {
+        driveModal.style.display = 'none';
+        currentDriveLink = '';
+      }
     });
   </script>
 
