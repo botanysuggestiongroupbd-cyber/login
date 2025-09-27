@@ -24,6 +24,7 @@
       color: white;
       padding: 30px;
       text-align: center;
+      position: relative;
     }
     .header h1 {
       margin: 0;
@@ -96,6 +97,10 @@
       background: #f44336;
       color: white;
     }
+    .btn-nu {
+      background: #ff9800;
+      color: white;
+    }
     .btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
@@ -116,6 +121,16 @@
       padding: 10px 20px;
       border-radius: 5px;
       cursor: pointer;
+    }
+
+    /* Ad Container Styles */
+    .ad-container {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+      padding: 10px;
+      background: #f5f5f5;
+      border-radius: 5px;
     }
 
     /* Modal Styles */
@@ -222,6 +237,22 @@
       <div class="welcome" id="welcomeMessage">Loading your profile...</div>
     </div>
 
+    <!-- Ad Container -->
+    <div class="ad-container">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3746401970919102"
+           crossorigin="anonymous"></script>
+      <!-- Student Dashboard Ad -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-3746401970919102"
+           data-ad-slot="1234567890"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
     <div class="profile-section">
       <div class="profile-card">
         <h2>Profile Information</h2>
@@ -234,6 +265,7 @@
 
       <div class="actions">
         <a href="all.html" class="btn btn-primary">Access Study Materials</a>
+        <a href="http://103.113.200.7" target="_blank" class="btn btn-nu">National University Result</a>
         <button class="btn btn-secondary" id="editProfileBtn">Edit Profile</button>
         <button class="btn btn-secondary" id="changePasswordBtn">Change Password</button>
       </div>
