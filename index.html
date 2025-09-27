@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Botany Study Materials Portal</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: #e8f5e9;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .form-container {
+      background: white;
+      padding: 30px;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    
+    h2 {
+      text-align: center;
+      color: #2e7d32;
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .notice-box {
+      background: #fff8e1;
+      border: 1px solid #ffd54f;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .notice-box h3 {
+      color: #ff8f00;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-align: center;
+    }
+    
+    .notice-content {
+      line-height: 1.6;
+      color: #5d4037;
+      text-align: justify;
+    }
+    
+    .notice-content p {
+      margin-bottom: 15px;
+    }
+    
+    .notice-content p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .highlight {
+      background: #e8f5e9;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 15px 0;
+      border-left: 4px solid #4caf50;
+      text-align: justify;
+    }
+    
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      color: white;
+      font-weight: 600;
+    }
+    
+    .btn-student {
+      background: #4caf50;
+    }
+    
+    .btn-student:hover {
+      background: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .btn-admin {
+      background: #2196F3;
+    }
+    
+    .btn-admin:hover {
+      background: #0b7dda;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #757575;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Botany Study Materials Portal</h2>
+    
+    <div class="notice-box">
+      <h3>📌 Important Notice</h3>
+      <div class="notice-content">
+        <p>This application has been developed exclusively for the Botany Study Materials community.</p>
+        
+        <div class="highlight">
+          <p><strong>Important Security Note:</strong> Always avoid clicking on any advertisements displayed in this application. Do not share personal information unnecessarily.</p>
+        </div>
+        
+        <p>For your account security, please use strong passwords and log out after each session.</p>
+      </div>
+    </div>
+    
+    <div class="button-container">
+      <a href="login.html" class="btn btn-student">Student Login</a>
+      <a href="admin.html" class="btn btn-admin">Admin Login</a>
+    </div>
+    
+    <div class="footer">
+      <p>Botany Study Materials © 2025 | Designed for Botany Enthusiasts</p>
+    </div>
+  </div>
+
+  <script>
+    // Function to adjust box heights based on content
+    function adjustBoxHeights() {
+      const noticeBox = document.querySelector('.notice-box');
+      const noticeContent = document.querySelector('.notice-content');
+      
+      // Set the notice box height to match its content
+      noticeBox.style.height = 'auto';
+      noticeBox.style.minHeight = 'fit-content';
+      
+      // Ensure content doesn't overflow
+      noticeContent.style.overflow = 'hidden';
+    }
+    
+    // Adjust boxes when page loads
+    window.addEventListener('load', adjustBoxHeights);
+    
+    // Adjust boxes if window is resized
+    window.addEventListener('resize', adjustBoxHeights);
+  </script>
+</body>
+</html>
