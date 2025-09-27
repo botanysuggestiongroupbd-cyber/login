@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Student Data</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+            color: #333;
+            min-height: 100vh;
+            padding: 15px;
+        }
+        
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+        
+        .admin-login {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .admin-login h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.5rem;
+        }
+        
+        .admin-login input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .admin-login input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        
+        .admin-login button {
+            width: 100%;
+            padding: 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .admin-login button:hover {
+            background: #45a049;
+        }
+        
+        .student-login-btn {
+            width: 100%;
+            padding: 15px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            font-weight: 600;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .student-login-btn:hover {
+            background: #0b7dda;
+        }
+        
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: none;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            padding: 25px 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .stat-card i {
+            font-size: 2rem;
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card h3 {
+            font-size: 1.5rem;
+            color: #2E7D32;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            color: #666;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .data-table-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .table-header {
+            background: #4CAF50;
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+        }
+        
+        .table-header h2 {
+            font-size: 1.3rem;
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+        
+        th, td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+        
+        th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #555;
+            position: sticky;
+            top: 0;
+        }
+        
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        .logout-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #d32f2f;
+        }
+        
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .verified {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+        
+        .pending {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+        
+        .approved {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 2px;
+            transition: all 0.3s;
+        }
+        
+        .edit-btn {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .edit-btn:hover {
+            background: #0b7dda;
+        }
+        
+        .save-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .save-btn:hover {
+            background: #45a049;
+        }
+        
+        .cancel-btn {
+            background: #757575;
+            color: white;
+        }
+        
+        .cancel-btn:hover {
+            background: #616161;
+        }
+        
+        .approve-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .approve-btn:hover {
+            background: #45a049;
+        }
+        
+        .delete-btn {
+            background: #f44336;
+            color: white;
+        }
+        
+        .delete-btn:hover {
+            background: #d32f2f;
+        }
+        
+        .spam-btn {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .spam-btn:hover {
+            background: #e68900;
+        }
+        
+        .bulk-actions {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .bulk-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .bulk-approve {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .bulk-delete {
+            background: #f44336;
+            color: white;
+        }
+        
+        .select-all {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: 20px;
+        }
+        
+        .select-all input {
+            width: 18px;
+            height: 18px;
+        }
+        
+        /* Edit Mode Styles */
+        .edit-input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .edit-input:focus {
+            border-color: #2196F3;
+            outline: none;
+        }
+        
+        .editing-row {
+            background-color: #e3f2fd !important;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .modal h3 {
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .modal-input-group {
+            margin-bottom: 15px;
+        }
+        
+        .modal-input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .modal-input-group input, .modal-input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .modal-save {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .modal-save:hover {
+            background: #45a049;
+        }
+        
+        .modal-cancel {
+            background: #757575;
+            color: white;
+        }
+        
+        .modal-cancel:hover {
+            background: #616161;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .admin-login {
+                padding: 20px 15px;
+            }
+            
+            .admin-login h2 {
+                font-size: 1.3rem;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            
+            .stat-card {
+                padding: 15px 10px;
+            }
+            
+            .stat-card i {
+                font-size: 1.5rem;
+            }
+            
+            .stat-card h3 {
+                font-size: 1.3rem;
+            }
+            
+            .stat-card p {
+                font-size: 12px;
+            }
+            
+            th, td {
+                padding: 10px 8px;
+                font-size: 13px;
+            }
+            
+            .table-header h2 {
+                font-size: 1.2rem;
+            }
+            
+            .bulk-actions {
+                flex-direction: column;
+            }
+            
+            .select-all {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Login Overlay -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="admin-login">
+            <h2><i class="fas fa-lock"></i> Admin Login</h2>
+            
+            <input type="email" id="adminEmail" placeholder="Admin Email">
+            <input type="password" id="adminPassword" placeholder="Admin Password">
+            <button onclick="adminLogin()">Login as Admin</button>
+            
+            <!-- New Student Login Button -->
+            <a href="index.html" class="student-login-btn">
+                <i class="fas fa-user-graduate"></i> Login as Student
+            </a>
+            
+            <div id="adminLoginMessage" style="margin-top: 10px; color: red; font-size: 14px;"></div>
+        </div>
+    </div>
+
+    <div class="admin-container" id="adminContainer">
+        <div class="header">
+            <h1><i class="fas fa-users-cog"></i> Admin Dashboard</h1>
+            <p>View and manage student data from Firestore</p>
+            <button class="logout-btn" onclick="adminLogout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+        
+        <div class="stats-cards">
+            <div class="stat-card">
+                <i class="fas fa-user-graduate"></i>
+                <h3 id="totalStudents">0</h3>
+                <p>Total Students</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-check-circle"></i>
+                <h3 id="verifiedStudents">0</h3>
+                <p>Verified Students</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <h3 id="pendingStudents">0</h3>
+                <p>Pending Approval</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-calendar-day"></i>
+                <h3 id="todayStudents">0</h3>
+                <p>Registered Today</p>
+            </div>
+        </div>
+        
+        <!-- Bulk Actions -->
+        <div class="bulk-actions">
+            <div class="select-all">
+                <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                <label for="selectAll">Select All</label>
+            </div>
+            <button class="bulk-btn bulk-approve" onclick="bulkApprove()">
+                <i class="fas fa-check-circle"></i> Approve Selected
+            </button>
+            <button class="bulk-btn bulk-delete" onclick="bulkDelete()">
+                <i class="fas fa-trash"></i> Delete Selected
+            </button>
+            <button class="bulk-btn spam-btn" onclick="deleteAllSpam()">
+                <i class="fas fa-ban"></i> Delete All Spam Users
+            </button>
+        </div>
+        
+        <div class="data-table-container">
+            <div class="table-header">
+                <h2><i class="fas fa-table"></i> Student Records</h2>
+            </div>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="30px">Select</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>College</th>
+                            <th>Reg No</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Joined Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="9" class="loading">
+                                <i class="fas fa-spinner fa-spin"></i> Loading student data...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Student Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3><i class="fas fa-edit"></i> Edit Student Details</h3>
+            <div class="modal-input-group">
+                <label for="editName">Name</label>
+                <input type="text" id="editName" class="edit-input">
+            </div>
+            <div class="modal-input-group">
+                <label for="editEmail">Email (Cannot be changed)</label>
+                <input type="text" id="editEmail" class="edit-input" disabled>
+            </div>
+            <div class="modal-input-group">
+                <label for="editCollege">College</label>
+                <input type="text" id="editCollege" class="edit-input">
+            </div>
+            <div class="modal-input-group">
+                <label for="editRegNo">Registration Number</label>
+                <input type="text" id="editRegNo" class="edit-input">
+            </div>
+            <div class="modal-input-group">
+                <label for="editDepartment">Department</label>
+                <input type="text" id="editDepartment" class="edit-input">
+            </div>
+            <div class="modal-input-group">
+                <label for="editStatus">Status</label>
+                <select id="editStatus" class="edit-input">
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                </select>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-cancel" onclick="closeEditModal()">Cancel</button>
+                <button class="modal-save" onclick="saveStudentChanges()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword,
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyChDeqEPatoWTUPoZpcYOSXcnAuoVJsV-c",
+            authDomain: "apps-login-page.firebaseapp.com",
+            projectId: "apps-login-page",
+            storageBucket: "apps-login-page.appspot.com",
+            messagingSenderId: "601656721972",
+            appId: "1:601656721972:web:20ce6efffc82b2e0b68061",
+            measurementId: "G-RPPBB0C7BQ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Admin credentials
+        const ADMIN_EMAIL = "admin@botanystudy.com";
+        const ADMIN_PASSWORD = "BotanyAdmin2023!";
+
+        let allStudents = [];
+        let currentEditingStudentId = null;
+
+        // Check if user is authenticated
+        auth.onAuthStateChanged((user) => {
+            if (user && user.email === ADMIN_EMAIL) {
+                // Admin is signed in
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('adminContainer').style.display = 'block';
+                loadStudentData();
+            } else {
+                // Show login form
+                document.getElementById('loginOverlay').style.display = 'flex';
+                document.getElementById('adminContainer').style.display = 'none';
+            }
+        });
+
+        // Admin login function
+        window.adminLogin = async function() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            const messageDiv = document.getElementById('adminLoginMessage');
+            
+            if (!email || !password) {
+                messageDiv.textContent = 'Please enter email and password';
+                return;
+            }
+            
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                messageDiv.textContent = '';
+            } catch (error) {
+                if (error.code === 'auth/user-not-found') {
+                    messageDiv.innerHTML = `
+                        Admin account not found. Please create admin account in Firebase Console.
+                    `;
+                } else {
+                    messageDiv.textContent = 'Login failed: ' + error.message;
+                }
+            }
+        };
+
+        // Admin logout function
+        window.adminLogout = async function() {
+            try {
+                await signOut(auth);
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        };
+
+        // Load student data function
+        async function loadStudentData() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "students"));
+                allStudents = [];
+                
+                querySnapshot.forEach((doc) => {
+                    const studentData = doc.data();
+                    studentData.id = doc.id;
+                    allStudents.push(studentData);
+                });
+                
+                updateStatistics(allStudents);
+                displayStudentData(allStudents);
+                
+            } catch (error) {
+                console.error('Error loading student data:', error);
+                document.getElementById('tableBody').innerHTML = `
+                    <tr>
+                        <td colspan="9" style="text-align: center; color: red; padding: 30px;">
+                            <h3>Error Loading Data</h3>
+                            <p>${error.message}</p>
+                            <p>Please check Firestore rules and try again.</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Update statistics
+        function updateStatistics(students) {
+            document.getElementById('totalStudents').textContent = students.length;
+            
+            const verifiedCount = students.filter(student => student.emailVerified === true).length;
+            document.getElementById('verifiedStudents').textContent = verifiedCount;
+            
+            const pendingCount = students.filter(student => !student.emailVerified).length;
+            document.getElementById('pendingStudents').textContent = pendingCount;
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const todayCount = students.filter(student => {
+                if (!student.createdAt) return false;
+                const studentDate = student.createdAt.toDate ? student.createdAt.toDate() : new Date(student.createdAt);
+                studentDate.setHours(0, 0, 0, 0);
+                return studentDate.getTime() === today.getTime();
+            }).length;
+            
+            document.getElementById('todayStudents').textContent = todayCount;
+        }
+
+        // Display student data in table
+        function displayStudentData(students) {
+            const tableBody = document.getElementById('tableBody');
+            
+            if (students.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 30px;">
+                            <i class="fas fa-database" style="font-size: 3rem; color: #ccc; margin-bottom: 10px;"></i><br>
+                            No student data found
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tableBody.innerHTML = students.map(student => {
+                let joinDate = 'N/A';
+                try {
+                    if (student.createdAt) {
+                        const date = student.createdAt.toDate ? student.createdAt.toDate() : new Date(student.createdAt);
+                        joinDate = date.toLocaleDateString();
+                    }
+                } catch (e) {
+                    joinDate = 'Invalid Date';
+                }
+                
+                // Determine status and button
+                let statusBadge, statusButton;
+                if (student.emailVerified) {
+                    statusBadge = `<span class="status-badge approved">Approved</span>`;
+                    statusButton = `<button class="action-btn edit-btn" onclick="openEditModal('${student.id}')">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>`;
+                } else {
+                    statusBadge = `<span class="status-badge pending" onclick="approveStudent('${student.id}')">Pending Approval</span>`;
+                    statusButton = `
+                        <button class="action-btn approve-btn" onclick="approveStudent('${student.id}')">
+                            <i class="fas fa-check"></i> Approve
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteStudent('${student.id}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    `;
+                }
+                
+                return `
+                    <tr>
+                        <td><input type="checkbox" class="student-checkbox" value="${student.id}"></td>
+                        <td>${student.name || 'N/A'}</td>
+                        <td>${student.email || 'N/A'}</td>
+                        <td>${student.college || 'N/A'}</td>
+                        <td>${student.regno || 'N/A'}</td>
+                        <td>${student.dept || 'N/A'}</td>
+                        <td>${statusBadge}</td>
+                        <td>${joinDate}</td>
+                        <td>${statusButton}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Open edit modal
+        window.openEditModal = function(studentId) {
+            const student = allStudents.find(s => s.id === studentId);
+            if (student) {
+                currentEditingStudentId = studentId;
+                document.getElementById('editName').value = student.name || '';
+                document.getElementById('editEmail').value = student.email || '';
+                document.getElementById('editCollege').value = student.college || '';
+                document.getElementById('editRegNo').value = student.regno || '';
+                document.getElementById('editDepartment').value = student.dept || '';
+                document.getElementById('editStatus').value = student.emailVerified ? 'approved' : 'pending';
+                document.getElementById('editModal').style.display = 'flex';
+            }
+        };
+
+        // Close edit modal
+        window.closeEditModal = function() {
+            document.getElementById('editModal').style.display = 'none';
+            currentEditingStudentId = null;
+        };
+
+        // Save student changes
+        window.saveStudentChanges = async function() {
+            if (!currentEditingStudentId) return;
+            
+            const name = document.getElementById('editName').value;
+            const college = document.getElementById('editCollege').value;
+            const regno = document.getElementById('editRegNo').value;
+            const dept = document.getElementById('editDepartment').value;
+            const status = document.getElementById('editStatus').value;
+            
+            if (!name) {
+                alert('Name is required');
+                return;
+            }
+            
+            try {
+                const updateData = {
+                    name: name,
+                    college: college,
+                    regno: regno,
+                    dept: dept,
+                    emailVerified: status === 'approved'
+                };
+                
+                if (status === 'approved') {
+                    updateData.approvedAt = new Date();
+                    updateData.approvedBy = ADMIN_EMAIL;
+                }
+                
+                await updateDoc(doc(db, "students", currentEditingStudentId), updateData);
+                alert('Student details updated successfully!');
+                closeEditModal();
+                loadStudentData();
+            } catch (error) {
+                console.error('Error updating student:', error);
+                alert('Error updating student: ' + error.message);
+            }
+        };
+
+        // Approve student manually
+        window.approveStudent = async function(studentId) {
+            if (confirm('Are you sure you want to approve this student?')) {
+                try {
+                    await updateDoc(doc(db, "students", studentId), {
+                        emailVerified: true,
+                        approvedAt: new Date(),
+                        approvedBy: ADMIN_EMAIL
+                    });
+                    alert('Student approved successfully!');
+                    loadStudentData();
+                } catch (error) {
+                    console.error('Error approving student:', error);
+                    alert('Error approving student: ' + error.message);
+                }
+            }
+        };
+
+        // Delete single student
+        window.deleteStudent = async function(studentId) {
+            if (confirm('Are you sure you want to delete this student? This action cannot be undone.')) {
+                try {
+                    await deleteDoc(doc(db, "students", studentId));
+                    alert('Student deleted successfully!');
+                    loadStudentData();
+                } catch (error) {
+                    console.error('Error deleting student:', error);
+                    alert('Error deleting student: ' + error.message);
+                }
+            }
+        };
+
+        // Toggle select all checkboxes
+        window.toggleSelectAll = function() {
+            const selectAll = document.getElementById('selectAll').checked;
+            const checkboxes = document.querySelectorAll('.student-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll;
+            });
+        };
+
+        // Bulk approve selected students
+        window.bulkApprove = async function() {
+            const selectedStudents = getSelectedStudents();
+            if (selectedStudents.length === 0) {
+                alert('Please select at least one student to approve.');
+                return;
+            }
+            
+            if (confirm(`Are you sure you want to approve ${selectedStudents.length} students?`)) {
+                try {
+                    for (const studentId of selectedStudents) {
+                        await updateDoc(doc(db, "students", studentId), {
+                            emailVerified: true,
+                            approvedAt: new Date(),
+                            approvedBy: ADMIN_EMAIL
+                        });
+                    }
+                    alert(`${selectedStudents.length} students approved successfully!`);
+                    loadStudentData();
+                } catch (error) {
+                    console.error('Error bulk approving students:', error);
+                    alert('Error approving students: ' + error.message);
+                }
+            }
+        };
+
+        // Bulk delete selected students
+        window.bulkDelete = async function() {
+            const selectedStudents = getSelectedStudents();
+            if (selectedStudents.length === 0) {
+                alert('Please select at least one student to delete.');
+                return;
+            }
+            
+            if (confirm(`Are you sure you want to delete ${selectedStudents.length} students? This action cannot be undone.`)) {
+                try {
+                    for (const studentId of selectedStudents) {
+                        await deleteDoc(doc(db, "students", studentId));
+                    }
+                    alert(`${selectedStudents.length} students deleted successfully!`);
+                    loadStudentData();
+                } catch (error) {
+                    console.error('Error bulk deleting students:', error);
+                    alert('Error deleting students: ' + error.message);
+                }
+            }
+        };
+
+        // Delete all spam users (unverified users)
+        window.deleteAllSpam = async function() {
+            const unverifiedStudents = allStudents.filter(student => !student.emailVerified);
+            if (unverifiedStudents.length === 0) {
+                alert('No unverified students found.');
+                return;
+            }
+            
+            if (confirm(`Are you sure you want to delete all ${unverifiedStudents.length} unverified students? This action cannot be undone.`)) {
+                try {
+                    for (const student of unverifiedStudents) {
+                        await deleteDoc(doc(db, "students", student.id));
+                    }
+                    alert(`All ${unverifiedStudents.length} unverified students deleted successfully!`);
+                    loadStudentData();
+                } catch (error) {
+                    console.error('Error deleting spam users:', error);
+                    alert('Error deleting spam users: ' + error.message);
+                }
+            }
+        };
+
+        // Get selected student IDs
+        function getSelectedStudents() {
+            const checkboxes = document.querySelectorAll('.student-checkbox:checked');
+            return Array.from(checkboxes).map(checkbox => checkbox.value);
+        }
+    </script>
+</body>
+</html>
