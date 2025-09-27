@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Third Year Subjects - Botany Study Materials</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+    }
+    
+    /* User Profile Section */
+    .user-section {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px 15px;
+      border-radius: 50px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .user-info:hover {
+      background: rgba(76, 175, 80, 0.8);
+      transform: translateY(-2px);
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4CAF50, #8BC34A);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    .user-name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: rgba(0, 0, 0, 0.9);
+      border-radius: 10px;
+      padding: 10px 0;
+      min-width: 200px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: none;
+      margin-top: 10px;
+    }
+    
+    .dropdown-menu.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .dropdown-item {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: white;
+    }
+    
+    .dropdown-item:hover {
+      background: rgba(76, 175, 80, 0.3);
+    }
+    
+    .dropdown-item i {
+      width: 20px;
+      text-align: center;
+    }
+    
+    .dropdown-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.2);
+      margin: 5px 0;
+    }
+    
+    header {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 30px;
+    }
+    
+    header h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+      text-align: center;
+      background: linear-gradient(to right, #4CAF50, #8BC34A);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+    
+    .tagline {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .button-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 900px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 30px;
+    }
+    
+    a.btn {
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.8), rgba(139, 195, 74, 0.8));
+      padding: 18px 20px;
+      border-radius: 12px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 70px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      line-height: 1.4;
+    }
+    
+    a.btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.9), rgba(139, 195, 74, 0.9));
+    }
+    
+    a.btn:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+    
+    a.btn:hover:before {
+      left: 100%;
+    }
+    
+    .back-button {
+      background: linear-gradient(135deg, rgba(33, 150, 243, 0.8), rgba(66, 165, 245, 0.8));
+      padding: 12px 25px;
+      border-radius: 8px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .back-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+      background: linear-gradient(135deg, rgba(33, 150, 243, 0.9), rgba(66, 165, 245, 0.9));
+    }
+    
+    .ad-container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .ad-box {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 15px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100px;
+    }
+    
+    footer {
+      margin-top: 30px;
+      text-align: center;
+      padding: 20px;
+      width: 100%;
+      max-width: 900px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    
+    @media (max-width: 768px) {
+      .button-container {
+        grid-template-columns: 1fr;
+        padding: 20px;
+        gap: 15px;
+      }
+      
+      header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .tagline {
+        font-size: 1rem;
+      }
+      
+      .user-section {
+        position: relative;
+        top: 0;
+        right: 0;
+        justify-content: center;
+        margin-bottom: 20px;
+        width: 100%;
+      }
+      
+      .user-name {
+        display: none;
+      }
+      
+      a.btn {
+        font-size: 1rem;
+        padding: 15px;
+        min-height: 60px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- User Profile Section -->
+  <div class="user-section">
+    <div class="user-info" id="userInfo">
+      <div class="user-avatar" id="userAvatar">U</div>
+      <div class="user-name" id="userName">User</div>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+    
+    <div class="dropdown-menu" id="dropdownMenu">
+      <a href="dashboard.html" class="dropdown-item">
+        <i class="fas fa-user"></i>
+        <span>My Profile</span>
+      </a>
+      <div class="dropdown-divider"></div>
+      <a href="index.html" class="dropdown-item" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <header>
+    <h1>Third Year Subjects</h1>
+    <p class="tagline">Comprehensive collection of study materials for third year botany students</p>
+  </header>
+
+  <div class="button-container">
+    <a href="#" class="btn">Gymnosperm, Paleobotany and Palynology</a>
+    <a href="#" class="btn">Plant Physiology and Plant Nutrition</a>
+    <a href="#" class="btn">Ecology and Environmental Science</a>
+    <a href="#" class="btn">Plant Biochemistry</a>
+    <a href="#" class="btn">Cytology and Cytogenetics</a>
+    <a href="#" class="btn">Plant Pathology</a>
+    <a href="#" class="btn">Genetics</a>
+    <a href="#" class="btn">Practical-III</a>
+  </div>
+
+  <!-- Back Button -->
+  <a href="all.html" class="back-button">
+    <i class="fas fa-arrow-left"></i> Back to Main Page
+  </a>
+
+  <div class="ad-container">
+    <div class="ad-box">
+      <script async="async" data-cfasync="false" src="//pl27696641.revenuecpmgate.com/d3c90308bd587e059824adaabc81cf7a/invoke.js"></script>
+      <div id="container-d3c90308bd587e059824adaabc81cf7a"></div>
+    </div>
+    
+    <div class="ad-box">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '5429be8814e153fe6360cf3cea0c93db',
+          'format' : 'iframe',
+          'height' : 300,
+          'width' : 160,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/5429be8814e153fe6360cf3cea0c93db/invoke.js"></script>
+    </div>
+    
+    <div class="ad-box">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '1259bdba7a9cba3623bc48ab4ce23c86',
+          'format' : 'iframe',
+          'height' : 60,
+          'width' : 468,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/1259bdba7a9cba3623bc48ab4ce23c86/invoke.js"></script>
+    </div>
+  </div>
+
+  <footer>
+    <p>Botany Study Materials &copy; 2023 | All resources are for educational purposes</p>
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { 
+      getAuth, 
+      signOut,
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyChDeqEPatoWTUPoZpcYOSXcnAuoVJsV-c",
+      authDomain: "apps-login-page.firebaseapp.com",
+      projectId: "apps-login-page",
+      storageBucket: "apps-login-page.appspot.com",
+      messagingSenderId: "601656721972",
+      appId: "1:601656721972:web:20ce6efffc82b2e0b68061",
+      measurementId: "G-RPPBB0C7BQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // DOM Elements
+    const userInfo = document.getElementById('userInfo');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // Toggle dropdown menu
+    userInfo.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownMenu.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+      dropdownMenu.classList.remove('show');
+    });
+
+    // Check authentication state
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is signed in
+        try {
+          const docRef = doc(db, "students", user.uid);
+          const docSnap = await getDoc(docRef);
+          
+          if (docSnap.exists()) {
+            const userData = docSnap.data();
+            // Update user info display
+            userName.textContent = userData.name || user.email.split('@')[0];
+            userAvatar.textContent = userData.name ? userData.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase();
+          } else {
+            // Use email if no profile data
+            userName.textContent = user.email.split('@')[0];
+            userAvatar.textContent = user.email.charAt(0).toUpperCase();
+          }
+        } catch (error) {
+          console.error("Error loading user data:", error);
+          userName.textContent = user.email.split('@')[0];
+          userAvatar.textContent = user.email.charAt(0).toUpperCase();
+        }
+      } else {
+        // User is not signed in, redirect to login
+        window.location.href = 'login.html';
+      }
+    });
+
+    // Logout functionality
+    logoutBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        await signOut(auth);
+        window.location.href = 'login.html';
+      } catch (error) {
+        console.error('Logout error:', error);
+        alert('Error during logout. Please try again.');
+      }
+    });
+
+    // Prevent dropdown close when clicking inside it
+    dropdownMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // Add click handlers for subject buttons (for future Google Drive links)
+    document.querySelectorAll('.btn').forEach(button => {
+      button.addEventListener('click', function(e) {
+        // You can add Google Drive link functionality here later
+        console.log('Button clicked:', this.textContent);
+        // For now, just prevent the default action
+        e.preventDefault();
+      });
+    });
+  </script>
+
+  <script type='text/javascript' src='//pl27696616.revenuecpmgate.com/ab/f3/9c/abf39cc2db32e330648becd45108c409.js'></script>
+  <script type='text/javascript' src='//pl27703488.revenuecpmgate.com/91/6c/6e/916c6e9ca16af6ee852fd57d9840b0d6.js'></script>
+</body>
+</html>
