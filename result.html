@@ -211,6 +211,77 @@
             text-decoration: underline;
         }
         
+        /* Login Overlay Styles */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+        
+        .admin-login {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .admin-login h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.5rem;
+        }
+        
+        .admin-login input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .admin-login input:focus {
+            border-color: #1a2a6c;
+            outline: none;
+        }
+        
+        .admin-login button {
+            width: 100%;
+            padding: 15px;
+            background: #1a2a6c;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .admin-login button:hover {
+            background: #b21f1f;
+        }
+        
+        .admin-login-message {
+            margin-top: 10px;
+            color: red;
+            font-size: 14px;
+            min-height: 20px;
+        }
+        
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -262,7 +333,21 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Admin Login Overlay -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="admin-login">
+            <h2><i class="fas fa-lock"></i> Admin Authentication Required</h2>
+            <p style="margin-bottom: 15px; color: #666;">Please login to access the result portal</p>
+            
+            <input type="email" id="adminEmail" placeholder="Admin Email">
+            <input type="password" id="adminPassword" placeholder="Admin Password">
+            <button onclick="adminLogin()">Login as Admin</button>
+            
+            <div id="adminLoginMessage" class="admin-login-message"></div>
+        </div>
+    </div>
+
+    <div class="container" id="mainContainer" style="display: none;">
         <div class="header">
             <button class="back-btn" onclick="goBackToAdmin()">
                 <i class="fas fa-arrow-left"></i> Back to Admin
@@ -385,6 +470,85 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyChDeqEPatoWTUPoZpcYOSXcnAuoVJsV-c",
+            authDomain: "apps-login-page.firebaseapp.com",
+            projectId: "apps-login-page",
+            storageBucket: "apps-login-page.appspot.com",
+            messagingSenderId: "601656721972",
+            appId: "1:601656721972:web:20ce6efffc82b2e0b68061",
+            measurementId: "G-RPPBB0C7BQ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Admin credentials
+        const ADMIN_EMAIL = "admin@botanystudy.com";
+        const ADMIN_PASSWORD = "BotanyAdmin2023!";
+
+        // Check authentication state
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === ADMIN_EMAIL) {
+                // User is signed in as admin
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+            } else {
+                // User is not signed in or not admin
+                document.getElementById('loginOverlay').style.display = 'flex';
+                document.getElementById('mainContainer').style.display = 'none';
+            }
+        });
+
+        // Admin login function
+        window.adminLogin = async function() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            const messageDiv = document.getElementById('adminLoginMessage');
+            
+            if (!email || !password) {
+                messageDiv.textContent = 'Please enter email and password';
+                return;
+            }
+            
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                messageDiv.textContent = '';
+            } catch (error) {
+                if (error.code === 'auth/user-not-found') {
+                    messageDiv.innerHTML = `
+                        Admin account not found. Please create admin account in Firebase Console.
+                    `;
+                } else {
+                    messageDiv.textContent = 'Login failed: ' + error.message;
+                }
+            }
+        };
+
+        // Admin logout function
+        window.adminLogout = async function() {
+            try {
+                await signOut(auth);
+            // After logout, redirect to admin page
+                window.location.href = 'admin.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        };
+    </script>
+
     <script>
         // Toggle input field visibility
         function toggleInput(optionId) {
@@ -476,4 +640,4 @@
         });
     </script>
 </body>
-</html>
+                    </html>
