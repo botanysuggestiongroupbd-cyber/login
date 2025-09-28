@@ -144,10 +144,15 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             text-align: center;
             transition: transform 0.3s;
+            cursor: pointer;
         }
         
         .stat-card:hover {
             transform: translateY(-3px);
+        }
+        
+        .stat-card.active {
+            box-shadow: 0 0 0 3px #4CAF50;
         }
         
         .stat-card i {
@@ -166,6 +171,41 @@
             color: #666;
             font-weight: 600;
             font-size: 14px;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .quick-action-btn {
+            background: white;
+            padding: 20px 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .quick-action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .collegewise-btn {
+            background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+            color: white;
+        }
+        
+        .resource-btn {
+            background: linear-gradient(135deg, #FF9800, #E68900);
+            color: white;
         }
         
         .data-table-container {
@@ -506,21 +546,6 @@
             background: #0b7dda;
         }
         
-        .result-btn {
-            background: #9C27B0;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-        
-        .result-btn:hover {
-            background: #7B1FA2;
-        }
-        
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -545,6 +570,10 @@
             .stats-cards {
                 grid-template-columns: 1fr 1fr;
                 gap: 10px;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
             }
             
             .stat-card {
@@ -624,26 +653,36 @@
         </div>
         
         <div class="stats-cards">
-            <div class="stat-card">
+            <div class="stat-card active" id="totalStudentsCard" onclick="toggleFilter('all')">
                 <i class="fas fa-user-graduate"></i>
                 <h3 id="totalStudents">0</h3>
                 <p>Total Students</p>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" id="verifiedStudentsCard" onclick="toggleFilter('verified')">
                 <i class="fas fa-check-circle"></i>
                 <h3 id="verifiedStudents">0</h3>
                 <p>Verified Students</p>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" id="pendingStudentsCard" onclick="toggleFilter('pending')">
                 <i class="fas fa-clock"></i>
                 <h3 id="pendingStudents">0</h3>
                 <p>Pending Approval</p>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" id="todayStudentsCard" onclick="toggleFilter('today')">
                 <i class="fas fa-calendar-day"></i>
                 <h3 id="todayStudents">0</h3>
                 <p>Registered Today</p>
             </div>
+        </div>
+        
+        <!-- Quick Action Buttons -->
+        <div class="quick-actions">
+            <button class="quick-action-btn collegewise-btn" onclick="viewCollegewiseResult()">
+                <i class="fas fa-chart-bar"></i> Collegewise Result
+            </button>
+            <button class="quick-action-btn resource-btn" onclick="goToResourceManagement()">
+                <i class="fas fa-book"></i> Botany Resource Management
+            </button>
         </div>
         
         <!-- Search Bar -->
@@ -651,9 +690,6 @@
             <input type="text" id="searchInput" class="search-input" placeholder="Search by name, email, college, registration number, or department...">
             <button class="search-btn" onclick="searchStudents()">
                 <i class="fas fa-search"></i> Search
-            </button>
-            <button class="result-btn" onclick="viewCollegewiseResult()">
-                <i class="fas fa-chart-bar"></i> Collegewise Result
             </button>
         </div>
         
@@ -774,6 +810,7 @@
         let allStudents = [];
         let currentEditingStudentId = null;
         let filteredStudents = [];
+        let currentFilter = 'all';
 
         // Check if user is authenticated
         auth.onAuthStateChanged((user) => {
@@ -939,14 +976,67 @@
             }).join('');
         }
 
+        // Toggle filter function
+        window.toggleFilter = function(filterType) {
+            // If the same filter is clicked again, show all students
+            if (currentFilter === filterType) {
+                currentFilter = 'all';
+                filteredStudents = [...allStudents];
+                
+                // Remove active class from all cards and set Total Students as active
+                document.getElementById('totalStudentsCard').classList.add('active');
+                document.getElementById('verifiedStudentsCard').classList.remove('active');
+                document.getElementById('pendingStudentsCard').classList.remove('active');
+                document.getElementById('todayStudentsCard').classList.remove('active');
+            } else {
+                currentFilter = filterType;
+                
+                // Remove active class from all cards
+                document.getElementById('totalStudentsCard').classList.remove('active');
+                document.getElementById('verifiedStudentsCard').classList.remove('active');
+                document.getElementById('pendingStudentsCard').classList.remove('active');
+                document.getElementById('todayStudentsCard').classList.remove('active');
+                
+                // Add active class to selected card
+                document.getElementById(filterType + 'StudentsCard').classList.add('active');
+                
+                // Filter students based on selected category
+                switch(filterType) {
+                    case 'all':
+                        filteredStudents = [...allStudents];
+                        break;
+                    case 'verified':
+                        filteredStudents = allStudents.filter(student => student.emailVerified === true);
+                        break;
+                    case 'pending':
+                        filteredStudents = allStudents.filter(student => !student.emailVerified);
+                        break;
+                    case 'today':
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        filteredStudents = allStudents.filter(student => {
+                            if (!student.createdAt) return false;
+                            const studentDate = student.createdAt.toDate ? student.createdAt.toDate() : new Date(student.createdAt);
+                            studentDate.setHours(0, 0, 0, 0);
+                            return studentDate.getTime() === today.getTime();
+                        });
+                        break;
+                }
+            }
+            
+            displayStudentData(filteredStudents);
+        };
+
         // Search students function
         window.searchStudents = function() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
             
             if (searchTerm === '') {
-                filteredStudents = [...allStudents];
+                // If no search term, apply current filter
+                toggleFilter(currentFilter);
             } else {
-                filteredStudents = allStudents.filter(student => {
+                // Apply search within current filter
+                let searchResults = filteredStudents.filter(student => {
                     return (
                         (student.name && student.name.toLowerCase().includes(searchTerm)) ||
                         (student.email && student.email.toLowerCase().includes(searchTerm)) ||
@@ -955,15 +1045,19 @@
                         (student.dept && student.dept.toLowerCase().includes(searchTerm))
                     );
                 });
+                
+                displayStudentData(searchResults);
             }
-            
-            displayStudentData(filteredStudents);
-            updateStatistics(filteredStudents);
         };
 
         // View collegewise result
         window.viewCollegewiseResult = function() {
             window.location.href = 'result.html';
+        };
+
+        // Go to resource management page
+        window.goToResourceManagement = function() {
+            window.location.href = 'ebook.html';
         };
 
         // Open edit modal
