@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #e8f5e9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
       padding: 20px;
       margin: 0;
       min-height: 100vh;
     }
     .dashboard-container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
       background: white;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       overflow: hidden;
     }
     .header {
-      background: #4caf50;
+      background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
       color: white;
       padding: 30px;
       text-align: center;
@@ -28,82 +28,129 @@
     }
     .header h1 {
       margin: 0;
-      font-size: 2rem;
+      font-size: 2.2rem;
+      font-weight: 600;
     }
     .welcome {
       font-size: 1.2rem;
       opacity: 0.9;
+      margin-top: 10px;
     }
     .profile-section {
       padding: 30px;
     }
     .profile-card {
       background: #f9f9f9;
-      border-radius: 10px;
+      border-radius: 15px;
       padding: 25px;
       margin-bottom: 25px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
       border-left: 5px solid #4caf50;
+    }
+    .profile-card h2 {
+      margin-top: 0;
+      color: #2e7d32;
+      font-size: 1.6rem;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 10px;
     }
     .profile-info {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
       margin-top: 20px;
+    }
+    .info-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-top: 4px solid #4caf50;
+    }
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
     }
     .info-item {
       margin-bottom: 15px;
     }
     .info-label {
-      font-weight: bold;
+      font-weight: 600;
       color: #555;
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     .info-value {
       color: #333;
       font-size: 1.1rem;
-      padding: 8px 12px;
-      background: white;
-      border-radius: 5px;
-      border: 1px solid #ddd;
+      padding: 10px 15px;
+      background: #f5f5f5;
+      border-radius: 8px;
+      border-left: 4px solid #4caf50;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .verified {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+    .not-verified {
+      background: #ffebee;
+      color: #c62828;
     }
     .actions {
       display: flex;
       gap: 15px;
       margin-top: 30px;
       flex-wrap: wrap;
+      justify-content: center;
     }
     .btn {
-      padding: 12px 25px;
+      padding: 14px 28px;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 16px;
-      font-weight: bold;
+      font-weight: 600;
       text-decoration: none;
-      display: inline-block;
-      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       transition: all 0.3s;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
     .btn-primary {
-      background: #4caf50;
+      background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
       color: white;
     }
     .btn-secondary {
-      background: #2196F3;
+      background: linear-gradient(135deg, #2196F3 0%, #0d47a1 100%);
       color: white;
     }
     .btn-danger {
-      background: #f44336;
+      background: linear-gradient(135deg, #f44336 0%, #b71c1c 100%);
       color: white;
     }
     .btn-nu {
-      background: #ff9800;
+      background: linear-gradient(135deg, #ff9800 0%, #e65100 100%);
       color: white;
     }
     .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 7px 15px rgba(0,0,0,0.2);
+    }
+    .btn:active {
+      transform: translateY(-1px);
     }
     .loading {
       text-align: center;
@@ -121,16 +168,12 @@
       padding: 10px 20px;
       border-radius: 5px;
       cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
     }
-
-    /* Ad Container Styles */
-    .ad-container {
-      display: flex;
-      justify-content: center;
-      margin: 20px 0;
-      padding: 10px;
-      background: #f5f5f5;
-      border-radius: 5px;
+    .logout-btn:hover {
+      background: #d32f2f;
+      transform: translateY(-2px);
     }
 
     /* Modal Styles */
@@ -149,10 +192,15 @@
     .modal-content {
       background: white;
       padding: 30px;
-      border-radius: 10px;
+      border-radius: 15px;
       width: 90%;
       max-width: 500px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      animation: modalAppear 0.3s ease-out;
+    }
+    @keyframes modalAppear {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .modal-header {
       display: flex;
@@ -172,6 +220,10 @@
       font-size: 24px;
       cursor: pointer;
       color: #666;
+      transition: color 0.3s;
+    }
+    .close-btn:hover {
+      color: #333;
     }
     .form-group {
       margin-bottom: 20px;
@@ -179,7 +231,7 @@
     .form-group label {
       display: block;
       margin-bottom: 8px;
-      font-weight: bold;
+      font-weight: 600;
       color: #555;
     }
     .form-group input {
@@ -189,6 +241,7 @@
       border-radius: 5px;
       font-size: 16px;
       box-sizing: border-box;
+      transition: border-color 0.3s;
     }
     .form-group input:focus {
       border-color: #4caf50;
@@ -210,7 +263,7 @@
       color: white;
     }
     .message {
-      padding: 10px;
+      padding: 12px;
       border-radius: 5px;
       margin: 10px 0;
       text-align: center;
@@ -226,6 +279,33 @@
       color: #721c24;
       border: 1px solid #f5c6cb;
     }
+
+    /* Profile Icon */
+    .profile-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: #4caf50;
+      color: white;
+      border-radius: 50%;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .profile-info {
+        grid-template-columns: 1fr;
+      }
+      .actions {
+        flex-direction: column;
+      }
+      .btn {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -235,22 +315,6 @@
     <div class="header">
       <h1>Student Dashboard</h1>
       <div class="welcome" id="welcomeMessage">Loading your profile...</div>
-    </div>
-
-    <!-- Ad Container -->
-    <div class="ad-container">
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3746401970919102"
-           crossorigin="anonymous"></script>
-      <!-- Student Dashboard Ad -->
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-3746401970919102"
-           data-ad-slot="1234567890"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>
-           (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
     </div>
 
     <div class="profile-section">
@@ -264,10 +328,22 @@
       </div>
 
       <div class="actions">
-        <a href="all.html" class="btn btn-primary">Access Study Materials</a>
-        <a href="http://103.113.200.7" target="_blank" class="btn btn-nu">National University Result</a>
-        <button class="btn btn-secondary" id="editProfileBtn">Edit Profile</button>
-        <button class="btn btn-secondary" id="changePasswordBtn">Change Password</button>
+        <a href="all.html" class="btn btn-primary">
+          <span class="profile-icon">📚</span>
+          Access Study Materials
+        </a>
+        <a href="http://103.113.200.7" target="_blank" class="btn btn-nu">
+          <span class="profile-icon">🏫</span>
+          National University Result
+        </a>
+        <button class="btn btn-secondary" id="editProfileBtn">
+          <span class="profile-icon">✏️</span>
+          Edit Profile
+        </button>
+        <button class="btn btn-secondary" id="changePasswordBtn">
+          <span class="profile-icon">🔒</span>
+          Change Password
+        </button>
       </div>
     </div>
   </div>
@@ -427,40 +503,52 @@
       document.getElementById('welcomeMessage').textContent = 
         `Welcome back, ${userData.name || user.email}!`;
 
-      // Display profile information
+      // Display profile information in a more attractive way
       const profileInfo = document.getElementById('profileInfo');
       profileInfo.innerHTML = `
-        <div class="info-item">
-          <span class="info-label">Full Name:</span>
-          <div class="info-value">${userData.name || 'Not set'}</div>
+        <div class="info-card">
+          <div class="info-item">
+            <span class="info-label">Full Name</span>
+            <div class="info-value">${userData.name || 'Not set'}</div>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Email</span>
+            <div class="info-value">${user.email}</div>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Email Status</span>
+            <div class="info-value">
+              <span class="status-badge ${user.emailVerified ? 'verified' : 'not-verified'}">
+                ${user.emailVerified ? 'Verified' : 'Not Verified'}
+              </span>
+            </div>
+          </div>
         </div>
-        <div class="info-item">
-          <span class="info-label">College:</span>
-          <div class="info-value">${userData.college || 'Not set'}</div>
+        
+        <div class="info-card">
+          <div class="info-item">
+            <span class="info-label">College</span>
+            <div class="info-value">${userData.college || 'Not set'}</div>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Registration No</span>
+            <div class="info-value">${userData.regno || 'Not set'}</div>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Department</span>
+            <div class="info-value">${userData.dept || 'Not set'}</div>
+          </div>
         </div>
-        <div class="info-item">
-          <span class="info-label">Registration No:</span>
-          <div class="info-value">${userData.regno || 'Not set'}</div>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Department:</span>
-          <div class="info-value">${userData.dept || 'Not set'}</div>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Email:</span>
-          <div class="info-value">${user.email}</div>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Email Verified:</span>
-          <div class="info-value">${user.emailVerified ? 'Yes' : 'No'}</div>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Member Since:</span>
-          <div class="info-value">${userData.createdAt ? new Date(userData.createdAt.toDate()).toLocaleDateString() : 'Not available'}</div>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Last Login:</span>
-          <div class="info-value">${userData.lastLogin ? new Date(userData.lastLogin.toDate()).toLocaleString() : 'Just now'}</div>
+        
+        <div class="info-card">
+          <div class="info-item">
+            <span class="info-label">Member Since</span>
+            <div class="info-value">${userData.createdAt ? new Date(userData.createdAt.toDate()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Not available'}</div>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Last Login</span>
+            <div class="info-value">${userData.lastLogin ? new Date(userData.lastLogin.toDate()).toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Just now'}</div>
+          </div>
         </div>
       `;
     }
