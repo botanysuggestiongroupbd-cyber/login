@@ -630,7 +630,7 @@
 
     // Load eBooks from Firestore
     function loadEbooks() {
-      console.log("Starting to load eBooks for Masters Final Year...");
+      console.log("Starting to load eBooks for Honours First Year...");
       
       try {
         // First try: Query with where clause and orderBy
@@ -660,7 +660,7 @@
             loadingState.style.display = 'none';
             
             if (ebooks.length === 0) {
-              console.log("No eBooks found for Masters Final Year");
+              console.log("No eBooks found for Honours First Year");
               emptyState.style.display = 'block';
               buttonContainer.style.display = 'none';
             } else {
