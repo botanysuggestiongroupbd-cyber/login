@@ -630,13 +630,13 @@
 
     // Load eBooks from Firestore
     function loadEbooks() {
-      console.log("Starting to load eBooks for Masters Final Year...");
+      console.log("Starting to load eBooks for Honours Fourth Year...");
       
       try {
         // First try: Query with where clause and orderBy
         const q = query(
           collection(db, "ebooks"), 
-          where("page", "==", "Masters Final Year"),
+          where("page", "==", "Honours Fourth Year"),
           orderBy("order", "asc")
         );
         
@@ -660,7 +660,7 @@
             loadingState.style.display = 'none';
             
             if (ebooks.length === 0) {
-              console.log("No eBooks found for Masters Final Year");
+              console.log("No eBooks found for Honours Fourth Year");
               emptyState.style.display = 'block';
               buttonContainer.style.display = 'none';
             } else {
@@ -722,7 +722,7 @@
               ebookData.id = doc.id;
               
               // Client-side filtering for Masters Final Year
-              if (ebookData.page === "Masters Final Year") {
+              if (ebookData.page === "Honours Fourth Year") {
                 console.log("Matching eBook found:", ebookData.name);
                 ebooks.push(ebookData);
               }
