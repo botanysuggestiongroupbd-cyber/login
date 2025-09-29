@@ -323,6 +323,138 @@
       font-size: 0.9rem;
     }
 
+    /* Dashboard Materials Section */
+    .dashboard-materials-section {
+      margin-top: 30px;
+      display: none; /* Initially hidden */
+    }
+    .dashboard-materials-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e8f5e9;
+    }
+    .dashboard-materials-header h2 {
+      color: #2e7d32;
+      margin: 0;
+      font-size: 1.4rem;
+    }
+    .dashboard-materials-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .dashboard-material-btn {
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.9), rgba(139, 195, 74, 0.9));
+      padding: 18px 20px;
+      border-radius: 12px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 70px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      line-height: 1.4;
+    }
+    .dashboard-material-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      background: linear-gradient(135deg, rgba(76, 175, 80, 1), rgba(139, 195, 74, 1));
+    }
+    .dashboard-material-btn:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+    .dashboard-material-btn:hover:before {
+      left: 100%;
+    }
+    .dashboard-material-btn:disabled {
+      background: linear-gradient(135deg, rgba(204, 204, 204, 0.8), rgba(170, 170, 170, 0.8));
+      cursor: not-allowed;
+      transform: none;
+    }
+    .dashboard-material-btn:disabled:hover {
+      transform: none;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+    .empty-dashboard-materials {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+      background: #f9f9f9;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+    .empty-dashboard-materials i {
+      font-size: 3rem;
+      color: #ddd;
+      margin-bottom: 15px;
+    }
+
+    /* External Link Modal */
+    .external-link-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+    }
+    .external-link-modal-content {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+    }
+    .external-link-modal-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .external-link-modal-btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s;
+      flex: 1;
+    }
+    .external-link-open {
+      background: #4CAF50;
+      color: white;
+    }
+    .external-link-cancel {
+      background: #f44336;
+      color: white;
+    }
+
     /* Responsive Design */
     @media (min-width: 768px) {
       body {
@@ -403,8 +535,19 @@
         margin-right: 10px;
         font-size: 1rem;
       }
+      .dashboard-materials-container {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .external-link-modal-buttons {
+        flex-direction: column;
+      }
     }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <div class="dashboard-container">
@@ -421,6 +564,28 @@
           <div class="loading">
             <div class="loading-spinner">Loading...</div>
           </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Materials Section - Only shows when materials exist -->
+      <div class="dashboard-materials-section" id="dashboardMaterialsSection">
+        <div class="dashboard-materials-header">
+          <h2><i class="fas fa-rocket"></i> Quick Access</h2>
+        </div>
+        
+        <div class="loading" id="dashboardMaterialsLoading">
+          <i class="fas fa-spinner fa-spin"></i>
+          <h3>Loading Quick Access Materials...</h3>
+        </div>
+
+        <div class="empty-dashboard-materials" id="emptyDashboardMaterials">
+          <i class="fas fa-book-open"></i>
+          <h3>No Quick Access Materials</h3>
+          <p>Quick access materials will appear here once they are added by the administrator.</p>
+        </div>
+
+        <div class="dashboard-materials-container" id="dashboardMaterialsContainer">
+          <!-- Dynamic dashboard material buttons will be added here -->
         </div>
       </div>
 
@@ -507,6 +672,19 @@
     </div>
   </div>
 
+  <!-- External Link Modal -->
+  <div id="externalLinkModal" class="external-link-modal">
+    <div class="external-link-modal-content">
+      <h3 style="color: #333; margin-bottom: 15px;"><i class="fas fa-external-link-alt"></i> Opening External Link</h3>
+      <p style="color: #666; margin-bottom: 10px;" id="modalLinkText">You are about to open an external study material.</p>
+      <p style="color: #888; font-size: 0.9rem; margin-bottom: 20px;">Make sure pop-ups are allowed for this site.</p>
+      <div class="external-link-modal-buttons">
+        <button class="external-link-modal-btn external-link-open" id="confirmOpen">Open Link</button>
+        <button class="external-link-modal-btn external-link-cancel" id="cancelOpen">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Firebase SDKs -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
@@ -519,7 +697,17 @@
       EmailAuthProvider,
       updateProfile
     } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+    import { 
+      getFirestore, 
+      doc, 
+      getDoc, 
+      updateDoc,
+      collection,
+      query,
+      where,
+      orderBy,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyChDeqEPatoWTUPoZpcYOSXcnAuoVJsV-c",
@@ -543,6 +731,7 @@
     // Modal Elements
     const editProfileModal = document.getElementById('editProfileModal');
     const changePasswordModal = document.getElementById('changePasswordModal');
+    const externalLinkModal = document.getElementById('externalLinkModal');
     const closeEditModal = document.getElementById('closeEditModal');
     const closePasswordModal = document.getElementById('closePasswordModal');
     const cancelEdit = document.getElementById('cancelEdit');
@@ -556,8 +745,22 @@
     const editProfileMessage = document.getElementById('editProfileMessage');
     const changePasswordMessage = document.getElementById('changePasswordMessage');
 
+    // Dashboard Materials Elements
+    const dashboardMaterialsSection = document.getElementById('dashboardMaterialsSection');
+    const dashboardMaterialsLoading = document.getElementById('dashboardMaterialsLoading');
+    const emptyDashboardMaterials = document.getElementById('emptyDashboardMaterials');
+    const dashboardMaterialsContainer = document.getElementById('dashboardMaterialsContainer');
+
+    // External Link Modal Elements
+    const confirmOpen = document.getElementById('confirmOpen');
+    const cancelOpen = document.getElementById('cancelOpen');
+    const modalLinkText = document.getElementById('modalLinkText');
+
     let currentUser = null;
     let userData = null;
+    let currentExternalLink = '';
+    let currentEbookName = '';
+    let dashboardMaterials = [];
 
     // Check authentication state
     onAuthStateChanged(auth, async (user) => {
@@ -574,6 +777,7 @@
 
       currentUser = user;
       await loadUserData(user);
+      loadDashboardMaterials(); // Load dashboard materials after user is authenticated
     });
 
     async function loadUserData(user) {
@@ -650,6 +854,112 @@
       `;
     }
 
+    // Load Dashboard Materials from Firestore
+    function loadDashboardMaterials() {
+      console.log("Starting to load Dashboard Materials...");
+      
+      try {
+        const q = query(
+          collection(db, "dashboardMaterials"), 
+          where("active", "==", true),
+          orderBy("order", "asc")
+        );
+        
+        const unsubscribe = onSnapshot(q, 
+          (querySnapshot) => {
+            console.log("Dashboard Materials snapshot received, documents:", querySnapshot.size);
+            
+            dashboardMaterials = [];
+            querySnapshot.forEach((doc) => {
+              const materialData = doc.data();
+              materialData.id = doc.id;
+              console.log("Found Dashboard Material:", materialData.name);
+              dashboardMaterials.push(materialData);
+            });
+            
+            console.log("Total Dashboard Materials loaded:", dashboardMaterials.length);
+            
+            // Hide loading state
+            dashboardMaterialsLoading.style.display = 'none';
+            
+            if (dashboardMaterials.length === 0) {
+              console.log("No Dashboard Materials found");
+              // Don't show the section at all if no materials
+              dashboardMaterialsSection.style.display = 'none';
+            } else {
+              console.log("Rendering Dashboard Materials");
+              dashboardMaterialsSection.style.display = 'block';
+              emptyDashboardMaterials.style.display = 'none';
+              dashboardMaterialsContainer.style.display = 'grid';
+              renderDashboardMaterials();
+            }
+          }, 
+          (error) => {
+            console.error("Error in Dashboard Materials query:", error);
+            dashboardMaterialsLoading.style.display = 'none';
+            // If error, don't show the section
+            dashboardMaterialsSection.style.display = 'none';
+          }
+        );
+      } catch (error) {
+        console.error("Unexpected error in loadDashboardMaterials:", error);
+        dashboardMaterialsLoading.style.display = 'none';
+        dashboardMaterialsSection.style.display = 'none';
+      }
+    }
+
+    // Render Dashboard Materials as buttons
+    function renderDashboardMaterials() {
+      console.log("Rendering", dashboardMaterials.length, "Dashboard Materials as buttons");
+      
+      // Clear existing buttons
+      dashboardMaterialsContainer.innerHTML = '';
+      
+      // Create buttons for each dashboard material
+      dashboardMaterials.forEach(material => {
+        const button = document.createElement('a');
+        button.className = 'dashboard-material-btn';
+        
+        // Add icon if available
+        if (material.icon) {
+          button.innerHTML = `<i class="${material.icon}" style="margin-right: 10px;"></i> ${material.name}`;
+        } else {
+          button.textContent = material.name;
+        }
+        
+        // Check if the material has a link
+        if (material.link && material.link.trim() !== '') {
+          button.href = material.link;
+          
+          // Add click handler for external links
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentExternalLink = material.link;
+            currentEbookName = material.name;
+            
+            // Update modal text with material name
+            modalLinkText.textContent = `You are about to open: "${material.name}"`;
+            
+            // Show modal for external links
+            externalLinkModal.style.display = 'flex';
+          });
+        } else {
+          // No link - disable the button
+          button.href = '#';
+          button.style.opacity = '0.6';
+          button.style.cursor = 'not-allowed';
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('No link available for this material yet.');
+          });
+        }
+        
+        dashboardMaterialsContainer.appendChild(button);
+      });
+      
+      console.log("Dashboard Materials buttons rendered successfully");
+    }
+
     // Modal Open/Close Functions
     editProfileBtn.addEventListener('click', () => {
       // Pre-fill form with current data
@@ -689,6 +999,24 @@
       changePasswordModal.style.display = 'none';
     });
 
+    // External Link Modal handlers
+    confirmOpen.addEventListener('click', function() {
+      if (currentExternalLink) {
+        console.log("Opening external link:", currentExternalLink);
+        window.open(currentExternalLink, '_blank');
+        externalLinkModal.style.display = 'none';
+        currentExternalLink = '';
+        currentEbookName = '';
+      }
+    });
+
+    cancelOpen.addEventListener('click', function() {
+      console.log("Cancelled opening external link");
+      externalLinkModal.style.display = 'none';
+      currentExternalLink = '';
+      currentEbookName = '';
+    });
+
     // Close modal when clicking outside
     window.addEventListener('click', (event) => {
       if (event.target === editProfileModal) {
@@ -696,6 +1024,11 @@
       }
       if (event.target === changePasswordModal) {
         changePasswordModal.style.display = 'none';
+      }
+      if (event.target === externalLinkModal) {
+        externalLinkModal.style.display = 'none';
+        currentExternalLink = '';
+        currentEbookName = '';
       }
     });
 
@@ -820,6 +1153,9 @@
       element.className = `message ${type}`;
       element.style.display = 'block';
     }
+
+    // Make functions available globally for retry buttons
+    window.loadDashboardMaterials = loadDashboardMaterials;
   </script>
 </body>
 </html>
