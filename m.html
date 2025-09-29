@@ -315,6 +315,31 @@
       color: white;
     }
     
+    /* Loading State */
+    .loading-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #fff;
+    }
+    
+    .loading-state i {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #4CAF50;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #fff;
+    }
+    
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 0.3);
+    }
+    
     @media (max-width: 768px) {
       .button-container {
         grid-template-columns: 1fr;
@@ -389,17 +414,23 @@
     <p class="tagline">Advanced study materials for masters final year botany students</p>
   </header>
 
-  <div class="button-container">
-    <a href="https://drive.google.com/file/d/1cLeYFOuSputVzMd1V-icisE19xt6bmZr/view?usp=drivesdk" class="btn" target="_blank">Taxonomy of Angiosperms</a>
-    <a href="#" class="btn">Advanced Plant Physiology</a>
-    <a href="#" class="btn">Plant Ecology and Environment</a>
-    <a href="https://drive.google.com/file/d/1ExYwKqD8IaxN-43eaMhI9-NP2T4efyYN/view?usp=drivesdk" class="btn">Molecular Genetics</a>
-    <a href="#" class="btn">Microbiology and Microbial Biotechnology</a>
-    <a href="#" class="btn">Advanced Phycology</a>
-    <a href="#" class="btn">Plant Pathology and Crop Protection</a>
-    <a href="#" class="btn">Plant Biotechnology</a>
-    <a href="#" class="btn">Medicinal Plants and Herbal Medicines</a>
-    <a href="#" class="btn">Information And Communication Technology</a>
+  <!-- Loading State -->
+  <div class="loading-state" id="loadingState">
+    <i class="fas fa-spinner fa-spin"></i>
+    <h3>Loading eBooks...</h3>
+    <p>Please wait while we fetch your study materials</p>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="emptyState" style="display: none;">
+    <i class="fas fa-book-open"></i>
+    <h3>No eBooks Available</h3>
+    <p>Study materials will be added soon</p>
+  </div>
+
+  <!-- Dynamic Button Container -->
+  <div class="button-container" id="buttonContainer" style="display: none;">
+    <!-- eBook buttons will be dynamically added here -->
   </div>
 
   <!-- Back Button -->
@@ -464,7 +495,16 @@
       signOut,
       onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+    import { 
+      getFirestore, 
+      doc, 
+      getDoc, 
+      collection, 
+      query, 
+      where, 
+      orderBy, 
+      onSnapshot 
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyChDeqEPatoWTUPoZpcYOSXcnAuoVJsV-c",
@@ -489,8 +529,12 @@
     const driveModal = document.getElementById('driveModal');
     const confirmOpen = document.getElementById('confirmOpen');
     const cancelOpen = document.getElementById('cancelOpen');
+    const loadingState = document.getElementById('loadingState');
+    const emptyState = document.getElementById('emptyState');
+    const buttonContainer = document.getElementById('buttonContainer');
 
     let currentDriveLink = '';
+    let ebooks = [];
 
     // Toggle dropdown menu
     userInfo.addEventListener('click', (e) => {
@@ -521,10 +565,14 @@
             userName.textContent = user.email.split('@')[0];
             userAvatar.textContent = user.email.charAt(0).toUpperCase();
           }
+          
+          // Load eBooks after user is authenticated
+          loadEbooks();
         } catch (error) {
           console.error("Error loading user data:", error);
           userName.textContent = user.email.split('@')[0];
           userAvatar.textContent = user.email.charAt(0).toUpperCase();
+          loadEbooks();
         }
       } else {
         // User is not signed in, redirect to login
@@ -549,24 +597,96 @@
       e.stopPropagation();
     });
 
-    // Google Drive link handling
-    document.querySelectorAll('.btn').forEach(button => {
-      button.addEventListener('click', function(e) {
-        const href = this.getAttribute('href');
+    // Load eBooks from Firestore
+    function loadEbooks() {
+      try {
+        // Query eBooks for Masters Final Year page, ordered by order field
+        const q = query(
+          collection(db, "ebooks"), 
+          where("page", "==", "Masters Final Year"),
+          orderBy("order", "asc")
+        );
         
-        // Check if it's a Google Drive link
-        if (href && href.includes('drive.google.com')) {
-          e.preventDefault();
-          currentDriveLink = href;
-          driveModal.style.display = 'flex';
-        } else if (href === '#') {
-          e.preventDefault();
-          // Button without link - you can add functionality here later
-          console.log('Button clicked without link:', this.textContent);
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+          ebooks = [];
+          querySnapshot.forEach((doc) => {
+            const ebookData = doc.data();
+            ebookData.id = doc.id;
+            ebooks.push(ebookData);
+          });
+          
+          // Hide loading state
+          loadingState.style.display = 'none';
+          
+          if (ebooks.length === 0) {
+            // Show empty state if no eBooks
+            emptyState.style.display = 'block';
+            buttonContainer.style.display = 'none';
+          } else {
+            // Show button container and render eBooks
+            emptyState.style.display = 'none';
+            buttonContainer.style.display = 'grid';
+            renderEbooks();
+          }
+        }, (error) => {
+          console.error("Error loading eBooks:", error);
+          loadingState.style.display = 'none';
+          emptyState.style.display = 'block';
+          emptyState.innerHTML = `
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Error Loading eBooks</h3>
+            <p>Please try again later</p>
+          `;
+        });
+      } catch (error) {
+        console.error("Error setting up eBooks listener:", error);
+        loadingState.style.display = 'none';
+        emptyState.style.display = 'block';
+        emptyState.innerHTML = `
+          <i class="fas fa-exclamation-triangle"></i>
+          <h3>Error Loading eBooks</h3>
+          <p>Please try again later</p>
+        `;
+      }
+    }
+
+    // Render eBooks as buttons
+    function renderEbooks() {
+      // Clear existing buttons
+      buttonContainer.innerHTML = '';
+      
+      // Create buttons for each eBook
+      ebooks.forEach(ebook => {
+        const button = document.createElement('a');
+        button.className = 'btn';
+        button.textContent = ebook.name;
+        
+        // Check if the eBook has a link
+        if (ebook.link && ebook.link.trim() !== '') {
+          button.href = ebook.link;
+          
+          // Add click handler for Google Drive links
+          if (ebook.link.includes('drive.google.com')) {
+            button.addEventListener('click', function(e) {
+              e.preventDefault();
+              currentDriveLink = ebook.link;
+              driveModal.style.display = 'flex';
+            });
+          }
+          // For other links, they will open normally
+        } else {
+          // No link - disable the button
+          button.href = '#';
+          button.style.opacity = '0.6';
+          button.style.cursor = 'not-allowed';
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+          });
         }
-        // If it's a regular link (not # and not drive.google.com), it will open normally
+        
+        buttonContainer.appendChild(button);
       });
-    });
+    }
 
     // Modal buttons
     confirmOpen.addEventListener('click', function() {
