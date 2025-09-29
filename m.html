@@ -265,7 +265,7 @@
       opacity: 0.8;
     }
 
-    /* Modal for Google Drive Links */
+    /* Modal for External Links */
     .modal {
       display: none;
       position: fixed;
@@ -464,11 +464,12 @@
     <i class="fas fa-arrow-left"></i> Back to Main Page
   </a>
 
-  <!-- Google Drive Link Modal -->
-  <div class="modal" id="driveModal">
+  <!-- External Link Modal -->
+  <div class="modal" id="externalLinkModal">
     <div class="modal-content">
-      <h3 style="color: #333; margin-bottom: 15px;"><i class="fas fa-external-link-alt"></i> Opening The File</h3>
-      <p style="color: #666; margin-bottom: 20px;">Make sure pop-ups are allowed for this file.</p>
+      <h3 style="color: #333; margin-bottom: 15px;"><i class="fas fa-external-link-alt"></i> Opening External Link</h3>
+      <p style="color: #666; margin-bottom: 10px;" id="modalLinkText">You are about to open an external study material.</p>
+      <p style="color: #888; font-size: 0.9rem; margin-bottom: 20px;">Make sure pop-ups are allowed for this site.</p>
       <div class="modal-buttons">
         <button class="modal-btn modal-open" id="confirmOpen">Open Link</button>
         <button class="modal-btn modal-cancel" id="cancelOpen">Cancel</button>
@@ -552,14 +553,16 @@
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
     const logoutBtn = document.getElementById('logoutBtn');
-    const driveModal = document.getElementById('driveModal');
+    const externalLinkModal = document.getElementById('externalLinkModal');
     const confirmOpen = document.getElementById('confirmOpen');
     const cancelOpen = document.getElementById('cancelOpen');
+    const modalLinkText = document.getElementById('modalLinkText');
     const loadingState = document.getElementById('loadingState');
     const emptyState = document.getElementById('emptyState');
     const buttonContainer = document.getElementById('buttonContainer');
 
-    let currentDriveLink = '';
+    let currentExternalLink = '';
+    let currentEbookName = '';
     let ebooks = [];
 
     // Toggle dropdown menu
@@ -780,15 +783,18 @@
         if (ebook.link && ebook.link.trim() !== '') {
           button.href = ebook.link;
           
-          // Add click handler for Google Drive links
-          if (ebook.link.includes('drive.google.com')) {
-            button.addEventListener('click', function(e) {
-              e.preventDefault();
-              currentDriveLink = ebook.link;
-              driveModal.style.display = 'flex';
-            });
-          }
-          // For other links, they will open normally
+          // Add click handler for ALL external links (not just Google Drive)
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentExternalLink = ebook.link;
+            currentEbookName = ebook.name;
+            
+            // Update modal text with ebook name
+            modalLinkText.textContent = `You are about to open: "${ebook.name}"`;
+            
+            // Show modal for all external links
+            externalLinkModal.style.display = 'flex';
+          });
         } else {
           // No link - disable the button
           button.href = '#';
@@ -809,25 +815,28 @@
 
     // Modal buttons
     confirmOpen.addEventListener('click', function() {
-      if (currentDriveLink) {
-        console.log("Opening Google Drive link:", currentDriveLink);
-        window.open(currentDriveLink, '_blank');
-        driveModal.style.display = 'none';
-        currentDriveLink = '';
+      if (currentExternalLink) {
+        console.log("Opening external link:", currentExternalLink);
+        window.open(currentExternalLink, '_blank');
+        externalLinkModal.style.display = 'none';
+        currentExternalLink = '';
+        currentEbookName = '';
       }
     });
 
     cancelOpen.addEventListener('click', function() {
-      console.log("Cancelled opening Google Drive link");
-      driveModal.style.display = 'none';
-      currentDriveLink = '';
+      console.log("Cancelled opening external link");
+      externalLinkModal.style.display = 'none';
+      currentExternalLink = '';
+      currentEbookName = '';
     });
 
     // Close modal when clicking outside
     window.addEventListener('click', function(e) {
-      if (e.target === driveModal) {
-        driveModal.style.display = 'none';
-        currentDriveLink = '';
+      if (e.target === externalLinkModal) {
+        externalLinkModal.style.display = 'none';
+        currentExternalLink = '';
+        currentEbookName = '';
       }
     });
 
@@ -839,4 +848,4 @@
   <script type='text/javascript' src='//pl27696616.revenuecpmgate.com/ab/f3/9c/abf39cc2db32e330648becd45108c409.js'></script>
   <script type='text/javascript' src='//pl27703488.revenuecpmgate.com/91/6c/6e/916c6e9ca16af6ee852fd57d9840b0d6.js'></script>
 </body>
-</html>
+  </html>
