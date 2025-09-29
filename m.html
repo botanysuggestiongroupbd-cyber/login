@@ -576,6 +576,7 @@
     // Check authentication state
     onAuthStateChanged(auth, async (user) => {
       if (user) {
+        console.log("User authenticated:", user.uid);
         // User is signed in
         try {
           const docRef = doc(db, "students", user.uid);
@@ -602,6 +603,7 @@
         }
       } else {
         // User is not signed in, redirect to login
+        console.log("User not authenticated, redirecting to login");
         window.location.href = 'login.html';
       }
     });
@@ -625,59 +627,140 @@
 
     // Load eBooks from Firestore
     function loadEbooks() {
+      console.log("Starting to load eBooks for Masters Final Year...");
+      
       try {
-        // Query eBooks for Masters Final Year page, ordered by order field
+        // First try: Query with where clause and orderBy
         const q = query(
           collection(db, "ebooks"), 
           where("page", "==", "Masters Final Year"),
           orderBy("order", "asc")
         );
         
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-          ebooks = [];
-          querySnapshot.forEach((doc) => {
-            const ebookData = doc.data();
-            ebookData.id = doc.id;
-            ebooks.push(ebookData);
-          });
-          
-          // Hide loading state
-          loadingState.style.display = 'none';
-          
-          if (ebooks.length === 0) {
-            // Show empty state if no eBooks
-            emptyState.style.display = 'block';
-            buttonContainer.style.display = 'none';
-          } else {
-            // Show button container and render eBooks
-            emptyState.style.display = 'none';
-            buttonContainer.style.display = 'grid';
-            renderEbooks();
+        console.log("Firestore query created");
+        
+        const unsubscribe = onSnapshot(q, 
+          (querySnapshot) => {
+            console.log("Firestore snapshot received, documents:", querySnapshot.size);
+            
+            ebooks = [];
+            querySnapshot.forEach((doc) => {
+              const ebookData = doc.data();
+              ebookData.id = doc.id;
+              console.log("Found eBook:", ebookData.name, "| Page:", ebookData.page, "| Order:", ebookData.order);
+              ebooks.push(ebookData);
+            });
+            
+            console.log("Total eBooks loaded:", ebooks.length);
+            
+            // Hide loading state
+            loadingState.style.display = 'none';
+            
+            if (ebooks.length === 0) {
+              console.log("No eBooks found for Masters Final Year");
+              emptyState.style.display = 'block';
+              buttonContainer.style.display = 'none';
+            } else {
+              console.log("Rendering eBook buttons");
+              emptyState.style.display = 'none';
+              buttonContainer.style.display = 'grid';
+              renderEbooks();
+            }
+          }, 
+          (error) => {
+            console.error("Error in Firestore query:", error);
+            console.error("Error code:", error.code);
+            console.error("Error message:", error.message);
+            
+            // If compound query fails, try alternative approach
+            if (error.code === 'failed-precondition') {
+              console.log("Trying alternative loading method...");
+              loadEbooksAlternative();
+            } else {
+              loadingState.style.display = 'none';
+              emptyState.style.display = 'block';
+              emptyState.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Database Error</h3>
+                <p>Error loading materials: ${error.code}</p>
+                <p>${error.message}</p>
+                <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Retry</button>
+              `;
+            }
           }
-        }, (error) => {
-          console.error("Error loading eBooks:", error);
-          loadingState.style.display = 'none';
-          emptyState.style.display = 'block';
-          emptyState.innerHTML = `
-            <i class="fas fa-book-medical"></i>
-            <h3>Study Materials Coming Soon</h3>
-            <p>We're currently preparing high-quality study materials for Masters Final Year subjects.<br>Please check back soon or contact your course administrator for updates.</p>
-          `;
-        });
+        );
       } catch (error) {
-        console.error("Error setting up eBooks listener:", error);
+        console.error("Unexpected error in loadEbooks:", error);
         loadingState.style.display = 'none';
         emptyState.style.display = 'block';
         emptyState.innerHTML = `
-          <i class="fas fa-book-medical"></i>
-          <h3>Study Materials Coming Soon</h3>
-          <p>We're currently preparing high-quality study materials for Masters Final Year subjects.<br>Please check back soon or contact your course administrator for updates.</p>
+          <i class="fas fa-exclamation-triangle"></i>
+          <h3>Unexpected Error</h3>
+          <p>${error.message}</p>
+          <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Retry</button>
         `;
+      }
+    }
+
+    // Alternative loading method - get all eBooks and filter client-side
+    function loadEbooksAlternative() {
+      console.log("Using alternative loading method...");
+      
+      try {
+        const q = query(collection(db, "ebooks"), orderBy("order", "asc"));
+        
+        const unsubscribe = onSnapshot(q, 
+          (querySnapshot) => {
+            console.log("Alternative method - All eBooks count:", querySnapshot.size);
+            
+            ebooks = [];
+            querySnapshot.forEach((doc) => {
+              const ebookData = doc.data();
+              ebookData.id = doc.id;
+              
+              // Client-side filtering for Masters Final Year
+              if (ebookData.page === "Masters Final Year") {
+                console.log("Matching eBook found:", ebookData.name);
+                ebooks.push(ebookData);
+              }
+            });
+            
+            console.log("Alternative method - Filtered eBooks count:", ebooks.length);
+            
+            loadingState.style.display = 'none';
+            
+            if (ebooks.length === 0) {
+              emptyState.style.display = 'block';
+              buttonContainer.style.display = 'none';
+            } else {
+              emptyState.style.display = 'none';
+              buttonContainer.style.display = 'grid';
+              renderEbooks();
+            }
+          }, 
+          (error) => {
+            console.error("Alternative method error:", error);
+            loadingState.style.display = 'none';
+            emptyState.style.display = 'block';
+            emptyState.innerHTML = `
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>Failed to Load Materials</h3>
+              <p>Please check your internet connection and try again.</p>
+              <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Retry</button>
+            `;
+          }
+        );
+      } catch (error) {
+        console.error("Unexpected error in alternative method:", error);
+        loadingState.style.display = 'none';
+        emptyState.style.display = 'block';
       }
     }
 
     // Render eBooks as buttons
     function renderEbooks() {
+      console.log("Rendering", ebooks.length, "eBooks as buttons");
+      
       // Clear existing buttons
       buttonContainer.innerHTML = '';
       
@@ -685,7 +768,13 @@
       ebooks.forEach(ebook => {
         const button = document.createElement('a');
         button.className = 'btn';
-        button.textContent = ebook.name;
+        
+        // Add icon if available
+        if (ebook.icon) {
+          button.innerHTML = `<i class="${ebook.icon}" style="margin-right: 10px;"></i> ${ebook.name}`;
+        } else {
+          button.textContent = ebook.name;
+        }
         
         // Check if the eBook has a link
         if (ebook.link && ebook.link.trim() !== '') {
@@ -705,18 +794,23 @@
           button.href = '#';
           button.style.opacity = '0.6';
           button.style.cursor = 'not-allowed';
+          button.title = 'No link available';
           button.addEventListener('click', function(e) {
             e.preventDefault();
+            alert('No study material link available for this subject yet.');
           });
         }
         
         buttonContainer.appendChild(button);
       });
+      
+      console.log("eBook buttons rendered successfully");
     }
 
     // Modal buttons
     confirmOpen.addEventListener('click', function() {
       if (currentDriveLink) {
+        console.log("Opening Google Drive link:", currentDriveLink);
         window.open(currentDriveLink, '_blank');
         driveModal.style.display = 'none';
         currentDriveLink = '';
@@ -724,6 +818,7 @@
     });
 
     cancelOpen.addEventListener('click', function() {
+      console.log("Cancelled opening Google Drive link");
       driveModal.style.display = 'none';
       currentDriveLink = '';
     });
@@ -735,9 +830,13 @@
         currentDriveLink = '';
       }
     });
+
+    // Make functions available globally for retry buttons
+    window.loadEbooks = loadEbooks;
+    window.loadEbooksAlternative = loadEbooksAlternative;
   </script>
 
   <script type='text/javascript' src='//pl27696616.revenuecpmgate.com/ab/f3/9c/abf39cc2db32e330648becd45108c409.js'></script>
   <script type='text/javascript' src='//pl27703488.revenuecpmgate.com/91/6c/6e/916c6e9ca16af6ee852fd57d9840b0d6.js'></script>
 </body>
-  </html>
+</html>
