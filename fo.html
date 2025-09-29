@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fourth Year Subjects - Botany Study Materials</title>
+  <title>Masters Final Year Subjects - Botany Study Materials</title>
   <style>
     body {
       margin: 0;
@@ -264,6 +264,98 @@
       font-size: 0.9rem;
       opacity: 0.8;
     }
+
+    /* Modal for External Links */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+      color: #333;
+    }
+    
+    .modal-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    
+    .modal-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .modal-open {
+      background: #4CAF50;
+      color: white;
+    }
+    
+    .modal-cancel {
+      background: #f44336;
+      color: white;
+    }
+    
+    /* Loading State */
+    .loading-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #fff;
+    }
+    
+    .loading-state i {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #4CAF50;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      margin: 20px 0;
+      max-width: 600px;
+      width: 100%;
+    }
+    
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .empty-state h3 {
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+      color: #fff;
+    }
+    
+    .empty-state p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      opacity: 0.8;
+    }
     
     @media (max-width: 768px) {
       .button-container {
@@ -298,6 +390,24 @@
         padding: 15px;
         min-height: 60px;
       }
+
+      .modal-content {
+        padding: 20px;
+        margin: 20px;
+      }
+      
+      .modal-buttons {
+        flex-direction: column;
+      }
+      
+      .empty-state {
+        padding: 30px 20px;
+        margin: 10px;
+      }
+      
+      .empty-state i {
+        font-size: 3rem;
+      }
     }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -326,26 +436,46 @@
   </div>
 
   <header>
-    <h1>Fourth Year Subjects</h1>
-    <p class="tagline">Comprehensive collection of study materials for fourth year botany students</p>
+    <h1>Honours Fourth Year Subjects</h1>
+    <p class="tagline">Comprehensive collection of study materials for Fourth year botany students</p>
   </header>
 
-  <div class="button-container">
-    <a href="#" class="btn">Agronomy and Horticulture</a>
-    <a href="#" class="btn">Economic Botany, Ethnobotany and Pharmacognosy</a>
-    <a href="#" class="btn">Limnology and Aquaculture</a>
-    <a href="#" class="btn">Biodiversity and Evolution</a>
-    <a href="#" class="btn">Plant Breeding</a>
-    <a href="#" class="btn">Molecular Biology and Bioinformatics</a>
-    <a href="#" class="btn">Biostatistics and Research Methodology</a>
-    <a href="#" class="btn">Biotechnology and Genetic Engineering</a>
-    <a href="#" class="btn">Practical Paper-IV</a>
+  <!-- Loading State -->
+  <div class="loading-state" id="loadingState">
+    <i class="fas fa-spinner fa-spin"></i>
+    <h3>Loading Study Materials...</h3>
+    <p>Please wait while we fetch your resources</p>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="emptyState" style="display: none;">
+    <i class="fas fa-book-medical"></i>
+    <h3>Study Materials Coming Soon</h3>
+    <p>We're currently preparing high-quality study materials for Masters Final Year subjects.<br>Please check back soon or contact your course administrator for updates.</p>
+  </div>
+
+  <!-- Dynamic Button Container -->
+  <div class="button-container" id="buttonContainer" style="display: none;">
+    <!-- eBook buttons will be dynamically added here -->
   </div>
 
   <!-- Back Button -->
   <a href="all.html" class="back-button">
     <i class="fas fa-arrow-left"></i> Back to Main Page
   </a>
+
+  <!-- External Link Modal -->
+  <div class="modal" id="externalLinkModal">
+    <div class="modal-content">
+      <h3 style="color: #333; margin-bottom: 15px;"><i class="fas fa-external-link-alt"></i> Opening External Link</h3>
+      <p style="color: #666; margin-bottom: 10px;" id="modalLinkText">You are about to open an external study material.</p>
+      <p style="color: #888; font-size: 0.9rem; margin-bottom: 20px;">Make sure pop-ups are allowed for this site.</p>
+      <div class="modal-buttons">
+        <button class="modal-btn modal-open" id="confirmOpen">Open Link</button>
+        <button class="modal-btn modal-cancel" id="cancelOpen">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <div class="ad-container">
     <div class="ad-box">
@@ -392,7 +522,16 @@
       signOut,
       onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+    import { 
+      getFirestore, 
+      doc, 
+      getDoc, 
+      collection, 
+      query, 
+      where, 
+      orderBy, 
+      onSnapshot 
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyChDeqEPatoWTUPoZpcYOSXcnAuoVJsV-c",
@@ -414,6 +553,17 @@
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
     const logoutBtn = document.getElementById('logoutBtn');
+    const externalLinkModal = document.getElementById('externalLinkModal');
+    const confirmOpen = document.getElementById('confirmOpen');
+    const cancelOpen = document.getElementById('cancelOpen');
+    const modalLinkText = document.getElementById('modalLinkText');
+    const loadingState = document.getElementById('loadingState');
+    const emptyState = document.getElementById('emptyState');
+    const buttonContainer = document.getElementById('buttonContainer');
+
+    let currentExternalLink = '';
+    let currentEbookName = '';
+    let ebooks = [];
 
     // Toggle dropdown menu
     userInfo.addEventListener('click', (e) => {
@@ -429,6 +579,7 @@
     // Check authentication state
     onAuthStateChanged(auth, async (user) => {
       if (user) {
+        console.log("User authenticated:", user.uid);
         // User is signed in
         try {
           const docRef = doc(db, "students", user.uid);
@@ -444,13 +595,18 @@
             userName.textContent = user.email.split('@')[0];
             userAvatar.textContent = user.email.charAt(0).toUpperCase();
           }
+          
+          // Load eBooks after user is authenticated
+          loadEbooks();
         } catch (error) {
           console.error("Error loading user data:", error);
           userName.textContent = user.email.split('@')[0];
           userAvatar.textContent = user.email.charAt(0).toUpperCase();
+          loadEbooks();
         }
       } else {
         // User is not signed in, redirect to login
+        console.log("User not authenticated, redirecting to login");
         window.location.href = 'login.html';
       }
     });
@@ -472,18 +628,224 @@
       e.stopPropagation();
     });
 
-    // Add click handlers for subject buttons (for future Google Drive links)
-    document.querySelectorAll('.btn').forEach(button => {
-      button.addEventListener('click', function(e) {
-        // You can add Google Drive link functionality here later
-        console.log('Button clicked:', this.textContent);
-        // For now, just prevent the default action
-        e.preventDefault();
+    // Load eBooks from Firestore
+    function loadEbooks() {
+      console.log("Starting to load eBooks for Masters Final Year...");
+      
+      try {
+        // First try: Query with where clause and orderBy
+        const q = query(
+          collection(db, "ebooks"), 
+          where("page", "==", "Masters Final Year"),
+          orderBy("order", "asc")
+        );
+        
+        console.log("Firestore query created");
+        
+        const unsubscribe = onSnapshot(q, 
+          (querySnapshot) => {
+            console.log("Firestore snapshot received, documents:", querySnapshot.size);
+            
+            ebooks = [];
+            querySnapshot.forEach((doc) => {
+              const ebookData = doc.data();
+              ebookData.id = doc.id;
+              console.log("Found eBook:", ebookData.name, "| Page:", ebookData.page, "| Order:", ebookData.order);
+              ebooks.push(ebookData);
+            });
+            
+            console.log("Total eBooks loaded:", ebooks.length);
+            
+            // Hide loading state
+            loadingState.style.display = 'none';
+            
+            if (ebooks.length === 0) {
+              console.log("No eBooks found for Masters Final Year");
+              emptyState.style.display = 'block';
+              buttonContainer.style.display = 'none';
+            } else {
+              console.log("Rendering eBook buttons");
+              emptyState.style.display = 'none';
+              buttonContainer.style.display = 'grid';
+              renderEbooks();
+            }
+          }, 
+          (error) => {
+            console.error("Error in Firestore query:", error);
+            console.error("Error code:", error.code);
+            console.error("Error message:", error.message);
+            
+            // If compound query fails, try alternative approach
+            if (error.code === 'failed-precondition') {
+              console.log("Trying alternative loading method...");
+              loadEbooksAlternative();
+            } else {
+              loadingState.style.display = 'none';
+              emptyState.style.display = 'block';
+              emptyState.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Database Error</h3>
+                <p>Error loading materials: ${error.code}</p>
+                <p>${error.message}</p>
+                <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Retry</button>
+              `;
+            }
+          }
+        );
+      } catch (error) {
+        console.error("Unexpected error in loadEbooks:", error);
+        loadingState.style.display = 'none';
+        emptyState.style.display = 'block';
+        emptyState.innerHTML = `
+          <i class="fas fa-exclamation-triangle"></i>
+          <h3>Unexpected Error</h3>
+          <p>${error.message}</p>
+          <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Retry</button>
+        `;
+      }
+    }
+
+    // Alternative loading method - get all eBooks and filter client-side
+    function loadEbooksAlternative() {
+      console.log("Using alternative loading method...");
+      
+      try {
+        const q = query(collection(db, "ebooks"), orderBy("order", "asc"));
+        
+        const unsubscribe = onSnapshot(q, 
+          (querySnapshot) => {
+            console.log("Alternative method - All eBooks count:", querySnapshot.size);
+            
+            ebooks = [];
+            querySnapshot.forEach((doc) => {
+              const ebookData = doc.data();
+              ebookData.id = doc.id;
+              
+              // Client-side filtering for Masters Final Year
+              if (ebookData.page === "Masters Final Year") {
+                console.log("Matching eBook found:", ebookData.name);
+                ebooks.push(ebookData);
+              }
+            });
+            
+            console.log("Alternative method - Filtered eBooks count:", ebooks.length);
+            
+            loadingState.style.display = 'none';
+            
+            if (ebooks.length === 0) {
+              emptyState.style.display = 'block';
+              buttonContainer.style.display = 'none';
+            } else {
+              emptyState.style.display = 'none';
+              buttonContainer.style.display = 'grid';
+              renderEbooks();
+            }
+          }, 
+          (error) => {
+            console.error("Alternative method error:", error);
+            loadingState.style.display = 'none';
+            emptyState.style.display = 'block';
+            emptyState.innerHTML = `
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>Failed to Load Materials</h3>
+              <p>Please check your internet connection and try again.</p>
+              <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Retry</button>
+            `;
+          }
+        );
+      } catch (error) {
+        console.error("Unexpected error in alternative method:", error);
+        loadingState.style.display = 'none';
+        emptyState.style.display = 'block';
+      }
+    }
+
+    // Render eBooks as buttons
+    function renderEbooks() {
+      console.log("Rendering", ebooks.length, "eBooks as buttons");
+      
+      // Clear existing buttons
+      buttonContainer.innerHTML = '';
+      
+      // Create buttons for each eBook
+      ebooks.forEach(ebook => {
+        const button = document.createElement('a');
+        button.className = 'btn';
+        
+        // Add icon if available
+        if (ebook.icon) {
+          button.innerHTML = `<i class="${ebook.icon}" style="margin-right: 10px;"></i> ${ebook.name}`;
+        } else {
+          button.textContent = ebook.name;
+        }
+        
+        // Check if the eBook has a link
+        if (ebook.link && ebook.link.trim() !== '') {
+          button.href = ebook.link;
+          
+          // Add click handler for ALL external links (not just Google Drive)
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentExternalLink = ebook.link;
+            currentEbookName = ebook.name;
+            
+            // Update modal text with ebook name
+            modalLinkText.textContent = `You are about to open: "${ebook.name}"`;
+            
+            // Show modal for all external links
+            externalLinkModal.style.display = 'flex';
+          });
+        } else {
+          // No link - disable the button
+          button.href = '#';
+          button.style.opacity = '0.6';
+          button.style.cursor = 'not-allowed';
+          button.title = 'No link available';
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('No study material link available for this subject yet.');
+          });
+        }
+        
+        buttonContainer.appendChild(button);
       });
+      
+      console.log("eBook buttons rendered successfully");
+    }
+
+    // Modal buttons
+    confirmOpen.addEventListener('click', function() {
+      if (currentExternalLink) {
+        console.log("Opening external link:", currentExternalLink);
+        window.open(currentExternalLink, '_blank');
+        externalLinkModal.style.display = 'none';
+        currentExternalLink = '';
+        currentEbookName = '';
+      }
     });
+
+    cancelOpen.addEventListener('click', function() {
+      console.log("Cancelled opening external link");
+      externalLinkModal.style.display = 'none';
+      currentExternalLink = '';
+      currentEbookName = '';
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function(e) {
+      if (e.target === externalLinkModal) {
+        externalLinkModal.style.display = 'none';
+        currentExternalLink = '';
+        currentEbookName = '';
+      }
+    });
+
+    // Make functions available globally for retry buttons
+    window.loadEbooks = loadEbooks;
+    window.loadEbooksAlternative = loadEbooksAlternative;
   </script>
 
   <script type='text/javascript' src='//pl27696616.revenuecpmgate.com/ab/f3/9c/abf39cc2db32e330648becd45108c409.js'></script>
   <script type='text/javascript' src='//pl27703488.revenuecpmgate.com/91/6c/6e/916c6e9ca16af6ee852fd57d9840b0d6.js'></script>
 </body>
-</html>
+  </html>
