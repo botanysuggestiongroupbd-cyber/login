@@ -706,6 +706,7 @@
       query,
       where,
       orderBy,
+      getDocs,
       onSnapshot
     } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
@@ -761,6 +762,7 @@
     let currentExternalLink = '';
     let currentEbookName = '';
     let dashboardMaterials = [];
+    let dashboardMaterialsUnsubscribe = null;
 
     // Check authentication state
     onAuthStateChanged(auth, async (user) => {
@@ -854,63 +856,124 @@
       `;
     }
 
-    // Load Dashboard Materials from Firestore
+    // Load Dashboard Materials from Firestore - COMPLETELY REWRITTEN
     function loadDashboardMaterials() {
-      console.log("Starting to load Dashboard Materials...");
+      console.log("🚀 Starting to load Dashboard Materials...");
+      
+      // Show loading state
+      dashboardMaterialsSection.style.display = 'block';
+      dashboardMaterialsLoading.style.display = 'block';
+      emptyDashboardMaterials.style.display = 'none';
+      dashboardMaterialsContainer.style.display = 'none';
       
       try {
+        // Create query for active dashboard materials ordered by order field
         const q = query(
           collection(db, "dashboardMaterials"), 
           where("active", "==", true),
           orderBy("order", "asc")
         );
         
-        const unsubscribe = onSnapshot(q, 
+        console.log("📋 Query created for dashboardMaterials collection");
+        
+        // Use getDocs for initial load (more reliable)
+        getDocs(q).then((querySnapshot) => {
+          console.log("✅ Dashboard Materials snapshot received, documents:", querySnapshot.size);
+          
+          dashboardMaterials = [];
+          querySnapshot.forEach((doc) => {
+            const materialData = doc.data();
+            materialData.id = doc.id;
+            console.log("📄 Found Dashboard Material:", materialData.name, materialData);
+            dashboardMaterials.push(materialData);
+          });
+          
+          console.log("📊 Total Dashboard Materials loaded:", dashboardMaterials.length);
+          
+          // Process the results
+          processDashboardMaterials();
+          
+        }).catch((error) => {
+          console.error("❌ Error in Dashboard Materials query:", error);
+          handleDashboardMaterialsError(error);
+        });
+        
+        // Also set up real-time listener for future updates
+        dashboardMaterialsUnsubscribe = onSnapshot(q, 
           (querySnapshot) => {
-            console.log("Dashboard Materials snapshot received, documents:", querySnapshot.size);
-            
+            console.log("🔄 Real-time update for Dashboard Materials");
             dashboardMaterials = [];
             querySnapshot.forEach((doc) => {
               const materialData = doc.data();
               materialData.id = doc.id;
-              console.log("Found Dashboard Material:", materialData.name);
               dashboardMaterials.push(materialData);
             });
             
-            console.log("Total Dashboard Materials loaded:", dashboardMaterials.length);
-            
-            // Hide loading state
-            dashboardMaterialsLoading.style.display = 'none';
-            
-            if (dashboardMaterials.length === 0) {
-              console.log("No Dashboard Materials found");
-              // Don't show the section at all if no materials
-              dashboardMaterialsSection.style.display = 'none';
-            } else {
-              console.log("Rendering Dashboard Materials");
-              dashboardMaterialsSection.style.display = 'block';
-              emptyDashboardMaterials.style.display = 'none';
-              dashboardMaterialsContainer.style.display = 'grid';
-              renderDashboardMaterials();
-            }
+            processDashboardMaterials();
           }, 
           (error) => {
-            console.error("Error in Dashboard Materials query:", error);
-            dashboardMaterialsLoading.style.display = 'none';
-            // If error, don't show the section
-            dashboardMaterialsSection.style.display = 'none';
+            console.error("❌ Error in real-time Dashboard Materials:", error);
+            handleDashboardMaterialsError(error);
           }
         );
+        
       } catch (error) {
-        console.error("Unexpected error in loadDashboardMaterials:", error);
-        dashboardMaterialsLoading.style.display = 'none';
-        dashboardMaterialsSection.style.display = 'none';
+        console.error("💥 Unexpected error in loadDashboardMaterials:", error);
+        handleDashboardMaterialsError(error);
       }
+    }
+
+    // Process and display dashboard materials
+    function processDashboardMaterials() {
+      console.log("🎨 Processing Dashboard Materials for display...");
+      
+      // Hide loading state
+      dashboardMaterialsLoading.style.display = 'none';
+      
+      if (dashboardMaterials.length === 0) {
+        console.log("📭 No Dashboard Materials found");
+        // Show empty state
+        dashboardMaterialsSection.style.display = 'block';
+        emptyDashboardMaterials.style.display = 'block';
+        dashboardMaterialsContainer.style.display = 'none';
+      } else {
+        console.log("✨ Rendering Dashboard Materials");
+        dashboardMaterialsSection.style.display = 'block';
+        emptyDashboardMaterials.style.display = 'none';
+        dashboardMaterialsContainer.style.display = 'grid';
+        renderDashboardMaterials();
+      }
+    }
+
+    // Error handling function for dashboard materials
+    function handleDashboardMaterialsError(error) {
+      console.error("🚨 Dashboard Materials Error:", error);
+      dashboardMaterialsLoading.style.display = 'none';
+      
+      // Show error message to user
+      dashboardMaterialsSection.style.display = 'block';
+      emptyDashboardMaterials.innerHTML = `
+        <i class="fas fa-exclamation-triangle" style="color: #f44336;"></i>
+        <h3>Error Loading Materials</h3>
+        <p>Could not load quick access materials. Please try again later.</p>
+        <p style="font-size: 0.8rem; color: #999;">Error: ${error.message}</p>
+        <button onclick="retryLoadDashboardMaterials()" class="btn btn-primary" style="margin-top: 15px;">
+          <i class="fas fa-redo"></i> Retry Loading
+        </button>
+      `;
+      emptyDashboardMaterials.style.display = 'block';
+      dashboardMaterialsContainer.style.display = 'none';
+    }
+
+    // Retry function for dashboard materials
+    function retryLoadDashboardMaterials() {
+      console.log("🔄 Retrying to load Dashboard Materials...");
+      loadDashboardMaterials();
     }
 
     // Render Dashboard Materials as buttons
     function renderDashboardMaterials() {
-      console.log("Rendering", dashboardMaterials.length, "Dashboard Materials as buttons");
+      console.log("🎯 Rendering", dashboardMaterials.length, "Dashboard Materials as buttons");
       
       // Clear existing buttons
       dashboardMaterialsContainer.innerHTML = '';
@@ -924,7 +987,7 @@
         if (material.icon) {
           button.innerHTML = `<i class="${material.icon}" style="margin-right: 10px;"></i> ${material.name}`;
         } else {
-          button.textContent = material.name;
+          button.innerHTML = `<i class="fas fa-file-alt" style="margin-right: 10px;"></i> ${material.name}`;
         }
         
         // Check if the material has a link
@@ -957,7 +1020,7 @@
         dashboardMaterialsContainer.appendChild(button);
       });
       
-      console.log("Dashboard Materials buttons rendered successfully");
+      console.log("✅ Dashboard Materials buttons rendered successfully");
     }
 
     // Modal Open/Close Functions
@@ -1002,7 +1065,7 @@
     // External Link Modal handlers
     confirmOpen.addEventListener('click', function() {
       if (currentExternalLink) {
-        console.log("Opening external link:", currentExternalLink);
+        console.log("🌐 Opening external link:", currentExternalLink);
         window.open(currentExternalLink, '_blank');
         externalLinkModal.style.display = 'none';
         currentExternalLink = '';
@@ -1011,7 +1074,7 @@
     });
 
     cancelOpen.addEventListener('click', function() {
-      console.log("Cancelled opening external link");
+      console.log("❌ Cancelled opening external link");
       externalLinkModal.style.display = 'none';
       currentExternalLink = '';
       currentEbookName = '';
@@ -1140,6 +1203,11 @@
     // Logout functionality
     logoutBtn.addEventListener('click', async () => {
       try {
+        // Unsubscribe from real-time updates
+        if (dashboardMaterialsUnsubscribe) {
+          dashboardMaterialsUnsubscribe();
+        }
+        
         await signOut(auth);
         window.location.href = 'index.html';
       } catch (error) {
@@ -1155,7 +1223,8 @@
     }
 
     // Make functions available globally for retry buttons
+    window.retryLoadDashboardMaterials = retryLoadDashboardMaterials;
     window.loadDashboardMaterials = loadDashboardMaterials;
   </script>
 </body>
-</html>
+          </html>
