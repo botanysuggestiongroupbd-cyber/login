@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Masters Final Year Subjects - Botany Study Materials</title>
+  <title>Honours Second Year Subjects - Botany Study Materials</title>
   <style>
     body {
       margin: 0;
@@ -451,7 +451,7 @@
   <div class="empty-state" id="emptyState" style="display: none;">
     <i class="fas fa-book-medical"></i>
     <h3>Study Materials Coming Soon</h3>
-    <p>We're currently preparing high-quality study materials for Masters Final Year subjects.<br>Please check back soon or contact your course administrator for updates.</p>
+    <p>We're currently preparing high-quality study materials for Honours Second Year subjects.<br>Please check back soon or contact your course administrator for updates.</p>
   </div>
 
   <!-- Dynamic Button Container -->
@@ -630,13 +630,13 @@
 
     // Load eBooks from Firestore
     function loadEbooks() {
-      console.log("Starting to load eBooks for Masters Final Year...");
+      console.log("Starting to load eBooks for Honours Second Year...");
       
       try {
         // First try: Query with where clause and orderBy
         const q = query(
           collection(db, "ebooks"), 
-          where("page", "==", "Masters Final Year"),
+          where("page", "==", "Honours Second Year"),
           orderBy("order", "asc")
         );
         
@@ -660,7 +660,7 @@
             loadingState.style.display = 'none';
             
             if (ebooks.length === 0) {
-              console.log("No eBooks found for Masters Final Year");
+              console.log("No eBooks found for Honours Second Year");
               emptyState.style.display = 'block';
               buttonContainer.style.display = 'none';
             } else {
@@ -721,8 +721,8 @@
               const ebookData = doc.data();
               ebookData.id = doc.id;
               
-              // Client-side filtering for Masters Final Year
-              if (ebookData.page === "Masters Final Year") {
+              // Client-side filtering for Honours Second Year
+              if (ebookData.page === "Honours Second Year") {
                 console.log("Matching eBook found:", ebookData.name);
                 ebooks.push(ebookData);
               }
@@ -848,4 +848,4 @@
   <script type='text/javascript' src='//pl27696616.revenuecpmgate.com/ab/f3/9c/abf39cc2db32e330648becd45108c409.js'></script>
   <script type='text/javascript' src='//pl27703488.revenuecpmgate.com/91/6c/6e/916c6e9ca16af6ee852fd57d9840b0d6.js'></script>
 </body>
-  </html>
+</html>
