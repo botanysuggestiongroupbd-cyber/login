@@ -636,7 +636,7 @@
         // First try: Query with where clause and orderBy
         const q = query(
           collection(db, "ebooks"), 
-          where("page", "==", "Masters Final Year"),
+          where("page", "==", "Honours First Year"),
           orderBy("order", "asc")
         );
         
@@ -722,7 +722,7 @@
               ebookData.id = doc.id;
               
               // Client-side filtering for Masters Final Year
-              if (ebookData.page === "Masters Final Year") {
+              if (ebookData.page === "Honours First Year") {
                 console.log("Matching eBook found:", ebookData.name);
                 ebooks.push(ebookData);
               }
