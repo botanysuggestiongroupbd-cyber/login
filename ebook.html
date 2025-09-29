@@ -74,48 +74,7 @@
             padding: 30px;
         }
         
-        /* Tab Navigation */
-        .tab-navigation {
-            display: flex;
-            background: #f5f5f5;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-        
-        .tab-btn {
-            flex: 1;
-            padding: 15px 20px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .tab-btn.active {
-            background: #4CAF50;
-            color: white;
-        }
-        
-        .tab-btn:hover:not(.active) {
-            background: #e8f5e9;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .add-ebook-form, .add-dashboard-form {
+        .add-ebook-form {
             background: #f9f9f9;
             padding: 25px;
             border-radius: 15px;
@@ -194,13 +153,13 @@
             gap: 10px;
         }
         
-        .ebooks-container, .dashboard-materials-container {
+        .ebooks-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
         }
         
-        .ebook-card, .dashboard-material-card {
+        .ebook-card {
             background: white;
             border-radius: 15px;
             padding: 20px;
@@ -210,19 +169,19 @@
             position: relative;
         }
         
-        .ebook-card:hover, .dashboard-material-card:hover {
+        .ebook-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             border-color: #4CAF50;
         }
         
-        .ebook-icon, .dashboard-material-icon {
+        .ebook-icon {
             font-size: 2.5rem;
             color: #4CAF50;
             margin-bottom: 15px;
         }
         
-        .ebook-card h3, .dashboard-material-card h3 {
+        .ebook-card h3 {
             color: #2E7D32;
             margin-bottom: 10px;
             font-size: 1.3rem;
@@ -239,18 +198,7 @@
             margin-top: 5px;
         }
         
-        .dashboard-material-status {
-            display: inline-block;
-            background: #E3F2FD;
-            color: #1976D2;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 5px;
-        }
-        
-        .ebook-actions, .dashboard-material-actions {
+        .ebook-actions {
             display: flex;
             justify-content: space-between;
             margin-top: 15px;
@@ -538,52 +486,6 @@
             background: #616161;
         }
         
-        /* Toggle Switch */
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
-        
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        
-        input:checked + .slider {
-            background-color: #4CAF50;
-        }
-        
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-        
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -601,7 +503,7 @@
                 padding: 20px;
             }
             
-            .ebooks-container, .dashboard-materials-container {
+            .ebooks-container {
                 grid-template-columns: 1fr;
             }
             
@@ -614,7 +516,7 @@
                 width: fit-content;
             }
             
-            .ebook-actions, .dashboard-material-actions {
+            .ebook-actions {
                 flex-direction: column;
                 gap: 10px;
             }
@@ -622,10 +524,6 @@
             .reorder-controls {
                 flex-direction: column;
                 align-items: stretch;
-            }
-            
-            .tab-navigation {
-                flex-direction: column;
             }
         }
         
@@ -638,11 +536,11 @@
                 font-size: 1.5rem;
             }
             
-            .add-ebook-form, .add-dashboard-form {
+            .add-ebook-form {
                 padding: 20px 15px;
             }
             
-            .ebook-actions, .dashboard-material-actions {
+            .ebook-actions {
                 flex-direction: column;
             }
             
@@ -677,80 +575,24 @@
         </div>
         
         <div class="main-content">
-            <!-- Tab Navigation -->
-            <div class="tab-navigation">
-                <button class="tab-btn active" onclick="switchTab('ebooks')">
-                    <i class="fas fa-book"></i> eBook Resources
-                </button>
-                <button class="tab-btn" onclick="switchTab('dashboard')">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard Materials
-                </button>
-            </div>
-
-            <!-- eBook Resources Tab -->
-            <div id="ebooksTab" class="tab-content active">
-                <div class="add-ebook-form">
-                    <h3 class="form-title"><i class="fas fa-plus-circle"></i> Add New eBook Resource</h3>
-                    <form id="ebookForm">
-                        <div class="form-group">
-                            <label for="ebookName">Resource Name</label>
-                            <input type="text" id="ebookName" class="form-control" placeholder="e.g., Botany Fundamentals, Plant Anatomy" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="ebookLink">Resource Link (Optional)</label>
-                            <input type="text" id="ebookLink" class="form-control" placeholder="Any link - Google Drive, Website, etc.">
-                            <small>You can add this later using the edit option</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="ebookPage">Assign to Page</label>
-                            <select id="ebookPage" class="form-control" required>
-                                <option value="">Select a page</option>
-                                <option value="Honours First Year">Honours First Year</option>
-                                <option value="Honours Second Year">Honours Second Year</option>
-                                <option value="Honours Third Year">Honours Third Year</option>
-                                <option value="Honours Fourth Year">Honours Fourth Year</option>
-                                <option value="Masters Final Year">Masters Final Year</option>
-                                <option value="Other Resources">Other Resources</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="ebookIcon">Select Icon</label>
-                            <select id="ebookIcon" class="form-control" required onchange="updateIconPreview()">
-                                <option value="fas fa-book">Book</option>
-                                <option value="fas fa-graduation-cap">Graduation Cap</option>
-                                <option value="fas fa-user-graduate">Graduate Student</option>
-                                <option value="fas fa-book-open">Open Book</option>
-                                <option value="fas fa-file-pdf">PDF File</option>
-                                <option value="fas fa-file-alt">Text File</option>
-                                <option value="fas fa-download">Download</option>
-                                <option value="fas fa-folder">Folder</option>
-                                <option value="fas fa-folder-open">Open Folder</option>
-                                <option value="fas fa-university">University</option>
-                                <option value="fas fa-school">School</option>
-                                <option value="fas fa-award">Award</option>
-                                <option value="fas fa-certificate">Certificate</option>
-                            </select>
-                            <div class="icon-preview">
-                                <span id="iconPreview"><i class="fas fa-book"></i></span>
-                                <small>Preview of selected icon</small>
-                            </div>
-                        </div>
-                        
-                        <button type="submit" class="submit-btn">
-                            <i class="fas fa-save"></i> Add eBook Resource
-                        </button>
-                    </form>
-                </div>
-                
-                <!-- Reorder Section -->
-                <div class="reorder-section">
-                    <h3 class="reorder-title"><i class="fas fa-sort"></i> Reorder eBook Resources</h3>
-                    <div class="reorder-controls">
-                        <select id="reorderPageSelect" class="form-control" style="flex: 1;">
-                            <option value="">Select a page to reorder</option>
+            <div class="add-ebook-form">
+                <h3 class="form-title"><i class="fas fa-plus-circle"></i> Add New eBook Resource</h3>
+                <form id="ebookForm">
+                    <div class="form-group">
+                        <label for="ebookName">Resource Name</label>
+                        <input type="text" id="ebookName" class="form-control" placeholder="e.g., Botany Fundamentals, Plant Anatomy" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ebookLink">Resource Link (Optional)</label>
+                        <input type="text" id="ebookLink" class="form-control" placeholder="Any link - Google Drive, Website, etc.">
+                        <small>You can add this later using the edit option</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ebookPage">Assign to Page</label>
+                        <select id="ebookPage" class="form-control" required>
+                            <option value="">Select a page</option>
                             <option value="Honours First Year">Honours First Year</option>
                             <option value="Honours Second Year">Honours Second Year</option>
                             <option value="Honours Third Year">Honours Third Year</option>
@@ -758,111 +600,68 @@
                             <option value="Masters Final Year">Masters Final Year</option>
                             <option value="Other Resources">Other Resources</option>
                         </select>
-                        <select id="reorderEbookSelect" class="form-control" style="flex: 1;">
-                            <option value="">Select an eBook to move</option>
-                        </select>
-                        <button class="reorder-btn" id="moveUpBtn" onclick="moveEbookUp()" disabled>
-                            <i class="fas fa-arrow-up"></i> Move Up
-                        </button>
-                        <button class="reorder-btn" id="moveDownBtn" onclick="moveEbookDown()" disabled>
-                            <i class="fas fa-arrow-down"></i> Move Down
-                        </button>
                     </div>
-                </div>
-                
-                <h2 style="color: #2E7D32; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-list"></i> eBook Resources
-                </h2>
-                
-                <div id="ebooksByPage">
-                    <!-- eBook sections will be dynamically added here -->
+                    
+                    <div class="form-group">
+                        <label for="ebookIcon">Select Icon</label>
+                        <select id="ebookIcon" class="form-control" required onchange="updateIconPreview()">
+                            <option value="fas fa-book">Book</option>
+                            <option value="fas fa-graduation-cap">Graduation Cap</option>
+                            <option value="fas fa-user-graduate">Graduate Student</option>
+                            <option value="fas fa-book-open">Open Book</option>
+                            <option value="fas fa-file-pdf">PDF File</option>
+                            <option value="fas fa-file-alt">Text File</option>
+                            <option value="fas fa-download">Download</option>
+                            <option value="fas fa-folder">Folder</option>
+                            <option value="fas fa-folder-open">Open Folder</option>
+                            <option value="fas fa-university">University</option>
+                            <option value="fas fa-school">School</option>
+                            <option value="fas fa-award">Award</option>
+                            <option value="fas fa-certificate">Certificate</option>
+                        </select>
+                        <div class="icon-preview">
+                            <span id="iconPreview"><i class="fas fa-book"></i></span>
+                            <small>Preview of selected icon</small>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-save"></i> Add eBook Resource
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Reorder Section -->
+            <div class="reorder-section">
+                <h3 class="reorder-title"><i class="fas fa-sort"></i> Reorder eBook Resources</h3>
+                <div class="reorder-controls">
+                    <select id="reorderPageSelect" class="form-control" style="flex: 1;">
+                        <option value="">Select a page to reorder</option>
+                        <option value="Honours First Year">Honours First Year</option>
+                        <option value="Honours Second Year">Honours Second Year</option>
+                        <option value="Honours Third Year">Honours Third Year</option>
+                        <option value="Honours Fourth Year">Honours Fourth Year</option>
+                        <option value="Masters Final Year">Masters Final Year</option>
+                        <option value="Other Resources">Other Resources</option>
+                    </select>
+                    <select id="reorderEbookSelect" class="form-control" style="flex: 1;">
+                        <option value="">Select an eBook to move</option>
+                    </select>
+                    <button class="reorder-btn" id="moveUpBtn" onclick="moveEbookUp()" disabled>
+                        <i class="fas fa-arrow-up"></i> Move Up
+                    </button>
+                    <button class="reorder-btn" id="moveDownBtn" onclick="moveEbookDown()" disabled>
+                        <i class="fas fa-arrow-down"></i> Move Down
+                    </button>
                 </div>
             </div>
-
-            <!-- Dashboard Materials Tab -->
-            <div id="dashboardTab" class="tab-content">
-                <div class="add-dashboard-form">
-                    <h3 class="form-title"><i class="fas fa-plus-circle"></i> Add Dashboard Material</h3>
-                    <form id="dashboardForm">
-                        <div class="form-group">
-                            <label for="dashboardName">Material Name</label>
-                            <input type="text" id="dashboardName" class="form-control" placeholder="e.g., Important Notice, Quick Links, etc." required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="dashboardLink">Material Link (Optional)</label>
-                            <input type="text" id="dashboardLink" class="form-control" placeholder="Any link - Google Drive, Website, etc.">
-                            <small>You can add this later using the edit option</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="dashboardIcon">Select Icon</label>
-                            <select id="dashboardIcon" class="form-control" required onchange="updateDashboardIconPreview()">
-                                <option value="fas fa-book">Book</option>
-                                <option value="fas fa-graduation-cap">Graduation Cap</option>
-                                <option value="fas fa-user-graduate">Graduate Student</option>
-                                <option value="fas fa-book-open">Open Book</option>
-                                <option value="fas fa-file-pdf">PDF File</option>
-                                <option value="fas fa-file-alt">Text File</option>
-                                <option value="fas fa-download">Download</option>
-                                <option value="fas fa-folder">Folder</option>
-                                <option value="fas fa-folder-open">Open Folder</option>
-                                <option value="fas fa-university">University</option>
-                                <option value="fas fa-school">School</option>
-                                <option value="fas fa-award">Award</option>
-                                <option value="fas fa-certificate">Certificate</option>
-                                <option value="fas fa-bullhorn">Announcement</option>
-                                <option value="fas fa-exclamation-circle">Important</option>
-                                <option value="fas fa-link">Quick Link</option>
-                                <option value="fas fa-rocket">Featured</option>
-                            </select>
-                            <div class="icon-preview">
-                                <span id="dashboardIconPreview"><i class="fas fa-book"></i></span>
-                                <small>Preview of selected icon</small>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="dashboardActive">Active Status</label>
-                            <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="dashboardActive" checked>
-                                    <span class="slider"></span>
-                                </label>
-                                <span id="activeStatusText">Active</span>
-                            </div>
-                            <small>Inactive materials won't appear on student dashboard</small>
-                        </div>
-                        
-                        <button type="submit" class="submit-btn">
-                            <i class="fas fa-save"></i> Add Dashboard Material
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Dashboard Reorder Section -->
-                <div class="reorder-section">
-                    <h3 class="reorder-title"><i class="fas fa-sort"></i> Reorder Dashboard Materials</h3>
-                    <div class="reorder-controls">
-                        <select id="reorderDashboardSelect" class="form-control" style="flex: 2;">
-                            <option value="">Select a material to move</option>
-                        </select>
-                        <button class="reorder-btn" id="moveDashboardUpBtn" onclick="moveDashboardMaterialUp()" disabled>
-                            <i class="fas fa-arrow-up"></i> Move Up
-                        </button>
-                        <button class="reorder-btn" id="moveDashboardDownBtn" onclick="moveDashboardMaterialDown()" disabled>
-                            <i class="fas fa-arrow-down"></i> Move Down
-                        </button>
-                    </div>
-                </div>
-                
-                <h2 style="color: #2E7D32; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard Materials
-                </h2>
-                
-                <div id="dashboardMaterialsList">
-                    <!-- Dashboard materials will be dynamically added here -->
-                </div>
+            
+            <h2 style="color: #2E7D32; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-list"></i> eBook Resources
+            </h2>
+            
+            <div id="ebooksByPage">
+                <!-- eBook sections will be dynamically added here -->
             </div>
         </div>
         
@@ -929,68 +728,6 @@
         </div>
     </div>
 
-    <!-- Edit Dashboard Material Modal -->
-    <div id="editDashboardModal" class="modal">
-        <div class="modal-content">
-            <h3><i class="fas fa-edit"></i> Edit Dashboard Material</h3>
-            <form id="editDashboardForm">
-                <div class="form-group">
-                    <label for="editDashboardName">Material Name</label>
-                    <input type="text" id="editDashboardName" class="form-control" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="editDashboardLink">Material Link</label>
-                    <input type="text" id="editDashboardLink" class="form-control" placeholder="Any link - Google Drive, Website, etc.">
-                </div>
-                
-                <div class="form-group">
-                    <label for="editDashboardIcon">Select Icon</label>
-                    <select id="editDashboardIcon" class="form-control" required onchange="updateEditDashboardIconPreview()">
-                        <option value="fas fa-book">Book</option>
-                        <option value="fas fa-graduation-cap">Graduation Cap</option>
-                        <option value="fas fa-user-graduate">Graduate Student</option>
-                        <option value="fas fa-book-open">Open Book</option>
-                        <option value="fas fa-file-pdf">PDF File</option>
-                        <option value="fas fa-file-alt">Text File</option>
-                        <option value="fas fa-download">Download</option>
-                        <option value="fas fa-folder">Folder</option>
-                        <option value="fas fa-folder-open">Open Folder</option>
-                        <option value="fas fa-university">University</option>
-                        <option value="fas fa-school">School</option>
-                        <option value="fas fa-award">Award</option>
-                        <option value="fas fa-certificate">Certificate</option>
-                        <option value="fas fa-bullhorn">Announcement</option>
-                        <option value="fas fa-exclamation-circle">Important</option>
-                        <option value="fas fa-link">Quick Link</option>
-                        <option value="fas fa-rocket">Featured</option>
-                    </select>
-                    <div class="icon-preview">
-                        <span id="editDashboardIconPreview"><i class="fas fa-book"></i></span>
-                        <small>Preview of selected icon</small>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="editDashboardActive">Active Status</label>
-                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="editDashboardActive">
-                            <span class="slider"></span>
-                        </label>
-                        <span id="editActiveStatusText">Active</span>
-                    </div>
-                    <small>Inactive materials won't appear on student dashboard</small>
-                </div>
-                
-                <div class="modal-buttons">
-                    <button type="button" class="modal-cancel" onclick="closeEditDashboardModal()">Cancel</button>
-                    <button type="submit" class="modal-save">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
@@ -1034,9 +771,7 @@
         const ADMIN_PASSWORD = "BotanyAdmin2023!";
 
         let ebooks = [];
-        let dashboardMaterials = [];
         let currentEditingEbookId = null;
-        let currentEditingDashboardMaterialId = null;
 
         // Check authentication state
         onAuthStateChanged(auth, (user) => {
@@ -1045,32 +780,12 @@
                 document.getElementById('loginOverlay').style.display = 'none';
                 document.getElementById('mainContainer').style.display = 'block';
                 loadEbooks();
-                loadDashboardMaterials();
             } else {
                 // User is not signed in or not admin
                 document.getElementById('loginOverlay').style.display = 'flex';
                 document.getElementById('mainContainer').style.display = 'none';
             }
         });
-
-        // Tab switching function
-        window.switchTab = function(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Remove active class from all buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Show selected tab
-            document.getElementById(tabName + 'Tab').classList.add('active');
-            
-            // Activate selected button
-            event.target.classList.add('active');
-        }
 
         // Admin login function
         window.adminLogin = async function() {
@@ -1097,39 +812,19 @@
             }
         };
 
-        // Update icon previews
+        // Update icon preview
         window.updateIconPreview = function() {
             const iconSelect = document.getElementById('ebookIcon');
             const iconPreview = document.getElementById('iconPreview');
             iconPreview.innerHTML = `<i class="${iconSelect.value}"></i>`;
         }
 
-        window.updateDashboardIconPreview = function() {
-            const iconSelect = document.getElementById('dashboardIcon');
-            const iconPreview = document.getElementById('dashboardIconPreview');
-            iconPreview.innerHTML = `<i class="${iconSelect.value}"></i>`;
-        }
-
+        // Update edit icon preview
         window.updateEditIconPreview = function() {
             const iconSelect = document.getElementById('editEbookIcon');
             const iconPreview = document.getElementById('editIconPreview');
             iconPreview.innerHTML = `<i class="${iconSelect.value}"></i>`;
         }
-
-        window.updateEditDashboardIconPreview = function() {
-            const iconSelect = document.getElementById('editDashboardIcon');
-            const iconPreview = document.getElementById('editDashboardIconPreview');
-            iconPreview.innerHTML = `<i class="${iconSelect.value}"></i>`;
-        }
-
-        // Active status toggle
-        document.getElementById('dashboardActive').addEventListener('change', function() {
-            document.getElementById('activeStatusText').textContent = this.checked ? 'Active' : 'Inactive';
-        });
-
-        document.getElementById('editDashboardActive').addEventListener('change', function() {
-            document.getElementById('editActiveStatusText').textContent = this.checked ? 'Active' : 'Inactive';
-        });
 
         // Load ebooks from Firestore
         async function loadEbooks() {
@@ -1150,26 +845,7 @@
             }
         }
 
-        // Load dashboard materials from Firestore
-        async function loadDashboardMaterials() {
-            try {
-                const q = query(collection(db, "dashboardMaterials"), orderBy("order", "asc"));
-                const unsubscribe = onSnapshot(q, (querySnapshot) => {
-                    dashboardMaterials = [];
-                    querySnapshot.forEach((doc) => {
-                        const materialData = doc.data();
-                        materialData.id = doc.id;
-                        dashboardMaterials.push(materialData);
-                    });
-                    renderDashboardMaterials();
-                    updateDashboardReorderControls();
-                });
-            } catch (error) {
-                console.error('Error loading dashboard materials:', error);
-            }
-        }
-
-        // Form submission handlers
+        // Form submission handler
         document.getElementById('ebookForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -1185,7 +861,7 @@
                     link: link,
                     page: page,
                     icon: icon,
-                    order: ebooks.length,
+                    order: ebooks.length, // Add at the end
                     createdAt: new Date()
                 });
                 
@@ -1201,40 +877,7 @@
             }
         });
 
-        document.getElementById('dashboardForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('dashboardName').value;
-            const link = document.getElementById('dashboardLink').value;
-            const icon = document.getElementById('dashboardIcon').value;
-            const active = document.getElementById('dashboardActive').checked;
-            
-            try {
-                // Add to Firestore
-                await addDoc(collection(db, "dashboardMaterials"), {
-                    name: name,
-                    link: link,
-                    icon: icon,
-                    active: active,
-                    order: dashboardMaterials.length,
-                    createdAt: new Date()
-                });
-                
-                // Reset the form
-                document.getElementById('dashboardForm').reset();
-                updateDashboardIconPreview();
-                document.getElementById('dashboardActive').checked = true;
-                document.getElementById('activeStatusText').textContent = 'Active';
-                
-                // Show success message
-                alert('Dashboard material added successfully!');
-            } catch (error) {
-                console.error('Error adding dashboard material:', error);
-                alert('Error adding dashboard material: ' + error.message);
-            }
-        });
-
-        // Edit form submission handlers
+        // Edit form submission handler
         document.getElementById('editEbookForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -1262,36 +905,6 @@
             } catch (error) {
                 console.error('Error updating ebook:', error);
                 alert('Error updating ebook: ' + error.message);
-            }
-        });
-
-        document.getElementById('editDashboardForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            if (!currentEditingDashboardMaterialId) return;
-            
-            const name = document.getElementById('editDashboardName').value;
-            const link = document.getElementById('editDashboardLink').value;
-            const icon = document.getElementById('editDashboardIcon').value;
-            const active = document.getElementById('editDashboardActive').checked;
-            
-            try {
-                // Update in Firestore
-                await updateDoc(doc(db, "dashboardMaterials", currentEditingDashboardMaterialId), {
-                    name: name,
-                    link: link,
-                    icon: icon,
-                    active: active
-                });
-                
-                // Close modal
-                closeEditDashboardModal();
-                
-                // Show success message
-                alert('Dashboard material updated successfully!');
-            } catch (error) {
-                console.error('Error updating dashboard material:', error);
-                alert('Error updating dashboard material: ' + error.message);
             }
         });
 
@@ -1381,77 +994,6 @@
             });
         }
 
-        // Render dashboard materials
-        function renderDashboardMaterials() {
-            const container = document.getElementById('dashboardMaterialsList');
-            
-            if (dashboardMaterials.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state" id="emptyState">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <h3>No Dashboard Materials Added Yet</h3>
-                        <p>Add your first dashboard material using the form above</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Clear container
-            container.innerHTML = '';
-            
-            const materialsContainer = document.createElement('div');
-            materialsContainer.className = 'dashboard-materials-container';
-            
-            // Add each dashboard material as a card
-            dashboardMaterials.forEach(material => {
-                const materialCard = document.createElement('div');
-                materialCard.className = 'dashboard-material-card';
-                
-                // Determine if view button should be enabled
-                const hasLink = material.link && material.link.trim() !== '';
-                const viewButton = hasLink ? 
-                    `<button class="action-btn view-btn" onclick="viewDashboardMaterial('${material.link}')">
-                        <i class="fas fa-external-link-alt"></i> View
-                    </button>` :
-                    `<button class="action-btn view-btn" disabled>
-                        <i class="fas fa-external-link-alt"></i> No Link
-                    </button>`;
-                
-                const statusText = material.active ? 'Active' : 'Inactive';
-                const statusClass = material.active ? 'dashboard-material-status' : 'dashboard-material-status';
-                const statusStyle = material.active ? 'background: #E8F5E9; color: #2E7D32;' : 'background: #FFEBEE; color: #C62828;';
-                
-                materialCard.innerHTML = `
-                    <div class="dashboard-material-icon">
-                        <i class="${material.icon}"></i>
-                    </div>
-                    <h3>${material.name}</h3>
-                    <div class="dashboard-material-status" style="${statusStyle}">
-                        ${statusText}
-                    </div>
-                    <div class="dashboard-material-actions">
-                        ${viewButton}
-                        <div class="dropdown">
-                            <button class="dropdown-btn">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </button>
-                            <div class="dropdown-content">
-                                <a href="#" onclick="openEditDashboardModal('${material.id}')">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                                <a href="#" onclick="deleteDashboardMaterial('${material.id}')">
-                                    <i class="fas fa-trash"></i> Delete
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                materialsContainer.appendChild(materialCard);
-            });
-            
-            container.appendChild(materialsContainer);
-        }
-
         // Update reorder controls
         function updateReorderControls() {
             const pageSelect = document.getElementById('reorderPageSelect');
@@ -1482,32 +1024,6 @@
                     moveUpBtn.disabled = true;
                     moveDownBtn.disabled = true;
                 }
-            } else {
-                moveUpBtn.disabled = true;
-                moveDownBtn.disabled = true;
-            }
-        }
-
-        function updateDashboardReorderControls() {
-            const dashboardSelect = document.getElementById('reorderDashboardSelect');
-            const moveUpBtn = document.getElementById('moveDashboardUpBtn');
-            const moveDownBtn = document.getElementById('moveDashboardDownBtn');
-            
-            // Clear select
-            dashboardSelect.innerHTML = '<option value="">Select a material to move</option>';
-            
-            if (dashboardMaterials.length > 0) {
-                dashboardMaterials.forEach((material, index) => {
-                    const option = document.createElement('option');
-                    option.value = material.id;
-                    option.textContent = material.name;
-                    option.dataset.index = index;
-                    dashboardSelect.appendChild(option);
-                });
-                
-                // Enable buttons if there are multiple materials
-                moveUpBtn.disabled = dashboardMaterials.length < 2;
-                moveDownBtn.disabled = dashboardMaterials.length < 2;
             } else {
                 moveUpBtn.disabled = true;
                 moveDownBtn.disabled = true;
@@ -1596,84 +1112,6 @@
             }
         }
 
-        // Move dashboard material up
-        window.moveDashboardMaterialUp = async function() {
-            const dashboardSelect = document.getElementById('reorderDashboardSelect');
-            
-            if (!dashboardSelect.value) {
-                alert('Please select a material to move');
-                return;
-            }
-            
-            const materialId = dashboardSelect.value;
-            const sortedMaterials = [...dashboardMaterials].sort((a, b) => a.order - b.order);
-            
-            const index = sortedMaterials.findIndex(material => material.id === materialId);
-            
-            if (index > 0) {
-                try {
-                    // Swap orders
-                    const currentMaterial = sortedMaterials[index];
-                    const prevMaterial = sortedMaterials[index - 1];
-                    
-                    await updateDoc(doc(db, "dashboardMaterials", currentMaterial.id), {
-                        order: prevMaterial.order
-                    });
-                    
-                    await updateDoc(doc(db, "dashboardMaterials", prevMaterial.id), {
-                        order: currentMaterial.order
-                    });
-                    
-                    // Update the select to keep the same material selected
-                    setTimeout(() => {
-                        dashboardSelect.value = materialId;
-                    }, 100);
-                } catch (error) {
-                    console.error('Error moving dashboard material:', error);
-                    alert('Error moving dashboard material: ' + error.message);
-                }
-            }
-        }
-
-        // Move dashboard material down
-        window.moveDashboardMaterialDown = async function() {
-            const dashboardSelect = document.getElementById('reorderDashboardSelect');
-            
-            if (!dashboardSelect.value) {
-                alert('Please select a material to move');
-                return;
-            }
-            
-            const materialId = dashboardSelect.value;
-            const sortedMaterials = [...dashboardMaterials].sort((a, b) => a.order - b.order);
-            
-            const index = sortedMaterials.findIndex(material => material.id === materialId);
-            
-            if (index < sortedMaterials.length - 1) {
-                try {
-                    // Swap orders
-                    const currentMaterial = sortedMaterials[index];
-                    const nextMaterial = sortedMaterials[index + 1];
-                    
-                    await updateDoc(doc(db, "dashboardMaterials", currentMaterial.id), {
-                        order: nextMaterial.order
-                    });
-                    
-                    await updateDoc(doc(db, "dashboardMaterials", nextMaterial.id), {
-                        order: currentMaterial.order
-                    });
-                    
-                    // Update the select to keep the same material selected
-                    setTimeout(() => {
-                        dashboardSelect.value = materialId;
-                    }, 100);
-                } catch (error) {
-                    console.error('Error moving dashboard material:', error);
-                    alert('Error moving dashboard material: ' + error.message);
-                }
-            }
-        }
-
         // View ebook (open link)
         window.viewEbook = function(link) {
             if (link && link.trim() !== '') {
@@ -1681,13 +1119,7 @@
             }
         }
 
-        window.viewDashboardMaterial = function(link) {
-            if (link && link.trim() !== '') {
-                window.open(link, '_blank');
-            }
-        }
-
-        // Open edit modals
+        // Open edit modal
         window.openEditModal = function(ebookId) {
             const ebook = ebooks.find(e => e.id === ebookId);
             if (ebook) {
@@ -1701,29 +1133,10 @@
             }
         }
 
-        window.openEditDashboardModal = function(materialId) {
-            const material = dashboardMaterials.find(m => m.id === materialId);
-            if (material) {
-                currentEditingDashboardMaterialId = materialId;
-                document.getElementById('editDashboardName').value = material.name || '';
-                document.getElementById('editDashboardLink').value = material.link || '';
-                document.getElementById('editDashboardIcon').value = material.icon || 'fas fa-book';
-                document.getElementById('editDashboardActive').checked = material.active !== false;
-                document.getElementById('editActiveStatusText').textContent = material.active !== false ? 'Active' : 'Inactive';
-                updateEditDashboardIconPreview();
-                document.getElementById('editDashboardModal').style.display = 'flex';
-            }
-        }
-
-        // Close edit modals
+        // Close edit modal
         window.closeEditModal = function() {
             document.getElementById('editModal').style.display = 'none';
             currentEditingEbookId = null;
-        }
-
-        window.closeEditDashboardModal = function() {
-            document.getElementById('editDashboardModal').style.display = 'none';
-            currentEditingDashboardMaterialId = null;
         }
 
         // Delete ebook
@@ -1739,19 +1152,6 @@
             }
         }
 
-        // Delete dashboard material
-        window.deleteDashboardMaterial = async function(id) {
-            if (confirm('Are you sure you want to delete this dashboard material?')) {
-                try {
-                    await deleteDoc(doc(db, "dashboardMaterials", id));
-                    alert('Dashboard material deleted successfully!');
-                } catch (error) {
-                    console.error('Error deleting dashboard material:', error);
-                    alert('Error deleting dashboard material: ' + error.message);
-                }
-            }
-        }
-
         // Go back to admin page
         window.goBackToAdmin = function() {
             window.location.href = 'admin.html';
@@ -1760,8 +1160,7 @@
         // Initialize event listeners for reorder controls
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('reorderPageSelect').addEventListener('change', updateReorderControls);
-            document.getElementById('reorderDashboardSelect').addEventListener('change', updateDashboardReorderControls);
         });
     </script>
 </body>
-                                </html>
+</html>
