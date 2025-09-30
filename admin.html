@@ -208,6 +208,11 @@
             color: white;
         }
         
+        .college-list-btn {
+            background: linear-gradient(135deg, #2196F3, #0b7dda);
+            color: white;
+        }
+        
         .data-table-container {
             background: white;
             border-radius: 15px;
@@ -683,6 +688,9 @@
             <button class="quick-action-btn resource-btn" onclick="goToResourceManagement()">
                 <i class="fas fa-book"></i> Botany Resource Management
             </button>
+            <button class="quick-action-btn college-list-btn" onclick="viewCollegeList()">
+                <i class="fas fa-list"></i> NU All College List
+            </button>
         </div>
         
         <!-- Search Bar -->
@@ -1058,6 +1066,11 @@
         // Go to resource management page
         window.goToResourceManagement = function() {
             window.location.href = 'ebook.html';
+        };
+
+        // View college list
+        window.viewCollegeList = function() {
+            window.location.href = 'http://103.113.200.68/nu-app/college/';
         };
 
         // Open edit modal
