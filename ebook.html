@@ -17,96 +17,98 @@
             background: linear-gradient(135deg, #1a2a3a, #2c3e50);
             color: #333;
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             overflow: hidden;
         }
         
         .header {
             background: linear-gradient(135deg, #4CAF50, #2E7D32);
             color: white;
-            padding: 25px 20px;
+            padding: 20px 15px;
             text-align: center;
             position: relative;
         }
         
         .back-btn {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: none;
             padding: 10px 15px;
             border-radius: 50px;
             cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
+            font-size: 14px;
             gap: 8px;
             transition: all 0.3s;
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 200px;
         }
         
         .back-btn:hover {
             background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-50%) scale(1.05);
+            transform: scale(1.05);
         }
         
         .header h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
         }
         
         .header p {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             opacity: 0.9;
         }
         
         .main-content {
-            padding: 30px;
+            padding: 20px 15px;
         }
         
         .add-ebook-form {
             background: #f9f9f9;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 20px 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
         }
         
         .form-title {
             color: #2E7D32;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 1.1rem;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
             color: #555;
+            font-size: 0.9rem;
         }
         
         .form-control {
             width: 100%;
-            padding: 12px 15px;
+            padding: 12px;
             border: 2px solid #ddd;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 16px; /* Prevent zoom on iOS */
             transition: border-color 0.3s;
         }
         
@@ -116,9 +118,9 @@
         }
         
         .icon-preview {
-            font-size: 24px;
+            font-size: 22px;
             color: #4CAF50;
-            margin-top: 10px;
+            margin-top: 8px;
             text-align: center;
         }
         
@@ -126,12 +128,17 @@
             background: linear-gradient(135deg, #4CAF50, #2E7D32);
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 12px 20px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
             font-size: 16px;
             transition: all 0.3s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .submit-btn:hover {
@@ -140,72 +147,74 @@
         }
         
         .page-section {
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
         
         .page-title {
             color: #2E7D32;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
             border-bottom: 2px solid #E8F5E9;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 1.1rem;
         }
         
         .ebooks-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 15px;
         }
         
         .ebook-card {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
             border: 2px solid transparent;
             position: relative;
         }
         
         .ebook-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             border-color: #4CAF50;
         }
         
         .ebook-icon {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: #4CAF50;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
         .ebook-card h3 {
             color: #2E7D32;
-            margin-bottom: 10px;
-            font-size: 1.3rem;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
         }
         
         .ebook-page {
             display: inline-block;
             background: #E8F5E9;
             color: #2E7D32;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 11px;
             font-weight: 600;
             margin-top: 5px;
         }
         
         .ebook-actions {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 10px;
             margin-top: 15px;
         }
         
         .action-btn {
-            padding: 8px 15px;
+            padding: 10px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -213,14 +222,14 @@
             transition: all 0.3s;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 5px;
+            font-size: 14px;
         }
         
         .view-btn {
             background: #2196F3;
             color: white;
-            flex: 1;
-            justify-content: center;
         }
         
         .view-btn:hover {
@@ -234,16 +243,22 @@
         
         .dropdown {
             position: relative;
+            width: 100%;
         }
         
         .dropdown-btn {
             background: #f5f5f5;
             color: #555;
             border: none;
-            padding: 8px 12px;
+            padding: 10px;
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
         
         .dropdown-btn:hover {
@@ -256,10 +271,10 @@
             right: 0;
             top: 100%;
             background: white;
-            min-width: 150px;
+            width: 100%;
             box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             border-radius: 8px;
-            z-index: 1;
+            z-index: 10;
             overflow: hidden;
         }
         
@@ -271,72 +286,74 @@
             align-items: center;
             gap: 10px;
             transition: all 0.3s;
+            font-size: 14px;
         }
         
         .dropdown-content a:hover {
             background: #f5f5f5;
         }
         
-        .dropdown:hover .dropdown-content {
+        .dropdown.active .dropdown-content {
             display: block;
         }
         
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px 15px;
             color: #666;
         }
         
         .empty-state i {
-            font-size: 4rem;
+            font-size: 3rem;
             color: #ddd;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .footer {
             background: #f5f5f5;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             color: #666;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             border-top: 1px solid #e0e0e0;
         }
         
         /* Reorder Section */
         .reorder-section {
             background: #f0f8ff;
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             border-left: 5px solid #4CAF50;
         }
         
         .reorder-title {
             color: #2E7D32;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 1.1rem;
         }
         
         .reorder-controls {
             display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
+            flex-direction: column;
+            gap: 10px;
         }
         
         .reorder-btn {
             background: linear-gradient(135deg, #4CAF50, #2E7D32);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 15px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
         }
         
@@ -368,24 +385,24 @@
         
         .admin-login {
             background: white;
-            padding: 25px;
+            padding: 25px 20px;
             border-radius: 15px;
             width: 100%;
             max-width: 400px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
         
         .admin-login h2 {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             color: #333;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
         }
         
         .admin-login input {
             width: 100%;
             padding: 15px;
-            margin: 10px 0;
+            margin: 8px 0;
             border: 2px solid #ddd;
             border-radius: 10px;
             font-size: 16px;
@@ -434,32 +451,35 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 15px;
         }
         
         .modal-content {
             background-color: white;
-            padding: 30px;
+            padding: 25px 20px;
             border-radius: 10px;
-            width: 90%;
+            width: 100%;
             max-width: 500px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         .modal h3 {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             color: #333;
             text-align: center;
+            font-size: 1.2rem;
         }
         
         .modal-buttons {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             margin-top: 20px;
         }
         
         .modal-buttons button {
-            flex: 1;
             padding: 12px;
             border: none;
             border-radius: 5px;
@@ -486,66 +506,126 @@
             background: #616161;
         }
         
-        @media (max-width: 768px) {
+        /* Mobile-specific improvements */
+        .mobile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .mobile-full-width {
+            width: 100%;
+        }
+        
+        /* Better touch targets for mobile */
+        button, 
+        .action-btn, 
+        .dropdown-btn, 
+        .dropdown-content a {
+            min-height: 44px; /* Apple's recommended minimum touch target size */
+        }
+        
+        /* Tablet and larger screens */
+        @media (min-width: 768px) {
             body {
-                padding: 10px;
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 25px 20px;
             }
             
             .header h1 {
-                font-size: 1.8rem;
+                font-size: 2.2rem;
             }
             
             .header p {
-                font-size: 1rem;
-            }
-            
-            .main-content {
-                padding: 20px;
-            }
-            
-            .ebooks-container {
-                grid-template-columns: 1fr;
+                font-size: 1.1rem;
             }
             
             .back-btn {
-                position: relative;
-                left: 0;
-                top: 0;
-                transform: none;
-                margin-bottom: 15px;
-                width: fit-content;
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: auto;
+                margin-bottom: 0;
             }
             
-            .ebook-actions {
-                flex-direction: column;
-                gap: 10px;
+            .back-btn:hover {
+                transform: translateY(-50%) scale(1.05);
             }
             
-            .reorder-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .header {
-                padding: 20px 15px;
-            }
-            
-            .header h1 {
-                font-size: 1.5rem;
+            .main-content {
+                padding: 30px;
             }
             
             .add-ebook-form {
-                padding: 20px 15px;
+                padding: 25px;
+            }
+            
+            .form-title {
+                font-size: 1.3rem;
+            }
+            
+            .ebooks-container {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 20px;
+            }
+            
+            .ebook-card {
+                padding: 20px;
             }
             
             .ebook-actions {
-                flex-direction: column;
+                flex-direction: row;
             }
             
-            .modal-content {
-                padding: 20px;
+            .dropdown {
+                width: auto;
+            }
+            
+            .dropdown-btn {
+                width: auto;
+            }
+            
+            .dropdown-content {
+                width: auto;
+                min-width: 150px;
+            }
+            
+            .reorder-controls {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .modal-buttons {
+                flex-direction: row;
+            }
+            
+            .mobile-actions {
+                flex-direction: row;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .container {
+                border-radius: 20px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+            
+            .add-ebook-form {
+                padding: 25px;
+                border-radius: 15px;
+            }
+            
+            .ebook-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             }
         }
     </style>
@@ -635,7 +715,7 @@
             <div class="reorder-section">
                 <h3 class="reorder-title"><i class="fas fa-sort"></i> Reorder eBook Resources</h3>
                 <div class="reorder-controls">
-                    <select id="reorderPageSelect" class="form-control" style="flex: 1;">
+                    <select id="reorderPageSelect" class="form-control">
                         <option value="">Select a page to reorder</option>
                         <option value="Honours First Year">Honours First Year</option>
                         <option value="Honours Second Year">Honours Second Year</option>
@@ -644,15 +724,17 @@
                         <option value="Masters Final Year">Masters Final Year</option>
                         <option value="Other Resources">Other Resources</option>
                     </select>
-                    <select id="reorderEbookSelect" class="form-control" style="flex: 1;">
+                    <select id="reorderEbookSelect" class="form-control">
                         <option value="">Select an eBook to move</option>
                     </select>
-                    <button class="reorder-btn" id="moveUpBtn" onclick="moveEbookUp()" disabled>
-                        <i class="fas fa-arrow-up"></i> Move Up
-                    </button>
-                    <button class="reorder-btn" id="moveDownBtn" onclick="moveEbookDown()" disabled>
-                        <i class="fas fa-arrow-down"></i> Move Down
-                    </button>
+                    <div class="mobile-actions">
+                        <button class="reorder-btn" id="moveUpBtn" onclick="moveEbookUp()" disabled>
+                            <i class="fas fa-arrow-up"></i> Move Up
+                        </button>
+                        <button class="reorder-btn" id="moveDownBtn" onclick="moveEbookDown()" disabled>
+                            <i class="fas fa-arrow-down"></i> Move Down
+                        </button>
+                    </div>
                 </div>
             </div>
             
@@ -970,9 +1052,9 @@
                         <div class="ebook-page">${ebook.page}</div>
                         <div class="ebook-actions">
                             ${viewButton}
-                            <div class="dropdown">
-                                <button class="dropdown-btn">
-                                    <i class="fas fa-ellipsis-v"></i>
+                            <div class="dropdown" id="dropdown-${ebook.id}">
+                                <button class="dropdown-btn" onclick="toggleDropdown('${ebook.id}')">
+                                    <i class="fas fa-ellipsis-v"></i> Options
                                 </button>
                                 <div class="dropdown-content">
                                     <a href="#" onclick="openEditModal('${ebook.id}')">
@@ -993,6 +1075,28 @@
                 container.appendChild(pageSection);
             });
         }
+
+        // Toggle dropdown on mobile
+        window.toggleDropdown = function(ebookId) {
+            const dropdown = document.getElementById(`dropdown-${ebookId}`);
+            dropdown.classList.toggle('active');
+            
+            // Close other dropdowns
+            document.querySelectorAll('.dropdown').forEach(d => {
+                if (d.id !== `dropdown-${ebookId}`) {
+                    d.classList.remove('active');
+                }
+            });
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown').forEach(d => {
+                    d.classList.remove('active');
+                });
+            }
+        });
 
         // Update reorder controls
         function updateReorderControls() {
@@ -1130,6 +1234,11 @@
                 document.getElementById('editEbookIcon').value = ebook.icon || 'fas fa-book';
                 updateEditIconPreview();
                 document.getElementById('editModal').style.display = 'flex';
+                
+                // Close any open dropdowns
+                document.querySelectorAll('.dropdown').forEach(d => {
+                    d.classList.remove('active');
+                });
             }
         }
 
@@ -1163,4 +1272,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
