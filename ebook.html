@@ -26,7 +26,6 @@
             background: white;
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            overflow: hidden;
         }
         
         .header {
@@ -108,7 +107,7 @@
             padding: 12px;
             border: 2px solid #ddd;
             border-radius: 8px;
-            font-size: 16px; /* Prevent zoom on iOS */
+            font-size: 16px;
             transition: border-color 0.3s;
         }
         
@@ -148,6 +147,7 @@
         
         .page-section {
             margin-bottom: 30px;
+            position: relative;
         }
         
         .page-title {
@@ -175,7 +175,7 @@
             transition: all 0.3s ease;
             border: 2px solid transparent;
             position: relative;
-            overflow: visible; /* Fix for dropdown overflow */
+            overflow: visible;
         }
         
         .ebook-card:hover {
@@ -207,6 +207,7 @@
             margin-top: 5px;
         }
         
+        /* Updated ebook-actions styles */
         .ebook-actions {
             display: flex;
             flex-direction: column;
@@ -227,6 +228,7 @@
             justify-content: center;
             gap: 5px;
             font-size: 14px;
+            flex: 1;
         }
         
         .view-btn {
@@ -243,60 +245,40 @@
             cursor: not-allowed;
         }
         
-        .dropdown {
-            position: relative;
-            width: 100%;
+        .move-up-btn {
+            background: #FF9800;
+            color: white;
         }
         
-        .dropdown-btn {
-            background: #f5f5f5;
-            color: #555;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
+        .move-up-btn:hover {
+            background: #e68900;
         }
         
-        .dropdown-btn:hover {
-            background: #e0e0e0;
+        .move-down-btn {
+            background: #FF9800;
+            color: white;
         }
         
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 100%;
-            background: white;
-            width: 100%;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            z-index: 100; /* Increased z-index */
-            overflow: hidden;
+        .move-down-btn:hover {
+            background: #e68900;
         }
         
-        .dropdown-content a {
-            color: #333;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s;
-            font-size: 14px;
+        .edit-btn {
+            background: #9C27B0;
+            color: white;
         }
         
-        .dropdown-content a:hover {
-            background: #f5f5f5;
+        .edit-btn:hover {
+            background: #7B1FA2;
         }
         
-        .dropdown.active .dropdown-content {
-            display: block;
+        .delete-btn {
+            background: #f44336;
+            color: white;
+        }
+        
+        .delete-btn:hover {
+            background: #d32f2f;
         }
         
         .empty-state {
@@ -318,56 +300,6 @@
             color: #666;
             font-size: 0.8rem;
             border-top: 1px solid #e0e0e0;
-        }
-        
-        /* Reorder Section */
-        .reorder-section {
-            background: #f0f8ff;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            border-left: 5px solid #4CAF50;
-        }
-        
-        .reorder-title {
-            color: #2E7D32;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.1rem;
-        }
-        
-        .reorder-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .reorder-btn {
-            background: linear-gradient(135deg, #4CAF50, #2E7D32);
-            color: white;
-            border: none;
-            padding: 12px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .reorder-btn:hover {
-            background: linear-gradient(135deg, #2E7D32, #4CAF50);
-            transform: translateY(-2px);
-        }
-        
-        .reorder-btn:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            transform: none;
         }
         
         /* Login Overlay Styles */
@@ -521,10 +453,8 @@
         
         /* Better touch targets for mobile */
         button, 
-        .action-btn, 
-        .dropdown-btn, 
-        .dropdown-content a {
-            min-height: 44px; /* Apple's recommended minimum touch target size */
+        .action-btn {
+            min-height: 44px;
         }
         
         /* Tablet and larger screens */
@@ -579,26 +509,15 @@
                 padding: 20px;
             }
             
+            /* Updated for tablet: horizontal layout for buttons */
             .ebook-actions {
                 flex-direction: row;
+                flex-wrap: wrap;
             }
             
-            .dropdown {
-                width: auto;
-            }
-            
-            .dropdown-btn {
-                width: auto;
-            }
-            
-            .dropdown-content {
-                width: auto;
-                min-width: 150px;
-            }
-            
-            .reorder-controls {
-                flex-direction: row;
-                align-items: center;
+            .ebook-actions .action-btn {
+                flex: 1;
+                min-width: 120px;
             }
             
             .modal-buttons {
@@ -711,33 +630,6 @@
                         <i class="fas fa-save"></i> Add eBook Resource
                     </button>
                 </form>
-            </div>
-            
-            <!-- Reorder Section -->
-            <div class="reorder-section">
-                <h3 class="reorder-title"><i class="fas fa-sort"></i> Reorder eBook Resources</h3>
-                <div class="reorder-controls">
-                    <select id="reorderPageSelect" class="form-control">
-                        <option value="">Select a page to reorder</option>
-                        <option value="Honours First Year">Honours First Year</option>
-                        <option value="Honours Second Year">Honours Second Year</option>
-                        <option value="Honours Third Year">Honours Third Year</option>
-                        <option value="Honours Fourth Year">Honours Fourth Year</option>
-                        <option value="Masters Final Year">Masters Final Year</option>
-                        <option value="Other Resources">Other Resources</option>
-                    </select>
-                    <select id="reorderEbookSelect" class="form-control">
-                        <option value="">Select an eBook to move</option>
-                    </select>
-                    <div class="mobile-actions">
-                        <button class="reorder-btn" id="moveUpBtn" onclick="moveEbookUp()" disabled>
-                            <i class="fas fa-arrow-up"></i> Move Up
-                        </button>
-                        <button class="reorder-btn" id="moveDownBtn" onclick="moveEbookDown()" disabled>
-                            <i class="fas fa-arrow-down"></i> Move Down
-                        </button>
-                    </div>
-                </div>
             </div>
             
             <h2 style="color: #2E7D32; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
@@ -922,7 +814,6 @@
                         ebooks.push(ebookData);
                     });
                     renderEbooks();
-                    updateReorderControls();
                 });
             } catch (error) {
                 console.error('Error loading ebooks:', error);
@@ -1040,11 +931,18 @@
                     const hasLink = ebook.link && ebook.link.trim() !== '';
                     const viewButton = hasLink ? 
                         `<button class="action-btn view-btn" onclick="viewEbook('${ebook.link}')">
-                            <i class="fas fa-external-link-alt"></i> View eBook
+                            View eBook
                         </button>` :
                         `<button class="action-btn view-btn" disabled>
-                            <i class="fas fa-external-link-alt"></i> No Link
+                            No Link
                         </button>`;
+                    
+                    // Get current ebook's position in the page for move up/down buttons
+                    const pageEbooks = ebooks.filter(e => e.page === ebook.page)
+                                             .sort((a, b) => a.order - b.order);
+                    const index = pageEbooks.findIndex(e => e.id === ebook.id);
+                    const canMoveUp = index > 0;
+                    const canMoveDown = index < pageEbooks.length - 1;
                     
                     ebookCard.innerHTML = `
                         <div class="ebook-icon">
@@ -1054,19 +952,18 @@
                         <div class="ebook-page">${ebook.page}</div>
                         <div class="ebook-actions">
                             ${viewButton}
-                            <div class="dropdown" id="dropdown-${ebook.id}">
-                                <button class="dropdown-btn" onclick="toggleDropdown('${ebook.id}')">
-                                    <i class="fas fa-ellipsis-v"></i> Options
-                                </button>
-                                <div class="dropdown-content">
-                                    <a href="#" onclick="openEditModal('${ebook.id}')">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                    <a href="#" onclick="deleteEbook('${ebook.id}')">
-                                        <i class="fas fa-trash"></i> Delete
-                                    </a>
-                                </div>
-                            </div>
+                            <button class="action-btn move-up-btn" onclick="moveEbookUpSingle('${ebook.id}')" ${canMoveUp ? '' : 'disabled'}>
+                                <i class="fas fa-arrow-up"></i> Move Up
+                            </button>
+                            <button class="action-btn move-down-btn" onclick="moveEbookDownSingle('${ebook.id}')" ${canMoveDown ? '' : 'disabled'}>
+                                <i class="fas fa-arrow-down"></i> Move Down
+                            </button>
+                            <button class="action-btn edit-btn" onclick="openEditModal('${ebook.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteEbook('${ebook.id}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
                         </div>
                     `;
                     ebooksContainer.appendChild(ebookCard);
@@ -1078,79 +975,15 @@
             });
         }
 
-        // Toggle dropdown on mobile
-        window.toggleDropdown = function(ebookId) {
-            const dropdown = document.getElementById(`dropdown-${ebookId}`);
-            dropdown.classList.toggle('active');
+        // Move ebook up in the list (for individual ebook cards)
+        window.moveEbookUpSingle = async function(ebookId) {
+            const ebook = ebooks.find(e => e.id === ebookId);
+            if (!ebook) return;
             
-            // Close other dropdowns
-            document.querySelectorAll('.dropdown').forEach(d => {
-                if (d.id !== `dropdown-${ebookId}`) {
-                    d.classList.remove('active');
-                }
-            });
-        }
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.dropdown')) {
-                document.querySelectorAll('.dropdown').forEach(d => {
-                    d.classList.remove('active');
-                });
-            }
-        });
-
-        // Update reorder controls
-        function updateReorderControls() {
-            const pageSelect = document.getElementById('reorderPageSelect');
-            const ebookSelect = document.getElementById('reorderEbookSelect');
-            const moveUpBtn = document.getElementById('moveUpBtn');
-            const moveDownBtn = document.getElementById('moveDownBtn');
-            
-            // Clear ebook select
-            ebookSelect.innerHTML = '<option value="">Select an eBook to move</option>';
-            
-            // If a page is selected, populate ebooks for that page
-            if (pageSelect.value) {
-                const pageEbooks = ebooks.filter(ebook => ebook.page === pageSelect.value);
-                
-                if (pageEbooks.length > 0) {
-                    pageEbooks.forEach((ebook, index) => {
-                        const option = document.createElement('option');
-                        option.value = ebook.id;
-                        option.textContent = ebook.name;
-                        option.dataset.index = index;
-                        ebookSelect.appendChild(option);
-                    });
-                    
-                    // Enable buttons if there are multiple ebooks
-                    moveUpBtn.disabled = pageEbooks.length < 2;
-                    moveDownBtn.disabled = pageEbooks.length < 2;
-                } else {
-                    moveUpBtn.disabled = true;
-                    moveDownBtn.disabled = true;
-                }
-            } else {
-                moveUpBtn.disabled = true;
-                moveDownBtn.disabled = true;
-            }
-        }
-
-        // Move ebook up in the list
-        window.moveEbookUp = async function() {
-            const pageSelect = document.getElementById('reorderPageSelect');
-            const ebookSelect = document.getElementById('reorderEbookSelect');
-            
-            if (!pageSelect.value || !ebookSelect.value) {
-                alert('Please select both a page and an eBook to move');
-                return;
-            }
-            
-            const ebookId = ebookSelect.value;
-            const pageEbooks = ebooks.filter(ebook => ebook.page === pageSelect.value)
+            const pageEbooks = ebooks.filter(e => e.page === ebook.page)
                                      .sort((a, b) => a.order - b.order);
             
-            const index = pageEbooks.findIndex(ebook => ebook.id === ebookId);
+            const index = pageEbooks.findIndex(e => e.id === ebookId);
             
             if (index > 0) {
                 try {
@@ -1165,11 +998,6 @@
                     await updateDoc(doc(db, "ebooks", prevEbook.id), {
                         order: currentEbook.order
                     });
-                    
-                    // Update the select to keep the same ebook selected
-                    setTimeout(() => {
-                        ebookSelect.value = ebookId;
-                    }, 100);
                 } catch (error) {
                     console.error('Error moving ebook:', error);
                     alert('Error moving ebook: ' + error.message);
@@ -1177,21 +1005,15 @@
             }
         }
 
-        // Move ebook down in the list
-        window.moveEbookDown = async function() {
-            const pageSelect = document.getElementById('reorderPageSelect');
-            const ebookSelect = document.getElementById('reorderEbookSelect');
+        // Move ebook down in the list (for individual ebook cards)
+        window.moveEbookDownSingle = async function(ebookId) {
+            const ebook = ebooks.find(e => e.id === ebookId);
+            if (!ebook) return;
             
-            if (!pageSelect.value || !ebookSelect.value) {
-                alert('Please select both a page and an eBook to move');
-                return;
-            }
-            
-            const ebookId = ebookSelect.value;
-            const pageEbooks = ebooks.filter(ebook => ebook.page === pageSelect.value)
+            const pageEbooks = ebooks.filter(e => e.page === ebook.page)
                                      .sort((a, b) => a.order - b.order);
             
-            const index = pageEbooks.findIndex(ebook => ebook.id === ebookId);
+            const index = pageEbooks.findIndex(e => e.id === ebookId);
             
             if (index < pageEbooks.length - 1) {
                 try {
@@ -1206,11 +1028,6 @@
                     await updateDoc(doc(db, "ebooks", nextEbook.id), {
                         order: currentEbook.order
                     });
-                    
-                    // Update the select to keep the same ebook selected
-                    setTimeout(() => {
-                        ebookSelect.value = ebookId;
-                    }, 100);
                 } catch (error) {
                     console.error('Error moving ebook:', error);
                     alert('Error moving ebook: ' + error.message);
@@ -1236,11 +1053,6 @@
                 document.getElementById('editEbookIcon').value = ebook.icon || 'fas fa-book';
                 updateEditIconPreview();
                 document.getElementById('editModal').style.display = 'flex';
-                
-                // Close any open dropdowns
-                document.querySelectorAll('.dropdown').forEach(d => {
-                    d.classList.remove('active');
-                });
             }
         }
 
@@ -1267,11 +1079,6 @@
         window.goBackToAdmin = function() {
             window.location.href = 'admin.html';
         }
-
-        // Initialize event listeners for reorder controls
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('reorderPageSelect').addEventListener('change', updateReorderControls);
-        });
     </script>
 </body>
-    </html>
+        </html>
