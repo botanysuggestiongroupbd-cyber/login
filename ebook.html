@@ -175,6 +175,7 @@
             transition: all 0.3s ease;
             border: 2px solid transparent;
             position: relative;
+            overflow: visible; /* Fix for dropdown overflow */
         }
         
         .ebook-card:hover {
@@ -211,6 +212,7 @@
             flex-direction: column;
             gap: 10px;
             margin-top: 15px;
+            position: relative;
         }
         
         .action-btn {
@@ -274,7 +276,7 @@
             width: 100%;
             box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             border-radius: 8px;
-            z-index: 10;
+            z-index: 100; /* Increased z-index */
             overflow: hidden;
         }
         
