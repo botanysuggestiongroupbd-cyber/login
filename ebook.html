@@ -14,10 +14,39 @@
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+            background: white;
             color: #333;
             min-height: 100vh;
             padding: 10px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Flying Books Animation */
+        .flying-books {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .flying-book {
+            position: absolute;
+            font-size: 24px;
+            color: rgba(76, 175, 80, 0.3);
+            animation: fly linear infinite;
+        }
+        
+        @keyframes fly {
+            0% {
+                transform: translateY(100vh) translateX(-100px) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+            }
         }
         
         .container {
@@ -25,7 +54,9 @@
             margin: 0 auto;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
         }
         
         .header {
@@ -34,6 +65,7 @@
             padding: 20px 15px;
             text-align: center;
             position: relative;
+            border-radius: 15px 15px 0 0;
         }
         
         .back-btn {
@@ -178,6 +210,24 @@
             overflow: visible;
         }
         
+        .ebook-card.hidden {
+            opacity: 0.7;
+            background-color: #f5f5f5;
+            border-left: 4px solid #ff9800;
+        }
+        
+        .hidden-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff9800;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
         .ebook-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -281,6 +331,15 @@
             background: #d32f2f;
         }
         
+        .visibility-btn {
+            background: #607D8B;
+            color: white;
+        }
+        
+        .visibility-btn:hover {
+            background: #455A64;
+        }
+        
         .empty-state {
             text-align: center;
             padding: 30px 15px;
@@ -300,6 +359,7 @@
             color: #666;
             font-size: 0.8rem;
             border-top: 1px solid #e0e0e0;
+            border-radius: 0 0 15px 15px;
         }
         
         /* Login Overlay Styles */
@@ -532,7 +592,7 @@
         @media (min-width: 1024px) {
             .container {
                 border-radius: 20px;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             }
             
             .header {
@@ -552,6 +612,9 @@
     </style>
 </head>
 <body>
+    <!-- Flying Books Animation -->
+    <div class="flying-books" id="flyingBooks"></div>
+
     <!-- Admin Login Overlay -->
     <div id="loginOverlay" class="login-overlay">
         <div class="admin-login">
@@ -704,6 +767,34 @@
         </div>
     </div>
 
+    <script>
+        // Create flying books animation
+        function createFlyingBooks() {
+            const flyingBooksContainer = document.getElementById('flyingBooks');
+            const bookIcons = ['📘', '📗', '📙', '📕', '📒'];
+            
+            for (let i = 0; i < 12; i++) {
+                const book = document.createElement('div');
+                book.className = 'flying-book';
+                book.textContent = bookIcons[Math.floor(Math.random() * bookIcons.length)];
+                
+                // Random position and animation
+                const left = Math.random() * 100;
+                const duration = 15 + Math.random() * 20;
+                const delay = Math.random() * 5;
+                
+                book.style.left = `${left}%`;
+                book.style.animationDuration = `${duration}s`;
+                book.style.animationDelay = `${delay}s`;
+                
+                flyingBooksContainer.appendChild(book);
+            }
+        }
+
+        // Initialize the animation when page loads
+        document.addEventListener('DOMContentLoaded', createFlyingBooks);
+    </script>
+
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
@@ -836,6 +927,7 @@
                     link: link,
                     page: page,
                     icon: icon,
+                    hidden: false, // Default to visible
                     order: ebooks.length, // Add at the end
                     createdAt: new Date()
                 });
@@ -925,7 +1017,13 @@
                 // Add each ebook in this page as a card
                 ebooksByPage[page].forEach(ebook => {
                     const ebookCard = document.createElement('div');
-                    ebookCard.className = 'ebook-card';
+                    ebookCard.className = `ebook-card ${ebook.hidden ? 'hidden' : ''}`;
+                    
+                    // Add hidden badge if ebook is hidden
+                    const hiddenBadge = ebook.hidden ? 
+                        `<div class="hidden-badge">
+                            <i class="fas fa-eye-slash"></i> Hidden
+                        </div>` : '';
                     
                     // Determine if view button should be enabled
                     const hasLink = ebook.link && ebook.link.trim() !== '';
@@ -944,7 +1042,17 @@
                     const canMoveUp = index > 0;
                     const canMoveDown = index < pageEbooks.length - 1;
                     
+                    // Visibility button text and icon
+                    const visibilityButton = ebook.hidden ?
+                        `<button class="action-btn visibility-btn" onclick="toggleEbookVisibility('${ebook.id}')">
+                            <i class="fas fa-eye"></i> Show
+                        </button>` :
+                        `<button class="action-btn visibility-btn" onclick="toggleEbookVisibility('${ebook.id}')">
+                            <i class="fas fa-eye-slash"></i> Hide
+                        </button>`;
+                    
                     ebookCard.innerHTML = `
+                        ${hiddenBadge}
                         <div class="ebook-icon">
                             <i class="${ebook.icon}"></i>
                         </div>
@@ -958,6 +1066,7 @@
                             <button class="action-btn move-down-btn" onclick="moveEbookDownSingle('${ebook.id}')" ${canMoveDown ? '' : 'disabled'}>
                                 <i class="fas fa-arrow-down"></i> Move Down
                             </button>
+                            ${visibilityButton}
                             <button class="action-btn edit-btn" onclick="openEditModal('${ebook.id}')">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
@@ -973,6 +1082,24 @@
                 pageSection.appendChild(ebooksContainer);
                 container.appendChild(pageSection);
             });
+        }
+
+        // Toggle ebook visibility
+        window.toggleEbookVisibility = async function(ebookId) {
+            const ebook = ebooks.find(e => e.id === ebookId);
+            if (!ebook) return;
+            
+            try {
+                await updateDoc(doc(db, "ebooks", ebookId), {
+                    hidden: !ebook.hidden
+                });
+                
+                // Show success message
+                alert(`eBook ${!ebook.hidden ? 'hidden' : 'shown'} successfully!`);
+            } catch (error) {
+                console.error('Error toggling ebook visibility:', error);
+                alert('Error toggling ebook visibility: ' + error.message);
+            }
         }
 
         // Move ebook up in the list (for individual ebook cards)
@@ -1079,6 +1206,9 @@
         window.goBackToAdmin = function() {
             window.location.href = 'admin.html';
         }
+
+        // Initialize icon preview
+        updateIconPreview();
     </script>
 </body>
-        </html>
+    </html>
