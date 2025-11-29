@@ -132,6 +132,20 @@
       border-radius: 4px;
       font-size: 14px;
     }
+    .optional-field {
+      position: relative;
+    }
+    .optional-label {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: #666;
+      background: white;
+      padding: 0 5px;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -149,7 +163,13 @@
   
   <input type="text" id="name" placeholder="Full Name" required />
   <input type="text" id="college" placeholder="College Name" required />
-  <input type="text" id="regno" placeholder="Registration Number" required />
+  
+  <!-- Registration Number field with optional indicator -->
+  <div class="optional-field">
+    <input type="text" id="regno" placeholder="Registration Number" />
+    <span class="optional-label">Optional</span>
+  </div>
+  
   <input type="text" id="dept" placeholder="Department" required />
   <input type="email" id="email" placeholder="Email" required />
   <input type="password" id="password" placeholder="Password" required />
@@ -213,9 +233,9 @@
     successMessage.style.display = "none";
     infoMessage.style.display = "none";
 
-    // Validate inputs
-    if (!name || !college || !regno || !dept || !email || !password) {
-      showError("Please fill in all fields.");
+    // Validate inputs - registration number is now optional
+    if (!name || !college || !dept || !email || !password) {
+      showError("Please fill in all required fields.");
       return;
     }
 
@@ -241,17 +261,23 @@
       // Send email verification
       await sendEmailVerification(user);
       
-      // Save additional user data to Firestore
-      await setDoc(doc(db, "students", user.uid), {
+      // Save additional user data to Firestore - registration number is optional
+      const userData = {
         name: name,
         college: college,
-        regno: regno,
         dept: dept,
         email: email,
         emailVerified: false,
         createdAt: new Date(),
         lastLogin: new Date()
-      });
+      };
+      
+      // Only add registration number if provided
+      if (regno) {
+        userData.regno = regno;
+      }
+      
+      await setDoc(doc(db, "students", user.uid), userData);
 
       // Show success message with verification info
       showSuccess("Registration successful! A verification email has been sent to " + email);
