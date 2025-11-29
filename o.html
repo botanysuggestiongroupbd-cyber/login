@@ -5,11 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Other Resources - Botany Study Materials</title>
   <style>
-    body {
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1a2a3a, #2c3e50);
-      color: #fff;
+    }
+    
+    body {
+      background: white;
+      color: #333;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
@@ -17,6 +22,33 @@
       align-items: center;
       padding: 20px;
       position: relative;
+    }
+    
+    /* Flying Books Animation */
+    .flying-books {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .flying-book {
+      position: absolute;
+      font-size: 24px;
+      color: rgba(76, 175, 80, 0.2);
+      animation: fly linear infinite;
+    }
+    
+    @keyframes fly {
+      0% {
+        transform: translateY(100vh) translateX(-100px) rotate(0deg);
+      }
+      100% {
+        transform: translateY(-100px) translateX(100px) rotate(360deg);
+      }
     }
     
     /* User Profile Section */
@@ -33,19 +65,21 @@
     .user-info {
       display: flex;
       align-items: center;
-      gap: 10px;
-      background: rgba(0, 0, 0, 0.7);
-      padding: 10px 15px;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
       border-radius: 50px;
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(76, 175, 80, 0.2);
       cursor: pointer;
       transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
     
     .user-info:hover {
-      background: rgba(76, 175, 80, 0.8);
+      background: rgba(76, 175, 80, 0.1);
       transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     }
     
     .user-avatar {
@@ -58,24 +92,30 @@
       justify-content: center;
       font-weight: bold;
       font-size: 18px;
+      color: white;
     }
     
     .user-name {
       font-weight: 600;
       font-size: 16px;
+      color: #2E7D32;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     
     .dropdown-menu {
       position: absolute;
       top: 100%;
       right: 0;
-      background: rgba(0, 0, 0, 0.9);
+      background: white;
       border-radius: 10px;
       padding: 10px 0;
       min-width: 200px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(76, 175, 80, 0.2);
       display: none;
       margin-top: 10px;
     }
@@ -98,21 +138,22 @@
       transition: all 0.3s ease;
       cursor: pointer;
       text-decoration: none;
-      color: white;
+      color: #333;
     }
     
     .dropdown-item:hover {
-      background: rgba(76, 175, 80, 0.3);
+      background: rgba(76, 175, 80, 0.1);
     }
     
     .dropdown-item i {
       width: 20px;
       text-align: center;
+      color: #4CAF50;
     }
     
     .dropdown-divider {
       height: 1px;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.1);
       margin: 5px 0;
     }
     
@@ -124,12 +165,11 @@
       align-items: center;
       gap: 10px;
       margin-bottom: 40px;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 20px;
+      background: white;
+      padding: 25px;
       border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(76, 175, 80, 0.2);
       margin-top: 30px;
     }
     
@@ -137,9 +177,8 @@
       margin: 0;
       font-size: 2.2rem;
       font-weight: 700;
-      text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
       text-align: center;
-      background: linear-gradient(to right, #4CAF50, #8BC34A);
+      background: linear-gradient(to right, #4CAF50, #2E7D32);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 10px;
@@ -147,7 +186,7 @@
     
     .tagline {
       font-size: 1.2rem;
-      opacity: 0.9;
+      color: #666;
       text-align: center;
       max-width: 600px;
       margin: 0 auto;
@@ -159,31 +198,30 @@
       gap: 20px;
       width: 100%;
       max-width: 900px;
-      background: rgba(0, 0, 0, 0.5);
+      background: white;
       padding: 30px;
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(76, 175, 80, 0.2);
       margin-bottom: 30px;
     }
     
     a.btn {
-      background: linear-gradient(135deg, rgba(76, 175, 80, 0.8), rgba(139, 195, 74, 0.8));
+      background: linear-gradient(135deg, #4CAF50, #2E7D32);
       padding: 18px 20px;
       border-radius: 12px;
-      color: #fff;
+      color: white;
       text-decoration: none;
       font-size: 1.1rem;
       font-weight: 600;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 6px 15px rgba(76, 175, 80, 0.3);
       transition: all 0.3s ease;
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 70px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(76, 175, 80, 0.3);
       position: relative;
       overflow: hidden;
       line-height: 1.4;
@@ -191,8 +229,8 @@
     
     a.btn:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-      background: linear-gradient(135deg, rgba(76, 175, 80, 0.9), rgba(139, 195, 74, 0.9));
+      box-shadow: 0 10px 25px rgba(76, 175, 80, 0.4);
+      background: linear-gradient(135deg, #2E7D32, #4CAF50);
     }
     
     a.btn:before {
@@ -211,46 +249,27 @@
     }
     
     .back-button {
-      background: linear-gradient(135deg, rgba(33, 150, 243, 0.8), rgba(66, 165, 245, 0.8));
+      background: linear-gradient(135deg, #2196F3, #1976D2);
       padding: 12px 25px;
       border-radius: 8px;
-      color: #fff;
+      color: white;
       text-decoration: none;
       font-size: 1rem;
       font-weight: 600;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
       transition: all 0.3s ease;
       text-align: center;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       margin-top: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(33, 150, 243, 0.3);
     }
     
     .back-button:hover {
       transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-      background: linear-gradient(135deg, rgba(33, 150, 243, 0.9), rgba(66, 165, 245, 0.9));
-    }
-    
-    .ad-container {
-      width: 100%;
-      max-width: 900px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin: 20px 0;
-    }
-    
-    .ad-box {
-      background: rgba(0, 0, 0, 0.4);
-      padding: 15px;
-      border-radius: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100px;
+      box-shadow: 0 6px 15px rgba(33, 150, 243, 0.4);
+      background: linear-gradient(135deg, #1976D2, #2196F3);
     }
     
     footer {
@@ -259,67 +278,19 @@
       padding: 20px;
       width: 100%;
       max-width: 900px;
-      background: rgba(0, 0, 0, 0.6);
+      background: white;
       border-radius: 10px;
       font-size: 0.9rem;
-      opacity: 0.8;
+      color: #666;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(76, 175, 80, 0.1);
     }
 
-    /* Modal for External Links */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      width: 90%;
-      max-width: 500px;
-      text-align: center;
-      color: #333;
-    }
-    
-    .modal-buttons {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      margin-top: 20px;
-    }
-    
-    .modal-btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s;
-    }
-    
-    .modal-open {
-      background: #4CAF50;
-      color: white;
-    }
-    
-    .modal-cancel {
-      background: #f44336;
-      color: white;
-    }
-    
     /* Loading State */
     .loading-state {
       text-align: center;
       padding: 40px 20px;
-      color: #fff;
+      color: #666;
     }
     
     .loading-state i {
@@ -331,30 +302,32 @@
     .empty-state {
       text-align: center;
       padding: 40px 20px;
-      color: #fff;
-      background: rgba(0, 0, 0, 0.5);
+      color: #666;
+      background: white;
       border-radius: 20px;
       margin: 20px 0;
       max-width: 600px;
       width: 100%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(76, 175, 80, 0.2);
     }
     
     .empty-state i {
       font-size: 4rem;
       margin-bottom: 20px;
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(76, 175, 80, 0.3);
     }
     
     .empty-state h3 {
       margin-bottom: 15px;
       font-size: 1.5rem;
-      color: #fff;
+      color: #2E7D32;
     }
     
     .empty-state p {
       font-size: 1.1rem;
       line-height: 1.6;
-      opacity: 0.8;
+      color: #666;
     }
     
     @media (max-width: 768px) {
@@ -382,22 +355,14 @@
       }
       
       .user-name {
-        display: none;
+        max-width: 120px;
+        font-size: 14px;
       }
       
       a.btn {
         font-size: 1rem;
         padding: 15px;
         min-height: 60px;
-      }
-
-      .modal-content {
-        padding: 20px;
-        margin: 20px;
-      }
-      
-      .modal-buttons {
-        flex-direction: column;
       }
       
       .empty-state {
@@ -413,6 +378,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+
+  <!-- Flying Books Animation -->
+  <div class="flying-books" id="flyingBooks"></div>
 
   <!-- User Profile Section -->
   <div class="user-section">
@@ -464,55 +432,37 @@
     <i class="fas fa-arrow-left"></i> Back to Main Page
   </a>
 
-  <!-- External Link Modal -->
-  <div class="modal" id="externalLinkModal">
-    <div class="modal-content">
-      <h3 style="color: #333; margin-bottom: 15px;"><i class="fas fa-external-link-alt"></i> Opening External Link</h3>
-      <p style="color: #666; margin-bottom: 10px;" id="modalLinkText">You are about to open an external study material.</p>
-      <p style="color: #888; font-size: 0.9rem; margin-bottom: 20px;">Make sure pop-ups are allowed for this site.</p>
-      <div class="modal-buttons">
-        <button class="modal-btn modal-open" id="confirmOpen">Open Link</button>
-        <button class="modal-btn modal-cancel" id="cancelOpen">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="ad-container">
-    <div class="ad-box">
-      <script async="async" data-cfasync="false" src="//pl27696641.revenuecpmgate.com/d3c90308bd587e059824adaabc81cf7a/invoke.js"></script>
-      <div id="container-d3c90308bd587e059824adaabc81cf7a"></div>
-    </div>
-    
-    <div class="ad-box">
-      <script type="text/javascript">
-        atOptions = {
-          'key' : '5429be8814e153fe6360cf3cea0c93db',
-          'format' : 'iframe',
-          'height' : 300,
-          'width' : 160,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/5429be8814e153fe6360cf3cea0c93db/invoke.js"></script>
-    </div>
-    
-    <div class="ad-box">
-      <script type="text/javascript">
-        atOptions = {
-          'key' : '1259bdba7a9cba3623bc48ab4ce23c86',
-          'format' : 'iframe',
-          'height' : 60,
-          'width' : 468,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/1259bdba7a9cba3623bc48ab4ce23c86/invoke.js"></script>
-    </div>
-  </div>
-
   <footer>
     <p>Botany Study Materials &copy; 2023 | All resources are for educational purposes</p>
   </footer>
+
+  <script>
+    // Create flying books animation
+    function createFlyingBooks() {
+      const flyingBooksContainer = document.getElementById('flyingBooks');
+      const bookIcons = ['📘', '📗', '📙', '📕', '📒'];
+      
+      for (let i = 0; i < 12; i++) {
+        const book = document.createElement('div');
+        book.className = 'flying-book';
+        book.textContent = bookIcons[Math.floor(Math.random() * bookIcons.length)];
+        
+        // Random position and animation
+        const left = Math.random() * 100;
+        const duration = 15 + Math.random() * 20;
+        const delay = Math.random() * 5;
+        
+        book.style.left = `${left}%`;
+        book.style.animationDuration = `${duration}s`;
+        book.style.animationDelay = `${delay}s`;
+        
+        flyingBooksContainer.appendChild(book);
+      }
+    }
+
+    // Initialize the animation when page loads
+    document.addEventListener('DOMContentLoaded', createFlyingBooks);
+  </script>
 
   <!-- Firebase SDKs -->
   <script type="module">
@@ -553,16 +503,10 @@
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
     const logoutBtn = document.getElementById('logoutBtn');
-    const externalLinkModal = document.getElementById('externalLinkModal');
-    const confirmOpen = document.getElementById('confirmOpen');
-    const cancelOpen = document.getElementById('cancelOpen');
-    const modalLinkText = document.getElementById('modalLinkText');
     const loadingState = document.getElementById('loadingState');
     const emptyState = document.getElementById('emptyState');
     const buttonContainer = document.getElementById('buttonContainer');
 
-    let currentExternalLink = '';
-    let currentEbookName = '';
     let ebooks = [];
 
     // Toggle dropdown menu
@@ -587,12 +531,12 @@
           
           if (docSnap.exists()) {
             const userData = docSnap.data();
-            // Update user info display
-            userName.textContent = userData.name || user.email.split('@')[0];
+            // Update user info display - show full name
+            userName.textContent = userData.name || user.email;
             userAvatar.textContent = userData.name ? userData.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase();
           } else {
             // Use email if no profile data
-            userName.textContent = user.email.split('@')[0];
+            userName.textContent = user.email;
             userAvatar.textContent = user.email.charAt(0).toUpperCase();
           }
           
@@ -600,7 +544,7 @@
           loadEbooks();
         } catch (error) {
           console.error("Error loading user data:", error);
-          userName.textContent = user.email.split('@')[0];
+          userName.textContent = user.email;
           userAvatar.textContent = user.email.charAt(0).toUpperCase();
           loadEbooks();
         }
@@ -650,8 +594,14 @@
             querySnapshot.forEach((doc) => {
               const ebookData = doc.data();
               ebookData.id = doc.id;
-              console.log("Found eBook:", ebookData.name, "| Page:", ebookData.page, "| Order:", ebookData.order);
-              ebooks.push(ebookData);
+              
+              // Hide functionality - filter out hidden ebooks
+              if (ebookData.hidden !== true) {
+                console.log("Found eBook:", ebookData.name, "| Page:", ebookData.page, "| Order:", ebookData.order, "| Hidden:", ebookData.hidden);
+                ebooks.push(ebookData);
+              } else {
+                console.log("Skipping hidden eBook:", ebookData.name);
+              }
             });
             
             console.log("Total eBooks loaded:", ebooks.length);
@@ -721,8 +671,8 @@
               const ebookData = doc.data();
               ebookData.id = doc.id;
               
-              // Client-side filtering for Other Resources
-              if (ebookData.page === "Other Resources") {
+              // Client-side filtering for Other Resources AND non-hidden eBooks
+              if (ebookData.page === "Other Resources" && ebookData.hidden !== true) {
                 console.log("Matching eBook found:", ebookData.name);
                 ebooks.push(ebookData);
               }
@@ -741,7 +691,7 @@
               renderEbooks();
             }
           }, 
-          (error) => {
+          (error) {
             console.error("Alternative method error:", error);
             loadingState.style.display = 'none';
             emptyState.style.display = 'block';
@@ -781,20 +731,9 @@
         
         // Check if the eBook has a link
         if (ebook.link && ebook.link.trim() !== '') {
+          // Direct link without popup
           button.href = ebook.link;
-          
-          // Add click handler for ALL external links (not just Google Drive)
-          button.addEventListener('click', function(e) {
-            e.preventDefault();
-            currentExternalLink = ebook.link;
-            currentEbookName = ebook.name;
-            
-            // Update modal text with ebook name
-            modalLinkText.textContent = `You are about to open: "${ebook.name}"`;
-            
-            // Show modal for all external links
-            externalLinkModal.style.display = 'flex';
-          });
+          button.target = "_blank";
         } else {
           // No link - disable the button
           button.href = '#';
@@ -813,38 +752,9 @@
       console.log("eBook buttons rendered successfully");
     }
 
-    // Modal buttons
-    confirmOpen.addEventListener('click', function() {
-      if (currentExternalLink) {
-        console.log("Opening external link:", currentExternalLink);
-        window.open(currentExternalLink, '_blank');
-        externalLinkModal.style.display = 'none';
-        currentExternalLink = '';
-        currentEbookName = '';
-      }
-    });
-
-    cancelOpen.addEventListener('click', function() {
-      console.log("Cancelled opening external link");
-      externalLinkModal.style.display = 'none';
-      currentExternalLink = '';
-      currentEbookName = '';
-    });
-
-    // Close modal when clicking outside
-    window.addEventListener('click', function(e) {
-      if (e.target === externalLinkModal) {
-        externalLinkModal.style.display = 'none';
-        currentExternalLink = '';
-        currentEbookName = '';
-      }
-    });
-
     // Make functions available globally for retry buttons
     window.loadEbooks = loadEbooks;
     window.loadEbooksAlternative = loadEbooksAlternative;
   </script>
-
-  <script type='text/javascript' src='//pl27703488.revenuecpmgate.com/91/6c/6e/916c6e9ca16af6ee852fd57d9840b0d6.js'></script>
 </body>
   </html>
