@@ -581,6 +581,7 @@
         const q = query(
           collection(db, "ebooks"), 
           where("page", "==", "Other Resources"),
+          where("hidden", "!=", true),
           orderBy("order", "asc")
         );
         
@@ -594,14 +595,8 @@
             querySnapshot.forEach((doc) => {
               const ebookData = doc.data();
               ebookData.id = doc.id;
-              
-              // Hide functionality - filter out hidden ebooks
-              if (ebookData.hidden !== true) {
-                console.log("Found eBook:", ebookData.name, "| Page:", ebookData.page, "| Order:", ebookData.order, "| Hidden:", ebookData.hidden);
-                ebooks.push(ebookData);
-              } else {
-                console.log("Skipping hidden eBook:", ebookData.name);
-              }
+              console.log("Found eBook:", ebookData.name, "| Page:", ebookData.page, "| Order:", ebookData.order, "| Hidden:", ebookData.hidden);
+              ebooks.push(ebookData);
             });
             
             console.log("Total eBooks loaded:", ebooks.length);
@@ -691,7 +686,7 @@
               renderEbooks();
             }
           }, 
-          (error) {
+          (error) => {
             console.error("Alternative method error:", error);
             loadingState.style.display = 'none';
             emptyState.style.display = 'block';
@@ -757,4 +752,4 @@
     window.loadEbooksAlternative = loadEbooksAlternative;
   </script>
 </body>
-  </html>
+        </html>
