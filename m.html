@@ -1,1214 +1,851 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Botany eBook Management</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: white;
-            color: #333;
-            min-height: 100vh;
-            padding: 10px;
-            position: relative;
-            overflow-x: hidden;
-        }
-        
-        /* Flying Books Animation */
-        .flying-books {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        .flying-book {
-            position: absolute;
-            font-size: 24px;
-            color: rgba(76, 175, 80, 0.3);
-            animation: fly linear infinite;
-        }
-        
-        @keyframes fly {
-            0% {
-                transform: translateY(100vh) translateX(-100px) rotate(0deg);
-            }
-            100% {
-                transform: translateY(-100px) translateX(100px) rotate(360deg);
-            }
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #4CAF50, #2E7D32);
-            color: white;
-            padding: 20px 15px;
-            text-align: center;
-            position: relative;
-            border-radius: 15px 15px 0 0;
-        }
-        
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 14px;
-            gap: 8px;
-            transition: all 0.3s;
-            margin-bottom: 15px;
-            width: 100%;
-            max-width: 200px;
-        }
-        
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-        
-        .header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-        
-        .header p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
-        .main-content {
-            padding: 20px 15px;
-        }
-        
-        .add-ebook-form {
-            background: #f9f9f9;
-            padding: 20px 15px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-        }
-        
-        .form-title {
-            color: #2E7D32;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.1rem;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: #555;
-            font-size: 0.9rem;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        .form-control:focus {
-            border-color: #4CAF50;
-            outline: none;
-        }
-        
-        .icon-preview {
-            font-size: 22px;
-            color: #4CAF50;
-            margin-top: 8px;
-            text-align: center;
-        }
-        
-        .submit-btn {
-            background: linear-gradient(135deg, #4CAF50, #2E7D32);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 16px;
-            transition: all 0.3s;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .submit-btn:hover {
-            background: linear-gradient(135deg, #2E7D32, #4CAF50);
-            transform: translateY(-2px);
-        }
-        
-        .page-section {
-            margin-bottom: 30px;
-            position: relative;
-        }
-        
-        .page-title {
-            color: #2E7D32;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #E8F5E9;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.1rem;
-        }
-        
-        .ebooks-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-        
-        .ebook-card {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            position: relative;
-            overflow: visible;
-        }
-        
-        .ebook-card.hidden {
-            opacity: 0.7;
-            background-color: #f5f5f5;
-            border-left: 4px solid #ff9800;
-        }
-        
-        .hidden-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #ff9800;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-        
-        .ebook-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-color: #4CAF50;
-        }
-        
-        .ebook-icon {
-            font-size: 2rem;
-            color: #4CAF50;
-            margin-bottom: 10px;
-        }
-        
-        .ebook-card h3 {
-            color: #2E7D32;
-            margin-bottom: 8px;
-            font-size: 1.1rem;
-        }
-        
-        .ebook-page {
-            display: inline-block;
-            background: #E8F5E9;
-            color: #2E7D32;
-            padding: 4px 8px;
-            border-radius: 15px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-top: 5px;
-        }
-        
-        /* Updated ebook-actions styles */
-        .ebook-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
-            position: relative;
-        }
-        
-        .action-btn {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            font-size: 14px;
-            flex: 1;
-        }
-        
-        .view-btn {
-            background: #2196F3;
-            color: white;
-        }
-        
-        .view-btn:hover {
-            background: #0b7dda;
-        }
-        
-        .view-btn:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-        }
-        
-        .move-up-btn {
-            background: #FF9800;
-            color: white;
-        }
-        
-        .move-up-btn:hover {
-            background: #e68900;
-        }
-        
-        .move-down-btn {
-            background: #FF9800;
-            color: white;
-        }
-        
-        .move-down-btn:hover {
-            background: #e68900;
-        }
-        
-        .edit-btn {
-            background: #9C27B0;
-            color: white;
-        }
-        
-        .edit-btn:hover {
-            background: #7B1FA2;
-        }
-        
-        .delete-btn {
-            background: #f44336;
-            color: white;
-        }
-        
-        .delete-btn:hover {
-            background: #d32f2f;
-        }
-        
-        .visibility-btn {
-            background: #607D8B;
-            color: white;
-        }
-        
-        .visibility-btn:hover {
-            background: #455A64;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 30px 15px;
-            color: #666;
-        }
-        
-        .empty-state i {
-            font-size: 3rem;
-            color: #ddd;
-            margin-bottom: 15px;
-        }
-        
-        .footer {
-            background: #f5f5f5;
-            padding: 15px;
-            text-align: center;
-            color: #666;
-            font-size: 0.8rem;
-            border-top: 1px solid #e0e0e0;
-            border-radius: 0 0 15px 15px;
-        }
-        
-        /* Login Overlay Styles */
-        .login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            padding: 20px;
-        }
-        
-        .admin-login {
-            background: white;
-            padding: 25px 20px;
-            border-radius: 15px;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-        
-        .admin-login h2 {
-            margin-bottom: 15px;
-            color: #333;
-            font-size: 1.3rem;
-        }
-        
-        .admin-login input {
-            width: 100%;
-            padding: 15px;
-            margin: 8px 0;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        .admin-login input:focus {
-            border-color: #4CAF50;
-            outline: none;
-        }
-        
-        .admin-login button {
-            width: 100%;
-            padding: 15px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-        
-        .admin-login button:hover {
-            background: #45a049;
-        }
-        
-        .admin-login-message {
-            margin-top: 10px;
-            color: red;
-            font-size: 14px;
-            min-height: 20px;
-        }
-        
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-        }
-        
-        .modal-content {
-            background-color: white;
-            padding: 25px 20px;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .modal h3 {
-            margin-bottom: 15px;
-            color: #333;
-            text-align: center;
-            font-size: 1.2rem;
-        }
-        
-        .modal-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .modal-buttons button {
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .modal-save {
-            background: #4CAF50;
-            color: white;
-        }
-        
-        .modal-save:hover {
-            background: #45a049;
-        }
-        
-        .modal-cancel {
-            background: #757575;
-            color: white;
-        }
-        
-        .modal-cancel:hover {
-            background: #616161;
-        }
-        
-        /* Mobile-specific improvements */
-        .mobile-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .mobile-full-width {
-            width: 100%;
-        }
-        
-        /* Better touch targets for mobile */
-        button, 
-        .action-btn {
-            min-height: 44px;
-        }
-        
-        /* Tablet and larger screens */
-        @media (min-width: 768px) {
-            body {
-                padding: 20px;
-            }
-            
-            .header {
-                padding: 25px 20px;
-            }
-            
-            .header h1 {
-                font-size: 2.2rem;
-            }
-            
-            .header p {
-                font-size: 1.1rem;
-            }
-            
-            .back-btn {
-                position: absolute;
-                left: 20px;
-                top: 50%;
-                transform: translateY(-50%);
-                width: auto;
-                margin-bottom: 0;
-            }
-            
-            .back-btn:hover {
-                transform: translateY(-50%) scale(1.05);
-            }
-            
-            .main-content {
-                padding: 30px;
-            }
-            
-            .add-ebook-form {
-                padding: 25px;
-            }
-            
-            .form-title {
-                font-size: 1.3rem;
-            }
-            
-            .ebooks-container {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 20px;
-            }
-            
-            .ebook-card {
-                padding: 20px;
-            }
-            
-            /* Updated for tablet: horizontal layout for buttons */
-            .ebook-actions {
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-            
-            .ebook-actions .action-btn {
-                flex: 1;
-                min-width: 120px;
-            }
-            
-            .modal-buttons {
-                flex-direction: row;
-            }
-            
-            .mobile-actions {
-                flex-direction: row;
-            }
-        }
-        
-        @media (min-width: 1024px) {
-            .container {
-                border-radius: 20px;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            }
-            
-            .header {
-                padding: 25px 20px;
-            }
-            
-            .add-ebook-form {
-                padding: 25px;
-                border-radius: 15px;
-            }
-            
-            .ebook-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Masters Final Year Subjects - Botany Study Materials</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+    }
+    
+    /* User Profile Section */
+    .user-section {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px 15px;
+      border-radius: 50px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .user-info:hover {
+      background: rgba(76, 175, 80, 0.8);
+      transform: translateY(-2px);
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4CAF50, #8BC34A);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    .user-name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: rgba(0, 0, 0, 0.9);
+      border-radius: 10px;
+      padding: 10px 0;
+      min-width: 200px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: none;
+      margin-top: 10px;
+    }
+    
+    .dropdown-menu.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .dropdown-item {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: white;
+    }
+    
+    .dropdown-item:hover {
+      background: rgba(76, 175, 80, 0.3);
+    }
+    
+    .dropdown-item i {
+      width: 20px;
+      text-align: center;
+    }
+    
+    .dropdown-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.2);
+      margin: 5px 0;
+    }
+    
+    header {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 30px;
+    }
+    
+    header h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+      text-align: center;
+      background: linear-gradient(to right, #4CAF50, #8BC34A);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+    
+    .tagline {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .button-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 900px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 30px;
+    }
+    
+    a.btn {
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.8), rgba(139, 195, 74, 0.8));
+      padding: 18px 20px;
+      border-radius: 12px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 70px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      line-height: 1.4;
+    }
+    
+    a.btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.9), rgba(139, 195, 74, 0.9));
+    }
+    
+    a.btn:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+    
+    a.btn:hover:before {
+      left: 100%;
+    }
+    
+    .back-button {
+      background: linear-gradient(135deg, rgba(33, 150, 243, 0.8), rgba(66, 165, 245, 0.8));
+      padding: 12px 25px;
+      border-radius: 8px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .back-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+      background: linear-gradient(135deg, rgba(33, 150, 243, 0.9), rgba(66, 165, 245, 0.9));
+    }
+    
+    .ad-container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .ad-box {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 15px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100px;
+    }
+    
+    footer {
+      margin-top: 30px;
+      text-align: center;
+      padding: 20px;
+      width: 100%;
+      max-width: 900px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Modal for External Links */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+      color: #333;
+    }
+    
+    .modal-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    
+    .modal-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .modal-open {
+      background: #4CAF50;
+      color: white;
+    }
+    
+    .modal-cancel {
+      background: #f44336;
+      color: white;
+    }
+    
+    /* Loading State */
+    .loading-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #fff;
+    }
+    
+    .loading-state i {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #4CAF50;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      margin: 20px 0;
+      max-width: 600px;
+      width: 100%;
+    }
+    
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .empty-state h3 {
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+      color: #fff;
+    }
+    
+    .empty-state p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      opacity: 0.8;
+    }
+    
+    @media (max-width: 768px) {
+      .button-container {
+        grid-template-columns: 1fr;
+        padding: 20px;
+        gap: 15px;
+      }
+      
+      header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .tagline {
+        font-size: 1rem;
+      }
+      
+      .user-section {
+        position: relative;
+        top: 0;
+        right: 0;
+        justify-content: center;
+        margin-bottom: 20px;
+        width: 100%;
+      }
+      
+      .user-name {
+        display: none;
+      }
+      
+      a.btn {
+        font-size: 1rem;
+        padding: 15px;
+        min-height: 60px;
+      }
+
+      .modal-content {
+        padding: 20px;
+        margin: 20px;
+      }
+      
+      .modal-buttons {
+        flex-direction: column;
+      }
+      
+      .empty-state {
+        padding: 30px 20px;
+        margin: 10px;
+      }
+      
+      .empty-state i {
+        font-size: 3rem;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Flying Books Animation -->
-    <div class="flying-books" id="flyingBooks"></div>
 
-    <!-- Admin Login Overlay -->
-    <div id="loginOverlay" class="login-overlay">
-        <div class="admin-login">
-            <h2><i class="fas fa-lock"></i> Admin Authentication Required</h2>
-            <p style="margin-bottom: 15px; color: #666;">Please login to access the eBook management system</p>
-            
-            <input type="email" id="adminEmail" placeholder="Admin Email">
-            <input type="password" id="adminPassword" placeholder="Admin Password">
-            <button onclick="adminLogin()">Login as Admin</button>
-            
-            <div id="adminLoginMessage" class="admin-login-message"></div>
-        </div>
+  <!-- User Profile Section -->
+  <div class="user-section">
+    <div class="user-info" id="userInfo">
+      <div class="user-avatar" id="userAvatar">U</div>
+      <div class="user-name" id="userName">User</div>
+      <i class="fas fa-chevron-down"></i>
     </div>
-
-    <div class="container" id="mainContainer" style="display: none;">
-        <div class="header">
-            <button class="back-btn" onclick="goBackToAdmin()">
-                <i class="fas fa-arrow-left"></i> Back to Admin
-            </button>
-            <h1><i class="fas fa-book"></i> Botany eBook Management</h1>
-            <p>Manage and organize your eBook resources</p>
-        </div>
-        
-        <div class="main-content">
-            <div class="add-ebook-form">
-                <h3 class="form-title"><i class="fas fa-plus-circle"></i> Add New eBook Resource</h3>
-                <form id="ebookForm">
-                    <div class="form-group">
-                        <label for="ebookName">Resource Name</label>
-                        <input type="text" id="ebookName" class="form-control" placeholder="e.g., Botany Fundamentals, Plant Anatomy" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="ebookLink">Resource Link (Optional)</label>
-                        <input type="text" id="ebookLink" class="form-control" placeholder="Any link - Google Drive, Website, etc.">
-                        <small>You can add this later using the edit option</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="ebookPage">Assign to Page</label>
-                        <select id="ebookPage" class="form-control" required>
-                            <option value="">Select a page</option>
-                            <option value="Honours First Year">Honours First Year</option>
-                            <option value="Honours Second Year">Honours Second Year</option>
-                            <option value="Honours Third Year">Honours Third Year</option>
-                            <option value="Honours Fourth Year">Honours Fourth Year</option>
-                            <option value="Masters Final Year">Masters Final Year</option>
-                            <option value="Other Resources">Other Resources</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="ebookIcon">Select Icon</label>
-                        <select id="ebookIcon" class="form-control" required onchange="updateIconPreview()">
-                            <option value="fas fa-book">Book</option>
-                            <option value="fas fa-graduation-cap">Graduation Cap</option>
-                            <option value="fas fa-user-graduate">Graduate Student</option>
-                            <option value="fas fa-book-open">Open Book</option>
-                            <option value="fas fa-file-pdf">PDF File</option>
-                            <option value="fas fa-file-alt">Text File</option>
-                            <option value="fas fa-download">Download</option>
-                            <option value="fas fa-folder">Folder</option>
-                            <option value="fas fa-folder-open">Open Folder</option>
-                            <option value="fas fa-university">University</option>
-                            <option value="fas fa-school">School</option>
-                            <option value="fas fa-award">Award</option>
-                            <option value="fas fa-certificate">Certificate</option>
-                        </select>
-                        <div class="icon-preview">
-                            <span id="iconPreview"><i class="fas fa-book"></i></span>
-                            <small>Preview of selected icon</small>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="submit-btn">
-                        <i class="fas fa-save"></i> Add eBook Resource
-                    </button>
-                </form>
-            </div>
-            
-            <h2 style="color: #2E7D32; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                <i class="fas fa-list"></i> eBook Resources
-            </h2>
-            
-            <div id="ebooksByPage">
-                <!-- eBook sections will be dynamically added here -->
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>© 2023 Botany Study eBook Management System. All rights reserved.</p>
-        </div>
+    
+    <div class="dropdown-menu" id="dropdownMenu">
+      <a href="dashboard.html" class="dropdown-item">
+        <i class="fas fa-user"></i>
+        <span>My Profile</span>
+      </a>
+      <div class="dropdown-divider"></div>
+      <a href="index.html" class="dropdown-item" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
     </div>
+  </div>
 
-    <!-- Edit eBook Modal -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <h3><i class="fas fa-edit"></i> Edit eBook Resource</h3>
-            <form id="editEbookForm">
-                <div class="form-group">
-                    <label for="editEbookName">Resource Name</label>
-                    <input type="text" id="editEbookName" class="form-control" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="editEbookLink">Resource Link</label>
-                    <input type="text" id="editEbookLink" class="form-control" placeholder="Any link - Google Drive, Website, etc.">
-                </div>
-                
-                <div class="form-group">
-                    <label for="editEbookPage">Assign to Page</label>
-                    <select id="editEbookPage" class="form-control" required>
-                        <option value="Honours First Year">Honours First Year</option>
-                        <option value="Honours Second Year">Honours Second Year</option>
-                        <option value="Honours Third Year">Honours Third Year</option>
-                        <option value="Honours Fourth Year">Honours Fourth Year</option>
-                        <option value="Masters Final Year">Masters Final Year</option>
-                        <option value="Other Resources">Other Resources</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="editEbookIcon">Select Icon</label>
-                    <select id="editEbookIcon" class="form-control" required onchange="updateEditIconPreview()">
-                        <option value="fas fa-book">Book</option>
-                        <option value="fas fa-graduation-cap">Graduation Cap</option>
-                        <option value="fas fa-user-graduate">Graduate Student</option>
-                        <option value="fas fa-book-open">Open Book</option>
-                        <option value="fas fa-file-pdf">PDF File</option>
-                        <option value="fas fa-file-alt">Text File</option>
-                        <option value="fas fa-download">Download</option>
-                        <option value="fas fa-folder">Folder</option>
-                        <option value="fas fa-folder-open">Open Folder</option>
-                        <option value="fas fa-university">University</option>
-                        <option value="fas fa-school">School</option>
-                        <option value="fas fa-award">Award</option>
-                        <option value="fas fa-certificate">Certificate</option>
-                    </select>
-                    <div class="icon-preview">
-                        <span id="editIconPreview"><i class="fas fa-book"></i></span>
-                        <small>Preview of selected icon</small>
-                    </div>
-                </div>
-                
-                <div class="modal-buttons">
-                    <button type="button" class="modal-cancel" onclick="closeEditModal()">Cancel</button>
-                    <button type="submit" class="modal-save">Save Changes</button>
-                </div>
-            </form>
-        </div>
+  <header>
+    <h1>Masters Final Year Subjects</h1>
+    <p class="tagline">Advanced study materials for masters final year botany students</p>
+  </header>
+
+  <!-- Loading State -->
+  <div class="loading-state" id="loadingState">
+    <i class="fas fa-spinner fa-spin"></i>
+    <h3>Loading Study Materials...</h3>
+    <p>Please wait while we fetch your resources</p>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="emptyState" style="display: none;">
+    <i class="fas fa-book-medical"></i>
+    <h3>Study Materials Coming Soon</h3>
+    <p>We're currently preparing high-quality study materials for Masters Final Year subjects.<br>Please check back soon or contact your course administrator for updates.</p>
+  </div>
+
+  <!-- Dynamic Button Container -->
+  <div class="button-container" id="buttonContainer" style="display: none;">
+    <!-- eBook buttons will be dynamically added here -->
+  </div>
+
+  <!-- Back Button -->
+  <a href="all.html" class="back-button">
+    <i class="fas fa-arrow-left"></i> Back to Main Page
+  </a>
+
+  <!-- External Link Modal -->
+  <div class="modal" id="externalLinkModal">
+    <div class="modal-content">
+      <h3 style="color: #333; margin-bottom: 15px;"><i class="fas fa-external-link-alt"></i> Opening External Link</h3>
+      <p style="color: #666; margin-bottom: 10px;" id="modalLinkText">You are about to open an external study material.</p>
+      <p style="color: #888; font-size: 0.9rem; margin-bottom: 20px;">Make sure pop-ups are allowed for this site.</p>
+      <div class="modal-buttons">
+        <button class="modal-btn modal-open" id="confirmOpen">Open Link</button>
+        <button class="modal-btn modal-cancel" id="cancelOpen">Cancel</button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // Create flying books animation
-        function createFlyingBooks() {
-            const flyingBooksContainer = document.getElementById('flyingBooks');
-            const bookIcons = ['📘', '📗', '📙', '📕', '📒'];
-            
-            for (let i = 0; i < 12; i++) {
-                const book = document.createElement('div');
-                book.className = 'flying-book';
-                book.textContent = bookIcons[Math.floor(Math.random() * bookIcons.length)];
-                
-                // Random position and animation
-                const left = Math.random() * 100;
-                const duration = 15 + Math.random() * 20;
-                const delay = Math.random() * 5;
-                
-                book.style.left = `${left}%`;
-                book.style.animationDuration = `${duration}s`;
-                book.style.animationDelay = `${delay}s`;
-                
-                flyingBooksContainer.appendChild(book);
-            }
-        }
-
-        // Initialize the animation when page loads
-        document.addEventListener('DOMContentLoaded', createFlyingBooks);
-    </script>
-
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-        import { 
-            getAuth, 
-            signInWithEmailAndPassword,
-            signOut,
-            onAuthStateChanged
-        } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-        import { 
-            getFirestore, 
-            collection, 
-            getDocs, 
-            addDoc, 
-            deleteDoc, 
-            doc, 
-            updateDoc,
-            orderBy,
-            query,
-            onSnapshot
-        } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
-
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyChDeqEPatoWTUPoZpcYOSXcnAuoVJsV-c",
-            authDomain: "apps-login-page.firebaseapp.com",
-            projectId: "apps-login-page",
-            storageBucket: "apps-login-page.appspot.com",
-            messagingSenderId: "601656721972",
-            appId: "1:601656721972:web:20ce6efffc82b2e0b68061",
-            measurementId: "G-RPPBB0C7BQ"
+  <div class="ad-container">
+    <div class="ad-box">
+      <script async="async" data-cfasync="false" src="//pl27696641.revenuecpmgate.com/d3c90308bd587e059824adaabc81cf7a/invoke.js"></script>
+      <div id="container-d3c90308bd587e059824adaabc81cf7a"></div>
+    </div>
+    
+    <div class="ad-box">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '5429be8814e153fe6360cf3cea0c93db',
+          'format' : 'iframe',
+          'height' : 300,
+          'width' : 160,
+          'params' : {}
         };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // Admin credentials
-        const ADMIN_EMAIL = "admin@botanystudy.com";
-        const ADMIN_PASSWORD = "BotanyAdmin2023!";
-
-        let ebooks = [];
-        let currentEditingEbookId = null;
-
-        // Check authentication state
-        onAuthStateChanged(auth, (user) => {
-            if (user && user.email === ADMIN_EMAIL) {
-                // User is signed in as admin
-                document.getElementById('loginOverlay').style.display = 'none';
-                document.getElementById('mainContainer').style.display = 'block';
-                loadEbooks();
-            } else {
-                // User is not signed in or not admin
-                document.getElementById('loginOverlay').style.display = 'flex';
-                document.getElementById('mainContainer').style.display = 'none';
-            }
-        });
-
-        // Admin login function
-        window.adminLogin = async function() {
-            const email = document.getElementById('adminEmail').value;
-            const password = document.getElementById('adminPassword').value;
-            const messageDiv = document.getElementById('adminLoginMessage');
-            
-            if (!email || !password) {
-                messageDiv.textContent = 'Please enter email and password';
-                return;
-            }
-            
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                messageDiv.textContent = '';
-            } catch (error) {
-                if (error.code === 'auth/user-not-found') {
-                    messageDiv.innerHTML = `
-                        Admin account not found. Please create admin account in Firebase Console.
-                    `;
-                } else {
-                    messageDiv.textContent = 'Login failed: ' + error.message;
-                }
-            }
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/5429be8814e153fe6360cf3cea0c93db/invoke.js"></script>
+    </div>
+    
+    <div class="ad-box">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '1259bdba7a9cba3623bc48ab4ce23c86',
+          'format' : 'iframe',
+          'height' : 60,
+          'width' : 468,
+          'params' : {}
         };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/1259bdba7a9cba3623bc48ab4ce23c86/invoke.js"></script>
+    </div>
+  </div>
 
-        // Update icon preview
-        window.updateIconPreview = function() {
-            const iconSelect = document.getElementById('ebookIcon');
-            const iconPreview = document.getElementById('iconPreview');
-            iconPreview.innerHTML = `<i class="${iconSelect.value}"></i>`;
+  <footer>
+    <p>Botany Study Materials &copy; 2023 | All resources are for educational purposes</p>
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { 
+      getAuth, 
+      signOut,
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+    import { 
+      getFirestore, 
+      doc, 
+      getDoc, 
+      collection, 
+      query, 
+      where, 
+      orderBy, 
+      onSnapshot 
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyChDeqEPatoWTUPoZpcYOSXcnAuoVJsV-c",
+      authDomain: "apps-login-page.firebaseapp.com",
+      projectId: "apps-login-page",
+      storageBucket: "apps-login-page.appspot.com",
+      messagingSenderId: "601656721972",
+      appId: "1:601656721972:web:20ce6efffc82b2e0b68061",
+      measurementId: "G-RPPBB0C7BQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // DOM Elements
+    const userInfo = document.getElementById('userInfo');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const externalLinkModal = document.getElementById('externalLinkModal');
+    const confirmOpen = document.getElementById('confirmOpen');
+    const cancelOpen = document.getElementById('cancelOpen');
+    const modalLinkText = document.getElementById('modalLinkText');
+    const loadingState = document.getElementById('loadingState');
+    const emptyState = document.getElementById('emptyState');
+    const buttonContainer = document.getElementById('buttonContainer');
+
+    let currentExternalLink = '';
+    let currentEbookName = '';
+    let ebooks = [];
+
+    // Toggle dropdown menu
+    userInfo.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownMenu.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+      dropdownMenu.classList.remove('show');
+    });
+
+    // Check authentication state
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        console.log("User authenticated:", user.uid);
+        // User is signed in
+        try {
+          const docRef = doc(db, "students", user.uid);
+          const docSnap = await getDoc(docRef);
+          
+          if (docSnap.exists()) {
+            const userData = docSnap.data();
+            // Update user info display
+            userName.textContent = userData.name || user.email.split('@')[0];
+            userAvatar.textContent = userData.name ? userData.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase();
+          } else {
+            // Use email if no profile data
+            userName.textContent = user.email.split('@')[0];
+            userAvatar.textContent = user.email.charAt(0).toUpperCase();
+          }
+          
+          // Load eBooks after user is authenticated
+          loadEbooks();
+        } catch (error) {
+          console.error("Error loading user data:", error);
+          userName.textContent = user.email.split('@')[0];
+          userAvatar.textContent = user.email.charAt(0).toUpperCase();
+          loadEbooks();
         }
+      } else {
+        // User is not signed in, redirect to login
+        console.log("User not authenticated, redirecting to login");
+        window.location.href = 'login.html';
+      }
+    });
 
-        // Update edit icon preview
-        window.updateEditIconPreview = function() {
-            const iconSelect = document.getElementById('editEbookIcon');
-            const iconPreview = document.getElementById('editIconPreview');
-            iconPreview.innerHTML = `<i class="${iconSelect.value}"></i>`;
-        }
+    // Logout functionality
+    logoutBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        await signOut(auth);
+        window.location.href = 'login.html';
+      } catch (error) {
+        console.error('Logout error:', error);
+        alert('Error during logout. Please try again.');
+      }
+    });
 
-        // Load ebooks from Firestore
-        async function loadEbooks() {
-            try {
-                const q = query(collection(db, "ebooks"), orderBy("order", "asc"));
-                const unsubscribe = onSnapshot(q, (querySnapshot) => {
-                    ebooks = [];
-                    querySnapshot.forEach((doc) => {
-                        const ebookData = doc.data();
-                        ebookData.id = doc.id;
-                        ebooks.push(ebookData);
-                    });
-                    renderEbooks();
-                });
-            } catch (error) {
-                console.error('Error loading ebooks:', error);
-            }
-        }
+    // Prevent dropdown close when clicking inside it
+    dropdownMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
 
-        // Form submission handler
-        document.getElementById('ebookForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+    // Load eBooks from Firestore
+    function loadEbooks() {
+      console.log("Starting to load eBooks for Masters Final Year...");
+      
+      try {
+        // First try: Query with where clause and orderBy
+        const q = query(
+          collection(db, "ebooks"), 
+          where("page", "==", "Masters Final Year"),
+          where("hidden", "!=", true), // ADDED: Only show non-hidden eBooks
+          orderBy("order", "asc")
+        );
+        
+        console.log("Firestore query created");
+        
+        const unsubscribe = onSnapshot(q, 
+          (querySnapshot) => {
+            console.log("Firestore snapshot received, documents:", querySnapshot.size);
             
-            const name = document.getElementById('ebookName').value;
-            const link = document.getElementById('ebookLink').value;
-            const page = document.getElementById('ebookPage').value;
-            const icon = document.getElementById('ebookIcon').value;
+            ebooks = [];
+            querySnapshot.forEach((doc) => {
+              const ebookData = doc.data();
+              ebookData.id = doc.id;
+              console.log("Found eBook:", ebookData.name, "| Page:", ebookData.page, "| Order:", ebookData.order, "| Hidden:", ebookData.hidden);
+              ebooks.push(ebookData);
+            });
             
-            try {
-                // Add to Firestore
-                await addDoc(collection(db, "ebooks"), {
-                    name: name,
-                    link: link,
-                    page: page,
-                    icon: icon,
-                    hidden: false, // Default to visible
-                    order: ebooks.length, // Add at the end
-                    createdAt: new Date()
-                });
-                
-                // Reset the form
-                document.getElementById('ebookForm').reset();
-                updateIconPreview();
-                
-                // Show success message
-                alert('eBook resource added successfully!');
-            } catch (error) {
-                console.error('Error adding ebook:', error);
-                alert('Error adding ebook: ' + error.message);
-            }
-        });
-
-        // Edit form submission handler
-        document.getElementById('editEbookForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+            console.log("Total eBooks loaded:", ebooks.length);
             
-            if (!currentEditingEbookId) return;
-            
-            const name = document.getElementById('editEbookName').value;
-            const link = document.getElementById('editEbookLink').value;
-            const page = document.getElementById('editEbookPage').value;
-            const icon = document.getElementById('editEbookIcon').value;
-            
-            try {
-                // Update in Firestore
-                await updateDoc(doc(db, "ebooks", currentEditingEbookId), {
-                    name: name,
-                    link: link,
-                    page: page,
-                    icon: icon
-                });
-                
-                // Close modal
-                closeEditModal();
-                
-                // Show success message
-                alert('eBook resource updated successfully!');
-            } catch (error) {
-                console.error('Error updating ebook:', error);
-                alert('Error updating ebook: ' + error.message);
-            }
-        });
-
-        // Render ebooks in the container, grouped by page
-        function renderEbooks() {
-            const container = document.getElementById('ebooksByPage');
+            // Hide loading state
+            loadingState.style.display = 'none';
             
             if (ebooks.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state" id="emptyState">
-                        <i class="fas fa-book-open"></i>
-                        <h3>No eBooks Added Yet</h3>
-                        <p>Add your first eBook resource using the form above</p>
-                    </div>
-                `;
-                return;
+              console.log("No eBooks found for Masters Final Year");
+              emptyState.style.display = 'block';
+              buttonContainer.style.display = 'none';
+            } else {
+              console.log("Rendering eBook buttons");
+              emptyState.style.display = 'none';
+              buttonContainer.style.display = 'grid';
+              renderEbooks();
             }
+          }, 
+          (error) => {
+            console.error("Error in Firestore query:", error);
+            console.error("Error code:", error.code);
+            console.error("Error message:", error.message);
             
-            // Group ebooks by page
-            const ebooksByPage = {};
-            ebooks.forEach(ebook => {
-                if (!ebooksByPage[ebook.page]) {
-                    ebooksByPage[ebook.page] = [];
-                }
-                ebooksByPage[ebook.page].push(ebook);
+            // If compound query fails, try alternative approach
+            if (error.code === 'failed-precondition') {
+              console.log("Trying alternative loading method...");
+              loadEbooksAlternative();
+            } else {
+              loadingState.style.display = 'none';
+              emptyState.style.display = 'block';
+              emptyState.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Database Error</h3>
+                <p>Error loading materials: ${error.code}</p>
+                <p>${error.message}</p>
+                <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Retry</button>
+              `;
+            }
+          }
+        );
+      } catch (error) {
+        console.error("Unexpected error in loadEbooks:", error);
+        loadingState.style.display = 'none';
+        emptyState.style.display = 'block';
+        emptyState.innerHTML = `
+          <i class="fas fa-exclamation-triangle"></i>
+          <h3>Unexpected Error</h3>
+          <p>${error.message}</p>
+          <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Retry</button>
+        `;
+      }
+    }
+
+    // Alternative loading method - get all eBooks and filter client-side
+    function loadEbooksAlternative() {
+      console.log("Using alternative loading method...");
+      
+      try {
+        const q = query(collection(db, "ebooks"), orderBy("order", "asc"));
+        
+        const unsubscribe = onSnapshot(q, 
+          (querySnapshot) => {
+            console.log("Alternative method - All eBooks count:", querySnapshot.size);
+            
+            ebooks = [];
+            querySnapshot.forEach((doc) => {
+              const ebookData = doc.data();
+              ebookData.id = doc.id;
+              
+              // Client-side filtering for Masters Final Year AND non-hidden eBooks
+              if (ebookData.page === "Masters Final Year" && ebookData.hidden !== true) {
+                console.log("Matching eBook found:", ebookData.name);
+                ebooks.push(ebookData);
+              }
             });
             
-            // Clear container
-            container.innerHTML = '';
+            console.log("Alternative method - Filtered eBooks count:", ebooks.length);
             
-            // Create a section for each page
-            Object.keys(ebooksByPage).forEach(page => {
-                const pageSection = document.createElement('div');
-                pageSection.className = 'page-section';
-                
-                const pageTitle = document.createElement('h3');
-                pageTitle.className = 'page-title';
-                pageTitle.innerHTML = `<i class="fas fa-folder"></i> ${page}`;
-                
-                const ebooksContainer = document.createElement('div');
-                ebooksContainer.className = 'ebooks-container';
-                
-                // Add each ebook in this page as a card
-                ebooksByPage[page].forEach(ebook => {
-                    const ebookCard = document.createElement('div');
-                    ebookCard.className = `ebook-card ${ebook.hidden ? 'hidden' : ''}`;
-                    
-                    // Add hidden badge if ebook is hidden
-                    const hiddenBadge = ebook.hidden ? 
-                        `<div class="hidden-badge">
-                            <i class="fas fa-eye-slash"></i> Hidden
-                        </div>` : '';
-                    
-                    // Determine if view button should be enabled
-                    const hasLink = ebook.link && ebook.link.trim() !== '';
-                    const viewButton = hasLink ? 
-                        `<button class="action-btn view-btn" onclick="viewEbook('${ebook.link}')">
-                            View eBook
-                        </button>` :
-                        `<button class="action-btn view-btn" disabled>
-                            No Link
-                        </button>`;
-                    
-                    // Get current ebook's position in the page for move up/down buttons
-                    const pageEbooks = ebooks.filter(e => e.page === ebook.page)
-                                             .sort((a, b) => a.order - b.order);
-                    const index = pageEbooks.findIndex(e => e.id === ebook.id);
-                    const canMoveUp = index > 0;
-                    const canMoveDown = index < pageEbooks.length - 1;
-                    
-                    // Visibility button text and icon
-                    const visibilityButton = ebook.hidden ?
-                        `<button class="action-btn visibility-btn" onclick="toggleEbookVisibility('${ebook.id}')">
-                            <i class="fas fa-eye"></i> Show
-                        </button>` :
-                        `<button class="action-btn visibility-btn" onclick="toggleEbookVisibility('${ebook.id}')">
-                            <i class="fas fa-eye-slash"></i> Hide
-                        </button>`;
-                    
-                    ebookCard.innerHTML = `
-                        ${hiddenBadge}
-                        <div class="ebook-icon">
-                            <i class="${ebook.icon}"></i>
-                        </div>
-                        <h3>${ebook.name}</h3>
-                        <div class="ebook-page">${ebook.page}</div>
-                        <div class="ebook-actions">
-                            ${viewButton}
-                            <button class="action-btn move-up-btn" onclick="moveEbookUpSingle('${ebook.id}')" ${canMoveUp ? '' : 'disabled'}>
-                                <i class="fas fa-arrow-up"></i> Move Up
-                            </button>
-                            <button class="action-btn move-down-btn" onclick="moveEbookDownSingle('${ebook.id}')" ${canMoveDown ? '' : 'disabled'}>
-                                <i class="fas fa-arrow-down"></i> Move Down
-                            </button>
-                            ${visibilityButton}
-                            <button class="action-btn edit-btn" onclick="openEditModal('${ebook.id}')">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="action-btn delete-btn" onclick="deleteEbook('${ebook.id}')">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    `;
-                    ebooksContainer.appendChild(ebookCard);
-                });
-                
-                pageSection.appendChild(pageTitle);
-                pageSection.appendChild(ebooksContainer);
-                container.appendChild(pageSection);
-            });
-        }
-
-        // Toggle ebook visibility
-        window.toggleEbookVisibility = async function(ebookId) {
-            const ebook = ebooks.find(e => e.id === ebookId);
-            if (!ebook) return;
+            loadingState.style.display = 'none';
             
-            try {
-                await updateDoc(doc(db, "ebooks", ebookId), {
-                    hidden: !ebook.hidden
-                });
-                
-                // Show success message
-                alert(`eBook ${!ebook.hidden ? 'hidden' : 'shown'} successfully!`);
-            } catch (error) {
-                console.error('Error toggling ebook visibility:', error);
-                alert('Error toggling ebook visibility: ' + error.message);
+            if (ebooks.length === 0) {
+              emptyState.style.display = 'block';
+              buttonContainer.style.display = 'none';
+            } else {
+              emptyState.style.display = 'none';
+              buttonContainer.style.display = 'grid';
+              renderEbooks();
             }
-        }
+          }, 
+          (error) => {
+            console.error("Alternative method error:", error);
+            loadingState.style.display = 'none';
+            emptyState.style.display = 'block';
+            emptyState.innerHTML = `
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>Failed to Load Materials</h3>
+              <p>Please check your internet connection and try again.</p>
+              <button onclick="location.reload()" style="margin-top: 15px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Retry</button>
+            `;
+          }
+        );
+      } catch (error) {
+        console.error("Unexpected error in alternative method:", error);
+        loadingState.style.display = 'none';
+        emptyState.style.display = 'block';
+      }
+    }
 
-        // Move ebook up in the list (for individual ebook cards)
-        window.moveEbookUpSingle = async function(ebookId) {
-            const ebook = ebooks.find(e => e.id === ebookId);
-            if (!ebook) return;
+    // Render eBooks as buttons
+    function renderEbooks() {
+      console.log("Rendering", ebooks.length, "eBooks as buttons");
+      
+      // Clear existing buttons
+      buttonContainer.innerHTML = '';
+      
+      // Create buttons for each eBook
+      ebooks.forEach(ebook => {
+        const button = document.createElement('a');
+        button.className = 'btn';
+        
+        // Add icon if available
+        if (ebook.icon) {
+          button.innerHTML = `<i class="${ebook.icon}" style="margin-right: 10px;"></i> ${ebook.name}`;
+        } else {
+          button.textContent = ebook.name;
+        }
+        
+        // Check if the eBook has a link
+        if (ebook.link && ebook.link.trim() !== '') {
+          button.href = ebook.link;
+          
+          // Add click handler for ALL external links (not just Google Drive)
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentExternalLink = ebook.link;
+            currentEbookName = ebook.name;
             
-            const pageEbooks = ebooks.filter(e => e.page === ebook.page)
-                                     .sort((a, b) => a.order - b.order);
+            // Update modal text with ebook name
+            modalLinkText.textContent = `You are about to open: "${ebook.name}"`;
             
-            const index = pageEbooks.findIndex(e => e.id === ebookId);
-            
-            if (index > 0) {
-                try {
-                    // Swap orders
-                    const currentEbook = pageEbooks[index];
-                    const prevEbook = pageEbooks[index - 1];
-                    
-                    await updateDoc(doc(db, "ebooks", currentEbook.id), {
-                        order: prevEbook.order
-                    });
-                    
-                    await updateDoc(doc(db, "ebooks", prevEbook.id), {
-                        order: currentEbook.order
-                    });
-                } catch (error) {
-                    console.error('Error moving ebook:', error);
-                    alert('Error moving ebook: ' + error.message);
-                }
-            }
+            // Show modal for all external links
+            externalLinkModal.style.display = 'flex';
+          });
+        } else {
+          // No link - disable the button
+          button.href = '#';
+          button.style.opacity = '0.6';
+          button.style.cursor = 'not-allowed';
+          button.title = 'No link available';
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('No study material link available for this subject yet.');
+          });
         }
+        
+        buttonContainer.appendChild(button);
+      });
+      
+      console.log("eBook buttons rendered successfully");
+    }
 
-        // Move ebook down in the list (for individual ebook cards)
-        window.moveEbookDownSingle = async function(ebookId) {
-            const ebook = ebooks.find(e => e.id === ebookId);
-            if (!ebook) return;
-            
-            const pageEbooks = ebooks.filter(e => e.page === ebook.page)
-                                     .sort((a, b) => a.order - b.order);
-            
-            const index = pageEbooks.findIndex(e => e.id === ebookId);
-            
-            if (index < pageEbooks.length - 1) {
-                try {
-                    // Swap orders
-                    const currentEbook = pageEbooks[index];
-                    const nextEbook = pageEbooks[index + 1];
-                    
-                    await updateDoc(doc(db, "ebooks", currentEbook.id), {
-                        order: nextEbook.order
-                    });
-                    
-                    await updateDoc(doc(db, "ebooks", nextEbook.id), {
-                        order: currentEbook.order
-                    });
-                } catch (error) {
-                    console.error('Error moving ebook:', error);
-                    alert('Error moving ebook: ' + error.message);
-                }
-            }
-        }
+    // Modal buttons
+    confirmOpen.addEventListener('click', function() {
+      if (currentExternalLink) {
+        console.log("Opening external link:", currentExternalLink);
+        window.open(currentExternalLink, '_blank');
+        externalLinkModal.style.display = 'none';
+        currentExternalLink = '';
+        currentEbookName = '';
+      }
+    });
 
-        // View ebook (open link)
-        window.viewEbook = function(link) {
-            if (link && link.trim() !== '') {
-                window.open(link, '_blank');
-            }
-        }
+    cancelOpen.addEventListener('click', function() {
+      console.log("Cancelled opening external link");
+      externalLinkModal.style.display = 'none';
+      currentExternalLink = '';
+      currentEbookName = '';
+    });
 
-        // Open edit modal
-        window.openEditModal = function(ebookId) {
-            const ebook = ebooks.find(e => e.id === ebookId);
-            if (ebook) {
-                currentEditingEbookId = ebookId;
-                document.getElementById('editEbookName').value = ebook.name || '';
-                document.getElementById('editEbookLink').value = ebook.link || '';
-                document.getElementById('editEbookPage').value = ebook.page || 'Honours First Year';
-                document.getElementById('editEbookIcon').value = ebook.icon || 'fas fa-book';
-                updateEditIconPreview();
-                document.getElementById('editModal').style.display = 'flex';
-            }
-        }
+    // Close modal when clicking outside
+    window.addEventListener('click', function(e) {
+      if (e.target === externalLinkModal) {
+        externalLinkModal.style.display = 'none';
+        currentExternalLink = '';
+        currentEbookName = '';
+      }
+    });
 
-        // Close edit modal
-        window.closeEditModal = function() {
-            document.getElementById('editModal').style.display = 'none';
-            currentEditingEbookId = null;
-        }
+    // Make functions available globally for retry buttons
+    window.loadEbooks = loadEbooks;
+    window.loadEbooksAlternative = loadEbooksAlternative;
+  </script>
 
-        // Delete ebook
-        window.deleteEbook = async function(id) {
-            if (confirm('Are you sure you want to delete this eBook resource?')) {
-                try {
-                    await deleteDoc(doc(db, "ebooks", id));
-                    alert('eBook resource deleted successfully!');
-                } catch (error) {
-                    console.error('Error deleting ebook:', error);
-                    alert('Error deleting ebook: ' + error.message);
-                }
-            }
-        }
-
-        // Go back to admin page
-        window.goBackToAdmin = function() {
-            window.location.href = 'admin.html';
-        }
-
-        // Initialize icon preview
-        updateIconPreview();
-    </script>
+  <script type='text/javascript' src='//pl27703488.revenuecpmgate.com/91/6c/6e/916c6e9ca16af6ee852fd57d9840b0d6.js'></script>
 </body>
-                                         </html>
+          </html>
