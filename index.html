@@ -181,7 +181,7 @@
     <div class="notice-box">
       <h3>📌 Welcome Notice</h3>
       <div class="notice-content">
-        <p>This application has been developed exclusively for the Botany Suggestion Group Bangladesh Community.</p>
+        <p>This application has been developed exclusively for the Botany Suggestion Group Bangladesh community.</p>
         <p>Access comprehensive botany resources, lecture notes, and study materials curated for academic excellence.</p>
       </div>
     </div>
@@ -202,34 +202,75 @@
       const flyingBooksContainer = document.getElementById('flyingBooks');
       const bookEmojis = ['📘', '📗', '📕', '📙', '📓', '📔', '📒'];
       
-      // Create 10 flying books
-      for (let i = 0; i < 10; i++) {
+      // Create 12 flying books for immediate visibility
+      for (let i = 0; i < 12; i++) {
         const book = document.createElement('div');
         book.className = 'book';
         book.textContent = bookEmojis[Math.floor(Math.random() * bookEmojis.length)];
         
-        // Random properties for each book
+        // Random properties for each book - faster and immediate
         const size = Math.random() * 25 + 35; // 35-60px
-        const startY = Math.random() * 80 + 10; // 10-90% from top
-        const duration = Math.random() * 25 + 20; // 20-45 seconds
-        const delay = Math.random() * 25; // 0-25 seconds delay
-        const yMove = (Math.random() - 0.5) * 2.5; // Move up/down during flight
+        const startY = Math.random() * 100; // 0-100% from top
+        const duration = Math.random() * 8 + 7; // 7-15 seconds (faster)
+        
+        // Start position: random horizontal position so they appear immediately
+        const startX = Math.random() * 100; // 0-100% from left
+        const endX = startX > 50 ? -150 : 100; // Move left or right based on position
+        
+        // Make some books already on screen
+        const delay = Math.random() * 2; // 0-2 seconds delay only
+        
+        const yMove = (Math.random() - 0.5) * 1.5; // Less vertical movement
         const rotateEnd = Math.random() * 360 + 180; // 180-540 degrees rotation
         
         // Apply random properties
         book.style.fontSize = `${size}px`;
         book.style.top = `${startY}%`;
-        book.style.left = `-100px`;
+        book.style.left = `${startX}%`; // Start at random horizontal position
         book.style.animationDuration = `${duration}s`;
         book.style.animationDelay = `${delay}s`;
         book.style.setProperty('--y-move', yMove);
         book.style.setProperty('--rotate-end', `${rotateEnd}deg`);
         
+        // For books starting on screen, set initial transform
+        book.style.transform = `translateX(${startX > 50 ? 100 : -100}px) rotate(${Math.random() * 360}deg)`;
+        
         // Random opacity for depth effect
-        book.style.opacity = Math.random() * 0.4 + 0.5; // 0.5-0.9 opacity
+        book.style.opacity = Math.random() * 0.4 + 0.6; // 0.6-1.0 opacity for better visibility
         
         flyingBooksContainer.appendChild(book);
       }
+      
+      // Add continuous stream of books
+      setInterval(() => {
+        const book = document.createElement('div');
+        book.className = 'book';
+        book.textContent = bookEmojis[Math.floor(Math.random() * bookEmojis.length)];
+        
+        const size = Math.random() * 25 + 35;
+        const startY = Math.random() * 100;
+        const duration = Math.random() * 8 + 7;
+        const yMove = (Math.random() - 0.5) * 1.5;
+        const rotateEnd = Math.random() * 360 + 180;
+        
+        book.style.fontSize = `${size}px`;
+        book.style.top = `${startY}%`;
+        book.style.left = `-100px`;
+        book.style.animationDuration = `${duration}s`;
+        book.style.animationDelay = `0s`;
+        book.style.setProperty('--y-move', yMove);
+        book.style.setProperty('--rotate-end', `${rotateEnd}deg`);
+        book.style.opacity = Math.random() * 0.4 + 0.6;
+        
+        flyingBooksContainer.appendChild(book);
+        
+        // Remove book after animation completes
+        setTimeout(() => {
+          if (book.parentNode) {
+            book.parentNode.removeChild(book);
+          }
+        }, duration * 1000);
+      }, 2000); // Add new book every 2 seconds
     }
     
     // Initialize when page loads
