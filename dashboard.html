@@ -16,6 +16,164 @@
       min-height: 100vh;
       line-height: 1.5;
     }
+
+    /* Login Container Styles */
+    .login-container {
+      max-width: 400px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .login-container h2 {
+      color: #2e7d32;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    .login-input:focus {
+      border-color: #4caf50;
+      outline: none;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      margin: 15px 0 5px;
+      background: #4caf50;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+
+    .login-btn:hover {
+      background: #45a049;
+    }
+
+    .login-btn:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .action-buttons button {
+      flex: 1;
+      padding: 10px;
+      background: #f0f0f0;
+      color: #333;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+
+    .action-buttons button:hover {
+      background: #e0e0e0;
+    }
+
+    .action-buttons button.register {
+      background: #2196F3;
+      color: white;
+    }
+
+    .action-buttons button.register:hover {
+      background: #0b7dda;
+    }
+
+    .action-buttons button.reset {
+      background: #ff9800;
+      color: white;
+    }
+
+    .action-buttons button.reset:hover {
+      background: #e68900;
+    }
+
+    /* Admin Button Styles */
+    .admin-btn {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0 5px;
+      background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .admin-btn:hover {
+      background: linear-gradient(135deg, #8E24AA, #6A1B9A);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
+    }
+
+    .message {
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      text-align: center;
+      display: none;
+    }
+
+    .success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Dashboard Container Styles */
     .dashboard-container {
       max-width: 900px;
       margin: 0 auto;
@@ -23,7 +181,9 @@
       border-radius: 15px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       overflow: hidden;
+      display: none; /* Initially hidden */
     }
+
     .header {
       background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
       color: white;
@@ -31,21 +191,25 @@
       text-align: center;
       position: relative;
     }
+
     .header h1 {
       margin: 0;
       font-size: 1.8rem;
       font-weight: 600;
-      padding-right: 70px; /* Logout button এর জন্য জায়গা রাখা */
+      padding-right: 70px;
     }
+
     .welcome {
       font-size: 1rem;
       opacity: 0.9;
       margin-top: 10px;
-      padding-right: 70px; /* Logout button এর জন্য জায়গা রাখা */
+      padding-right: 70px;
     }
+
     .profile-section {
       padding: 20px 15px;
     }
+
     .profile-card {
       background: #f9f9f9;
       border-radius: 15px;
@@ -54,6 +218,7 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.05);
       border-left: 5px solid #4caf50;
     }
+
     .profile-card h2 {
       margin-top: 0;
       color: #2e7d32;
@@ -61,12 +226,14 @@
       border-bottom: 2px solid #e0e0e0;
       padding-bottom: 10px;
     }
+
     .profile-info {
       display: grid;
       grid-template-columns: 1fr;
       gap: 15px;
       margin-top: 15px;
     }
+
     .info-card {
       background: white;
       border-radius: 10px;
@@ -75,13 +242,16 @@
       transition: transform 0.3s, box-shadow 0.3s;
       border-top: 4px solid #4caf50;
     }
+
     .info-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 20px rgba(0,0,0,0.12);
     }
+
     .info-item {
       margin-bottom: 12px;
     }
+
     .info-label {
       font-weight: 600;
       color: #555;
@@ -91,6 +261,7 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
+
     .info-value {
       color: #333;
       font-size: 1rem;
@@ -100,6 +271,7 @@
       border-left: 4px solid #4caf50;
       word-break: break-word;
     }
+
     .status-badge {
       display: inline-block;
       padding: 5px 10px;
@@ -107,20 +279,24 @@
       font-size: 0.8rem;
       font-weight: 600;
     }
+
     .verified {
       background: #e8f5e9;
       color: #2e7d32;
     }
+
     .not-verified {
       background: #ffebee;
       color: #c62828;
     }
+
     .actions {
       display: flex;
       flex-direction: column;
       gap: 12px;
       margin-top: 25px;
     }
+
     .btn {
       padding: 14px 20px;
       border: none;
@@ -138,35 +314,43 @@
       text-align: center;
       width: 100%;
     }
+
     .btn-primary {
       background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
       color: white;
     }
+
     .btn-secondary {
       background: linear-gradient(135deg, #2196F3 0%, #0d47a1 100%);
       color: white;
     }
+
     .btn-danger {
       background: linear-gradient(135deg, #f44336 0%, #b71c1c 100%);
       color: white;
     }
+
     .btn-nu {
       background: linear-gradient(135deg, #ff9800 0%, #e65100 100%);
       color: white;
     }
+
     .btn:hover {
       transform: translateY(-3px);
       box-shadow: 0 7px 15px rgba(0,0,0,0.2);
     }
+
     .btn:active {
       transform: translateY(-1px);
     }
+
     .loading {
       text-align: center;
       padding: 30px;
       font-size: 1.1rem;
       color: #666;
     }
+
     .logout-btn {
       position: absolute;
       top: 15px;
@@ -181,6 +365,7 @@
       transition: all 0.3s;
       font-size: 0.9rem;
     }
+
     .logout-btn:hover {
       background: #d32f2f;
       transform: translateY(-2px);
@@ -201,6 +386,7 @@
       padding: 15px;
       overflow-y: auto;
     }
+
     .modal-content {
       background: white;
       padding: 20px;
@@ -212,10 +398,12 @@
       max-height: 90vh;
       overflow-y: auto;
     }
+
     @keyframes modalAppear {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
     .modal-header {
       display: flex;
       justify-content: space-between;
@@ -224,11 +412,13 @@
       border-bottom: 1px solid #eee;
       padding-bottom: 10px;
     }
+
     .modal-header h2 {
       margin: 0;
       color: #333;
       font-size: 1.4rem;
     }
+
     .close-btn {
       background: none;
       border: none;
@@ -243,12 +433,15 @@
       align-items: center;
       justify-content: center;
     }
+
     .close-btn:hover {
       color: #333;
     }
+
     .form-group {
       margin-bottom: 15px;
     }
+
     .form-group label {
       display: block;
       margin-bottom: 5px;
@@ -256,6 +449,7 @@
       color: #555;
       font-size: 0.95rem;
     }
+
     .form-group input {
       width: 100%;
       padding: 12px;
@@ -265,11 +459,13 @@
       box-sizing: border-box;
       transition: border-color 0.3s;
     }
+
     .form-group input:focus {
       border-color: #4caf50;
       outline: none;
       box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
     }
+
     .modal-actions {
       display: flex;
       gap: 10px;
@@ -277,38 +473,22 @@
       margin-top: 20px;
       flex-wrap: wrap;
     }
+
     .modal-actions .btn {
       flex: 1;
       min-width: 120px;
     }
+
     .btn-cancel {
       background: #f0f0f0;
       color: #333;
     }
+
     .btn-save {
       background: #4caf50;
       color: white;
     }
-    .message {
-      padding: 10px;
-      border-radius: 5px;
-      margin: 10px 0;
-      text-align: center;
-      display: none;
-      font-size: 0.9rem;
-    }
-    .success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-    .error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
 
-    /* Profile Icon */
     .profile-icon {
       display: inline-flex;
       align-items: center;
@@ -323,10 +503,10 @@
       font-size: 0.9rem;
     }
 
-    /* Optional Field Styles */
     .optional-field {
       position: relative;
     }
+
     .optional-label {
       position: absolute;
       right: 10px;
@@ -344,75 +524,99 @@
       body {
         padding: 20px;
       }
+
+      .login-container {
+        margin: 100px auto;
+        padding: 40px;
+      }
+
       .header {
         padding: 30px;
       }
+
       .header h1 {
         font-size: 2.2rem;
         padding-right: 0;
       }
+
       .welcome {
         font-size: 1.2rem;
         padding-right: 0;
       }
+
       .profile-section {
         padding: 30px;
       }
+
       .profile-info {
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 25px;
         margin-top: 20px;
       }
+
       .info-card {
         padding: 20px;
       }
+
       .info-item {
         margin-bottom: 15px;
       }
+
       .info-label {
         font-size: 0.9rem;
         margin-bottom: 8px;
       }
+
       .info-value {
         font-size: 1.1rem;
         padding: 10px 15px;
       }
+
       .actions {
         flex-direction: row;
         gap: 15px;
         margin-top: 30px;
       }
+
       .btn {
         width: auto;
         padding: 14px 28px;
       }
+
       .logout-btn {
         top: 20px;
         right: 20px;
         padding: 10px 20px;
         font-size: 1rem;
       }
+
       .modal-content {
         padding: 30px;
       }
+
       .modal-header {
         margin-bottom: 20px;
         padding-bottom: 15px;
       }
+
       .modal-header h2 {
         font-size: 1.6rem;
       }
+
       .form-group {
         margin-bottom: 20px;
       }
+
       .form-group label {
         font-size: 1rem;
         margin-bottom: 8px;
       }
+
       .message {
         padding: 12px;
         font-size: 1rem;
       }
+
       .profile-icon {
         width: 40px;
         height: 40px;
@@ -423,7 +627,38 @@
   </style>
 </head>
 <body>
-  <div class="dashboard-container">
+  <!-- Login Container (Initially Visible) -->
+  <div class="login-container" id="loginContainer">
+    <h2>Student Login</h2>
+    
+    <div id="errorMessage" class="message error"></div>
+    <div id="successMessage" class="message success"></div>
+    
+    <input type="email" id="email" class="login-input" placeholder="Email" required 
+           autocomplete="off" readonly 
+           onfocus="this.removeAttribute('readonly')" />
+    
+    <input type="password" id="password" class="login-input" placeholder="Password" required 
+           autocomplete="new-password" readonly 
+           onfocus="this.removeAttribute('readonly')" />
+    
+    <button id="loginBtn" class="login-btn">
+      Login
+    </button>
+    
+    <div class="action-buttons">
+      <button class="register" onclick="window.location.href='register.html'">Registration</button>
+      <button class="reset" onclick="window.location.href='reset-password.html'">Password Reset</button>
+    </div>
+    
+    <!-- Admin Panel Button -->
+    <button class="admin-btn" onclick="window.location.href='admin.html'">
+      <i class="fas fa-user-shield"></i> Admin Panel
+    </button>
+  </div>
+
+  <!-- Dashboard Container (Initially Hidden) -->
+  <div class="dashboard-container" id="dashboardContainer">
     <div class="header">
       <h1>Student Dashboard</h1>
       <div class="welcome" id="welcomeMessage">Loading your profile...</div>
@@ -524,6 +759,9 @@
     </div>
   </div>
 
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <!-- Firebase SDKs -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
@@ -534,7 +772,9 @@
       updatePassword,
       reauthenticateWithCredential,
       EmailAuthProvider,
-      updateProfile
+      updateProfile,
+      signInWithEmailAndPassword,
+      sendEmailVerification 
     } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
     import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
@@ -553,6 +793,12 @@
     const db = getFirestore(app);
 
     // DOM Elements
+    const loginContainer = document.getElementById('loginContainer');
+    const dashboardContainer = document.getElementById('dashboardContainer');
+    const loginBtn = document.getElementById('loginBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+    
     const editProfileBtn = document.getElementById('editProfileBtn');
     const changePasswordBtn = document.getElementById('changePasswordBtn');
     const logoutBtn = document.getElementById('logoutBtn');
@@ -576,22 +822,79 @@
     let currentUser = null;
     let userData = null;
 
-    // Check authentication state
+    // Check authentication state on page load
     onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = 'index.html';
-        return;
+      if (user && user.emailVerified) {
+        // User is signed in and verified, show dashboard
+        currentUser = user;
+        await loadUserData(user);
+        showDashboard();
+      } else {
+        // User is not signed in or not verified, show login
+        showLogin();
       }
-
-      if (!user.emailVerified) {
-        alert('Please verify your email first.');
-        window.location.href = 'index.html';
-        return;
-      }
-
-      currentUser = user;
-      await loadUserData(user);
     });
+
+    // Login functionality
+    loginBtn.addEventListener("click", login);
+
+    async function login() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      errorMessage.style.display = "none";
+      successMessage.style.display = "none";
+
+      if (!email || !password) {
+        showError("Please enter both email and password.");
+        return;
+      }
+
+      loginBtn.innerHTML = '<span class="loading"></span> Logging in...';
+      loginBtn.disabled = true;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        if (!user.emailVerified) {
+          await sendEmailVerification(user);
+          showError("Please verify your email first. A new verification email has been sent.");
+          return;
+        }
+
+        await updateDoc(doc(db, "students", user.uid), {
+          lastLogin: new Date()
+        });
+
+        currentUser = user;
+        await loadUserData(user);
+        showDashboard();
+
+      } catch (error) {
+        let errorMsg = "Login failed. ";
+        switch(error.code) {
+          case 'auth/invalid-email':
+            errorMsg += "Invalid email address.";
+            break;
+          case 'auth/user-disabled':
+            errorMsg += "This account has been disabled.";
+            break;
+          case 'auth/user-not-found':
+            errorMsg += "No account found with this email.";
+            break;
+          case 'auth/wrong-password':
+            errorMsg += "Incorrect password.";
+            break;
+          default:
+            errorMsg += error.message;
+        }
+        showError(errorMsg);
+      } finally {
+        loginBtn.innerHTML = "Login";
+        loginBtn.disabled = false;
+      }
+    }
 
     async function loadUserData(user) {
       try {
@@ -665,6 +968,26 @@
           </div>
         </div>
       `;
+    }
+
+    function showDashboard() {
+      loginContainer.style.display = 'none';
+      dashboardContainer.style.display = 'block';
+    }
+
+    function showLogin() {
+      loginContainer.style.display = 'block';
+      dashboardContainer.style.display = 'none';
+    }
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = "block";
+    }
+
+    function showSuccess(message) {
+      successMessage.textContent = message;
+      successMessage.style.display = "block";
     }
 
     // Modal Open/Close Functions
@@ -835,7 +1158,12 @@
     logoutBtn.addEventListener('click', async () => {
       try {
         await signOut(auth);
-        window.location.href = 'index.html';
+        showLogin();
+        // Clear login form
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+        errorMessage.style.display = 'none';
+        successMessage.style.display = 'none';
       } catch (error) {
         console.error('Logout error:', error);
       }
@@ -849,4 +1177,4 @@
     }
   </script>
 </body>
-</html>
+    </html>
