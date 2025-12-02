@@ -14,7 +14,7 @@
         }
         
         body {
-            background: white;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9, #a5d6a7);
             color: #333;
             min-height: 100vh;
             padding: 10px;
@@ -30,49 +30,52 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: -1;
+            z-index: 1;
         }
         
         .flying-book {
             position: absolute;
-            font-size: 24px;
-            color: rgba(76, 175, 80, 0.3);
+            font-size: 40px;
+            opacity: 0.8;
+            filter: drop-shadow(0 0 8px rgba(46, 125, 50, 0.3));
             animation: fly linear infinite;
+            z-index: 1;
         }
         
         @keyframes fly {
             0% {
-                transform: translateY(100vh) translateX(-100px) rotate(0deg);
+                transform: translateX(-100px) translateY(0) rotate(0deg);
             }
             100% {
-                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                transform: translateX(calc(100vw + 100px)) translateY(calc(100vh * var(--y-move))) rotate(var(--rotate-end));
             }
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: transparent;
             border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
         
         .header {
-            background: linear-gradient(135deg, #4CAF50, #2E7D32);
-            color: white;
+            background: rgba(255, 255, 255, 0.9);
+            color: #2E7D32;
             padding: 20px 15px;
             text-align: center;
             position: relative;
             border-radius: 15px 15px 0 0;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(46, 125, 50, 0.1);
         }
         
         .back-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(76, 175, 80, 0.9);
             color: white;
             border: none;
             padding: 10px 15px;
@@ -87,18 +90,19 @@
         }
         
         .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(46, 125, 50, 0.9);
             transform: scale(1.05);
         }
         
         .header h1 {
             font-size: 1.5rem;
             margin-bottom: 8px;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
         }
         
         .header p {
             font-size: 0.9rem;
-            opacity: 0.9;
+            color: #555;
         }
         
         .main-content {
@@ -106,11 +110,13 @@
         }
         
         .add-ebook-form {
-            background: #f9f9f9;
+            background: rgba(255, 255, 255, 0.9);
             padding: 20px 15px;
             border-radius: 12px;
             margin-bottom: 25px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
         .form-title {
@@ -141,6 +147,7 @@
             border-radius: 8px;
             font-size: 16px;
             transition: border-color 0.3s;
+            background: white;
         }
         
         .form-control:focus {
@@ -170,11 +177,13 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            box-shadow: 0 4px 6px rgba(76, 175, 80, 0.3);
         }
         
         .submit-btn:hover {
             background: linear-gradient(135deg, #2E7D32, #4CAF50);
             transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
         }
         
         .page-section {
@@ -186,11 +195,12 @@
             color: #2E7D32;
             margin-bottom: 15px;
             padding-bottom: 8px;
-            border-bottom: 2px solid #E8F5E9;
+            border-bottom: 2px solid rgba(46, 125, 50, 0.2);
             display: flex;
             align-items: center;
             gap: 10px;
             font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
         }
         
         .ebooks-container {
@@ -200,7 +210,7 @@
         }
         
         .ebook-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 12px;
             padding: 15px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.08);
@@ -208,11 +218,13 @@
             border: 2px solid transparent;
             position: relative;
             overflow: visible;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
         .ebook-card.hidden {
             opacity: 0.7;
-            background-color: #f5f5f5;
+            background-color: rgba(245, 245, 245, 0.9);
             border-left: 4px solid #ff9800;
         }
         
@@ -248,7 +260,7 @@
         
         .ebook-page {
             display: inline-block;
-            background: #E8F5E9;
+            background: rgba(232, 245, 233, 0.9);
             color: #2E7D32;
             padding: 4px 8px;
             border-radius: 15px;
@@ -257,7 +269,6 @@
             margin-top: 5px;
         }
         
-        /* Updated ebook-actions styles */
         .ebook-actions {
             display: flex;
             flex-direction: column;
@@ -353,13 +364,14 @@
         }
         
         .footer {
-            background: #f5f5f5;
+            background: rgba(255, 255, 255, 0.9);
             padding: 15px;
             text-align: center;
-            color: #666;
+            color: #2E7D32;
             font-size: 0.8rem;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid rgba(224, 224, 224, 0.5);
             border-radius: 0 0 15px 15px;
+            backdrop-filter: blur(10px);
         }
         
         /* Login Overlay Styles */
@@ -500,21 +512,54 @@
             background: #616161;
         }
         
-        /* Mobile-specific improvements */
-        .mobile-actions {
+        /* Filter Styles */
+        .filter-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .filter-title {
+            color: #2E7D32;
+            margin-bottom: 10px;
             display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 10px;
+            font-size: 1rem;
         }
         
-        .mobile-full-width {
+        .filter-select {
             width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            background-color: white;
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234CAF50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+            padding-right: 45px;
         }
         
-        /* Better touch targets for mobile */
-        button, 
-        .action-btn {
-            min-height: 44px;
+        .filter-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+        
+        .filter-status {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
         }
         
         /* Tablet and larger screens */
@@ -569,7 +614,6 @@
                 padding: 20px;
             }
             
-            /* Updated for tablet: horizontal layout for buttons */
             .ebook-actions {
                 flex-direction: row;
                 flex-wrap: wrap;
@@ -584,15 +628,33 @@
                 flex-direction: row;
             }
             
-            .mobile-actions {
-                flex-direction: row;
+            .filter-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 20px;
+            }
+            
+            .filter-title {
+                margin-bottom: 0;
+                font-size: 1.1rem;
+            }
+            
+            .filter-select {
+                width: 50%;
+                max-width: 300px;
+            }
+            
+            .filter-status {
+                margin-top: 0;
+                text-align: right;
+                font-size: 0.95rem;
             }
         }
         
         @media (min-width: 1024px) {
             .container {
                 border-radius: 20px;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             }
             
             .header {
@@ -607,6 +669,10 @@
             .ebook-card:hover {
                 transform: translateY(-5px);
                 box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            }
+            
+            .filter-container {
+                padding: 20px 25px;
             }
         }
     </style>
@@ -695,6 +761,25 @@
                 </form>
             </div>
             
+            <!-- Filter Section -->
+            <div class="filter-container">
+                <div class="filter-title">
+                    <i class="fas fa-filter"></i> Filter eBooks by Category
+                </div>
+                <select id="categoryFilter" class="filter-select">
+                    <option value="All">All Categories</option>
+                    <option value="Honours First Year">Honours First Year</option>
+                    <option value="Honours Second Year">Honours Second Year</option>
+                    <option value="Honours Third Year">Honours Third Year</option>
+                    <option value="Honours Fourth Year">Honours Fourth Year</option>
+                    <option value="Masters Final Year">Masters Final Year</option>
+                    <option value="Other Resources">Other Resources</option>
+                </select>
+                <div id="filterStatus" class="filter-status">
+                    Showing all categories
+                </div>
+            </div>
+            
             <h2 style="color: #2E7D32; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
                 <i class="fas fa-list"></i> eBook Resources
             </h2>
@@ -768,31 +853,82 @@
     </div>
 
     <script>
-        // Create flying books animation
+        // Function to create flying books (instant version)
         function createFlyingBooks() {
             const flyingBooksContainer = document.getElementById('flyingBooks');
-            const bookIcons = ['📘', '📗', '📙', '📕', '📒'];
+            const bookEmojis = ['📘', '📗', '📕', '📙', '📓', '📔', '📒'];
             
+            // Create 12 flying books for immediate visibility
             for (let i = 0; i < 12; i++) {
                 const book = document.createElement('div');
                 book.className = 'flying-book';
-                book.textContent = bookIcons[Math.floor(Math.random() * bookIcons.length)];
+                book.textContent = bookEmojis[Math.floor(Math.random() * bookEmojis.length)];
                 
-                // Random position and animation
-                const left = Math.random() * 100;
-                const duration = 15 + Math.random() * 20;
-                const delay = Math.random() * 5;
+                // Random properties for each book - faster and immediate
+                const size = Math.random() * 25 + 35; // 35-60px
+                const startY = Math.random() * 100; // 0-100% from top
+                const duration = Math.random() * 8 + 7; // 7-15 seconds (faster)
                 
-                book.style.left = `${left}%`;
+                // Start position: random horizontal position so they appear immediately
+                const startX = Math.random() * 100; // 0-100% from left
+                
+                // Make some books already on screen
+                const delay = Math.random() * 2; // 0-2 seconds delay only
+                
+                const yMove = (Math.random() - 0.5) * 1.5; // Less vertical movement
+                const rotateEnd = Math.random() * 360 + 180; // 180-540 degrees rotation
+                
+                // Apply random properties
+                book.style.fontSize = `${size}px`;
+                book.style.top = `${startY}%`;
+                book.style.left = `${startX}%`; // Start at random horizontal position
                 book.style.animationDuration = `${duration}s`;
                 book.style.animationDelay = `${delay}s`;
+                book.style.setProperty('--y-move', yMove);
+                book.style.setProperty('--rotate-end', `${rotateEnd}deg`);
+                
+                // Random opacity for better visibility
+                book.style.opacity = Math.random() * 0.4 + 0.6; // 0.6-1.0 opacity
                 
                 flyingBooksContainer.appendChild(book);
             }
+            
+            // Add continuous stream of books
+            setInterval(() => {
+                const book = document.createElement('div');
+                book.className = 'flying-book';
+                book.textContent = bookEmojis[Math.floor(Math.random() * bookEmojis.length)];
+                
+                const size = Math.random() * 25 + 35;
+                const startY = Math.random() * 100;
+                const duration = Math.random() * 8 + 7;
+                const yMove = (Math.random() - 0.5) * 1.5;
+                const rotateEnd = Math.random() * 360 + 180;
+                
+                book.style.fontSize = `${size}px`;
+                book.style.top = `${startY}%`;
+                book.style.left = `-100px`;
+                book.style.animationDuration = `${duration}s`;
+                book.style.animationDelay = `0s`;
+                book.style.setProperty('--y-move', yMove);
+                book.style.setProperty('--rotate-end', `${rotateEnd}deg`);
+                book.style.opacity = Math.random() * 0.4 + 0.6;
+                
+                flyingBooksContainer.appendChild(book);
+                
+                // Remove book after animation completes
+                setTimeout(() => {
+                    if (book.parentNode) {
+                        book.parentNode.removeChild(book);
+                    }
+                }, duration * 1000);
+            }, 2000); // Add new book every 2 seconds
         }
 
-        // Initialize the animation when page loads
-        document.addEventListener('DOMContentLoaded', createFlyingBooks);
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            createFlyingBooks();
+        });
     </script>
 
     <!-- Firebase SDK -->
@@ -905,9 +1041,73 @@
                         ebooks.push(ebookData);
                     });
                     renderEbooks();
+                    
+                    // Initialize category filter
+                    setupCategoryFilter();
                 });
             } catch (error) {
                 console.error('Error loading ebooks:', error);
+            }
+        }
+
+        // Setup category filter functionality
+        function setupCategoryFilter() {
+            const categoryFilter = document.getElementById('categoryFilter');
+            const filterStatus = document.getElementById('filterStatus');
+            
+            if (categoryFilter) {
+                // Remove existing event listener if any
+                const newCategoryFilter = categoryFilter.cloneNode(true);
+                categoryFilter.parentNode.replaceChild(newCategoryFilter, categoryFilter);
+                
+                // Add event listener to the new filter
+                newCategoryFilter.addEventListener('change', function() {
+                    const selectedValue = this.value;
+                    filterEbooksByCategory(selectedValue);
+                    
+                    // Update filter status text
+                    if (selectedValue === 'All') {
+                        filterStatus.textContent = 'Showing all categories';
+                    } else {
+                        filterStatus.textContent = `Showing: ${selectedValue}`;
+                    }
+                });
+            }
+        }
+
+        // Filter ebooks by category
+        function filterEbooksByCategory(category) {
+            const allSections = document.querySelectorAll('.page-section');
+            
+            if (category === 'All') {
+                // Show all sections with animation
+                allSections.forEach(section => {
+                    section.style.display = 'block';
+                    section.style.opacity = '0';
+                    setTimeout(() => {
+                        section.style.transition = 'opacity 0.3s ease';
+                        section.style.opacity = '1';
+                    }, 10);
+                });
+            } else {
+                // Hide all sections first
+                allSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Show only the selected category with animation
+                const pageTitles = document.querySelectorAll('.page-title');
+                pageTitles.forEach(title => {
+                    if (title.textContent.includes(category)) {
+                        const section = title.closest('.page-section');
+                        section.style.display = 'block';
+                        section.style.opacity = '0';
+                        setTimeout(() => {
+                            section.style.transition = 'opacity 0.3s ease';
+                            section.style.opacity = '1';
+                        }, 10);
+                    }
+                });
             }
         }
 
@@ -919,6 +1119,11 @@
             const link = document.getElementById('ebookLink').value;
             const page = document.getElementById('ebookPage').value;
             const icon = document.getElementById('ebookIcon').value;
+            
+            if (!page) {
+                alert('Please select a page/category for the eBook');
+                return;
+            }
             
             try {
                 // Add to Firestore
