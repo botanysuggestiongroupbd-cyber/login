@@ -13,7 +13,7 @@
     }
     
     body {
-      background: white;
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9, #a5d6a7);
       color: #333;
       display: flex;
       flex-direction: column;
@@ -22,6 +22,7 @@
       align-items: center;
       padding: 20px;
       position: relative;
+      overflow-x: hidden;
     }
     
     /* Flying Books Animation */
@@ -32,22 +33,24 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: -1;
+      z-index: 1;
     }
     
     .flying-book {
       position: absolute;
-      font-size: 24px;
-      color: rgba(76, 175, 80, 0.2);
+      font-size: 40px;
+      opacity: 0.8;
+      filter: drop-shadow(0 0 8px rgba(46, 125, 50, 0.3));
       animation: fly linear infinite;
+      z-index: 1;
     }
     
     @keyframes fly {
       0% {
-        transform: translateY(100vh) translateX(-100px) rotate(0deg);
+        transform: translateX(-100px) translateY(0) rotate(0deg);
       }
       100% {
-        transform: translateY(-100px) translateX(100px) rotate(360deg);
+        transform: translateX(calc(100vw + 100px)) translateY(calc(100vh * var(--y-move))) rotate(var(--rotate-end));
       }
     }
     
@@ -109,7 +112,7 @@
       position: absolute;
       top: 100%;
       right: 0;
-      background: white;
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 10px;
       padding: 10px 0;
       min-width: 200px;
@@ -118,6 +121,7 @@
       border: 1px solid rgba(76, 175, 80, 0.2);
       display: none;
       margin-top: 10px;
+      z-index: 2;
     }
     
     .dropdown-menu.show {
@@ -151,12 +155,6 @@
       color: #4CAF50;
     }
     
-    .dropdown-divider {
-      height: 1px;
-      background: rgba(0, 0, 0, 0.1);
-      margin: 5px 0;
-    }
-    
     header {
       width: 100%;
       max-width: 900px;
@@ -165,12 +163,15 @@
       align-items: center;
       gap: 10px;
       margin-bottom: 40px;
-      background: white;
+      background: rgba(255, 255, 255, 0.9);
       padding: 25px;
       border-radius: 15px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
       border: 1px solid rgba(76, 175, 80, 0.2);
       margin-top: 30px;
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 2;
     }
     
     header h1 {
@@ -198,12 +199,15 @@
       gap: 20px;
       width: 100%;
       max-width: 900px;
-      background: white;
+      background: rgba(255, 255, 255, 0.9);
       padding: 30px;
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       border: 1px solid rgba(76, 175, 80, 0.2);
       margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 2;
     }
     
     a.btn {
@@ -225,6 +229,7 @@
       position: relative;
       overflow: hidden;
       line-height: 1.4;
+      z-index: 2;
     }
     
     a.btn:hover {
@@ -278,12 +283,15 @@
       padding: 20px;
       width: 100%;
       max-width: 900px;
-      background: white;
+      background: rgba(255, 255, 255, 0.9);
       border-radius: 10px;
       font-size: 0.9rem;
-      color: #666;
+      color: #2E7D32;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
       border: 1px solid rgba(76, 175, 80, 0.1);
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 2;
     }
 
     /* Loading State */
@@ -291,6 +299,14 @@
       text-align: center;
       padding: 40px 20px;
       color: #666;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      margin: 20px 0;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(76, 175, 80, 0.2);
+      backdrop-filter: blur(10px);
     }
     
     .loading-state i {
@@ -303,13 +319,14 @@
       text-align: center;
       padding: 40px 20px;
       color: #666;
-      background: white;
+      background: rgba(255, 255, 255, 0.9);
       border-radius: 20px;
       margin: 20px 0;
       max-width: 600px;
       width: 100%;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
       border: 1px solid rgba(76, 175, 80, 0.2);
+      backdrop-filter: blur(10px);
     }
     
     .empty-state i {
@@ -395,11 +412,6 @@
         <i class="fas fa-user"></i>
         <span>My Profile</span>
       </a>
-      <div class="dropdown-divider"></div>
-      <a href="index.html" class="dropdown-item" id="logoutBtn">
-        <i class="fas fa-sign-out-alt"></i>
-        <span>Logout</span>
-      </a>
     </div>
   </div>
 
@@ -437,39 +449,89 @@
   </footer>
 
   <script>
-    // Create flying books animation
+    // Function to create flying books (instant version)
     function createFlyingBooks() {
       const flyingBooksContainer = document.getElementById('flyingBooks');
-      const bookIcons = ['📘', '📗', '📙', '📕', '📒'];
+      const bookEmojis = ['📘', '📗', '📕', '📙', '📓', '📔', '📒'];
       
+      // Create 12 flying books for immediate visibility
       for (let i = 0; i < 12; i++) {
         const book = document.createElement('div');
         book.className = 'flying-book';
-        book.textContent = bookIcons[Math.floor(Math.random() * bookIcons.length)];
+        book.textContent = bookEmojis[Math.floor(Math.random() * bookEmojis.length)];
         
-        // Random position and animation
-        const left = Math.random() * 100;
-        const duration = 15 + Math.random() * 20;
-        const delay = Math.random() * 5;
+        // Random properties for each book - faster and immediate
+        const size = Math.random() * 25 + 35; // 35-60px
+        const startY = Math.random() * 100; // 0-100% from top
+        const duration = Math.random() * 8 + 7; // 7-15 seconds (faster)
         
-        book.style.left = `${left}%`;
+        // Start position: random horizontal position so they appear immediately
+        const startX = Math.random() * 100; // 0-100% from left
+        
+        // Make some books already on screen
+        const delay = Math.random() * 2; // 0-2 seconds delay only
+        
+        const yMove = (Math.random() - 0.5) * 1.5; // Less vertical movement
+        const rotateEnd = Math.random() * 360 + 180; // 180-540 degrees rotation
+        
+        // Apply random properties
+        book.style.fontSize = `${size}px`;
+        book.style.top = `${startY}%`;
+        book.style.left = `${startX}%`; // Start at random horizontal position
         book.style.animationDuration = `${duration}s`;
         book.style.animationDelay = `${delay}s`;
+        book.style.setProperty('--y-move', yMove);
+        book.style.setProperty('--rotate-end', `${rotateEnd}deg`);
+        
+        // Random opacity for better visibility
+        book.style.opacity = Math.random() * 0.4 + 0.6; // 0.6-1.0 opacity
         
         flyingBooksContainer.appendChild(book);
       }
+      
+      // Add continuous stream of books
+      setInterval(() => {
+        const book = document.createElement('div');
+        book.className = 'flying-book';
+        book.textContent = bookEmojis[Math.floor(Math.random() * bookEmojis.length)];
+        
+        const size = Math.random() * 25 + 35;
+        const startY = Math.random() * 100;
+        const duration = Math.random() * 8 + 7;
+        const yMove = (Math.random() - 0.5) * 1.5;
+        const rotateEnd = Math.random() * 360 + 180;
+        
+        book.style.fontSize = `${size}px`;
+        book.style.top = `${startY}%`;
+        book.style.left = `-100px`;
+        book.style.animationDuration = `${duration}s`;
+        book.style.animationDelay = `0s`;
+        book.style.setProperty('--y-move', yMove);
+        book.style.setProperty('--rotate-end', `${rotateEnd}deg`);
+        book.style.opacity = Math.random() * 0.4 + 0.6;
+        
+        flyingBooksContainer.appendChild(book);
+        
+        // Remove book after animation completes
+        setTimeout(() => {
+          if (book.parentNode) {
+            book.parentNode.removeChild(book);
+          }
+        }, duration * 1000);
+      }, 2000); // Add new book every 2 seconds
     }
 
-    // Initialize the animation when page loads
-    document.addEventListener('DOMContentLoaded', createFlyingBooks);
+    // Initialize when page loads
+    window.addEventListener('load', () => {
+      createFlyingBooks();
+    });
   </script>
 
   <!-- Firebase SDKs -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
     import { 
-      getAuth, 
-      signOut,
+      getAuth,
       onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
     import { 
@@ -502,7 +564,6 @@
     const dropdownMenu = document.getElementById('dropdownMenu');
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
-    const logoutBtn = document.getElementById('logoutBtn');
     const loadingState = document.getElementById('loadingState');
     const emptyState = document.getElementById('emptyState');
     const buttonContainer = document.getElementById('buttonContainer');
@@ -518,6 +579,11 @@
     // Close dropdown when clicking outside
     document.addEventListener('click', () => {
       dropdownMenu.classList.remove('show');
+    });
+
+    // Prevent dropdown close when clicking inside it
+    dropdownMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
     });
 
     // Check authentication state
@@ -553,23 +619,6 @@
         console.log("User not authenticated, redirecting to login");
         window.location.href = 'login.html';
       }
-    });
-
-    // Logout functionality
-    logoutBtn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      try {
-        await signOut(auth);
-        window.location.href = 'login.html';
-      } catch (error) {
-        console.error('Logout error:', error);
-        alert('Error during logout. Please try again.');
-      }
-    });
-
-    // Prevent dropdown close when clicking inside it
-    dropdownMenu.addEventListener('click', (e) => {
-      e.stopPropagation();
     });
 
     // Load eBooks from Firestore
