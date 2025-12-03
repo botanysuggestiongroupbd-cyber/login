@@ -318,6 +318,14 @@
     <div class="user-info" id="userInfo">
       <div class="user-avatar" id="userAvatar">U</div>
       <div class="user-name" id="userName">User</div>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+    
+    <div class="dropdown-menu" id="dropdownMenu">
+      <a href="dashboard.html" class="dropdown-item">
+        <i class="fas fa-user"></i>
+        <span>My Profile</span>
+      </a>
     </div>
   </div>
 
@@ -460,8 +468,26 @@
     const db = getFirestore(app);
 
     // DOM Elements
+    const userInfo = document.getElementById('userInfo');
+    const dropdownMenu = document.getElementById('dropdownMenu');
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
+
+    // Toggle dropdown menu
+    userInfo.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownMenu.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+      dropdownMenu.classList.remove('show');
+    });
+
+    // Prevent dropdown close when clicking inside it
+    dropdownMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
 
     // Check authentication state
     onAuthStateChanged(auth, async (user) => {
